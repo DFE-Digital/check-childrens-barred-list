@@ -46,7 +46,6 @@ end
 
 group :development do
   gem 'rladr'
-  gem 'annotate', require: false
   gem 'solargraph', require: false
   gem 'solargraph-rails', require: false
   gem 'prettier_print', require: false
