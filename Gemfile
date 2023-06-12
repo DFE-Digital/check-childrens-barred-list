@@ -46,6 +46,11 @@ group :development do
   gem "web-console"
 end
 
+group :test do
+  gem "capybara"
+  gem "cuprite"
+end
+
 group :test, :development do
   gem "rspec"
   gem "rspec-rails"
