@@ -25,6 +25,6 @@ tmp/pids/*
 !tmp/pids/.keep
 
 .terraform
-terraform/vendor
+terraform/aks/vendor
 terraform.tfstate*
 bin/terrafile
