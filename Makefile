@@ -8,7 +8,7 @@ review:
 	$(eval include global_config/review.sh)
 	$(eval DEPLOY_ENV=review)
 	$(eval export TF_VAR_app_name=$(APP_NAME))
-	echo https://ccbl-$(APP_NAME).test.teacherservices.cloud will be created in aks
+	echo https://check-childrens-barred-list-$(APP_NAME).test.teacherservices.cloud will be created in aks
 
 install-terrafile: ## Install terrafile to manage terraform modules
 	[ ! -f bin/terrafile ] \
@@ -21,7 +21,7 @@ set-azure-account:
 
 terraform-init: install-terrafile set-azure-account
 	$(if $(APP_NAME), $(eval KEY_PREFIX=$(APP_NAME)), $(eval KEY_PREFIX=$(ENVIRONMENT)))
-	./bin/terrafile -p terraform/vendor/modules -f terraform/config/$(CONFIG)_Terrafile
+	./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/config/$(CONFIG)_Terrafile
 	terraform -chdir=terraform init -upgrade -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
@@ -33,10 +33,10 @@ terraform-init: install-terrafile set-azure-account
 	$(eval export TF_VAR_rg_name=$(RESOURCE_GROUP_NAME))
 
 terraform-plan: terraform-init
-	terraform -chdir=terraform plan -var-file "config/${CONFIG}.tfvars.json"
+	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
-	terraform -chdir=terraform apply -var-file "config/${CONFIG}.tfvars.json"
+	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json"
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
