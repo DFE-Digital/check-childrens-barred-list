@@ -38,6 +38,9 @@ terraform-plan: terraform-init
 terraform-apply: terraform-init
 	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json"
 
+terraform-destroy: terraform-init
+	terraform -chdir=terraform/aks destroy -var-file "config/$(CONFIG).tfvars.json"
+
 set-what-if:
 	$(eval WHAT_IF=--what-if)
 
