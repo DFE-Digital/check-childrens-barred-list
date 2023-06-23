@@ -1,0 +1,7 @@
+default: &default
+  RAILS_SERVE_STATIC_FILES: true
+
+review:
+  <<: *default
+  RAILS_ENV: review
+  RACK_ENV: review

@@ -10,6 +10,9 @@ review:
 	$(eval export TF_VAR_app_name=$(APP_NAME))
 	echo https://check-childrens-barred-list-$(APP_NAME).test.teacherservices.cloud will be created in aks
 
+ci:
+	$(eval export AUTO_APPROVE=-auto-approve)
+
 install-terrafile: ## Install terrafile to manage terraform modules
 	[ ! -f bin/terrafile ] \
 		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
@@ -20,6 +23,9 @@ set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
 terraform-init: install-terrafile set-azure-account
+	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
+	$(eval export TF_VAR_app_docker_image=ghcr.io/dfe-digital/check-childrens-barred-list:$(IMAGE_TAG))
+
 	$(if $(APP_NAME), $(eval KEY_PREFIX=$(APP_NAME)), $(eval KEY_PREFIX=$(ENVIRONMENT)))
 	./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/config/$(CONFIG)_Terrafile
 	terraform -chdir=terraform/aks init -upgrade -reconfigure \
@@ -36,10 +42,10 @@ terraform-plan: terraform-init
 	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
-	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json"
+	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json" $(AUTO_APPROVE)
 
 terraform-destroy: terraform-init
-	terraform -chdir=terraform/aks destroy -var-file "config/$(CONFIG).tfvars.json"
+	terraform -chdir=terraform/aks destroy -var-file "config/$(CONFIG).tfvars.json" $(AUTO_APPROVE)
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
