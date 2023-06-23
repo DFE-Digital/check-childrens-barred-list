@@ -1,0 +1,105 @@
+name: Build and Deploy
+concurrency: build_and_deploy_${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build
+    env:
+      DOCKER_IMAGE: ghcr.io/dfe-digital/check-childrens-barred-list
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.IMAGE_TAG }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout
+
+      - name: Set environment variables (push)
+        if: github.event_name == 'push'
+        run: |
+          GIT_BRANCH=${GITHUB_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV # GIT_BRANCH will be main for refs/heads/main
+          echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Set environment variables (pull_request)
+        if: github.event_name == 'pull_request'
+        run: |
+          GIT_BRANCH=${GITHUB_HEAD_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+      - name: Set KV environment variables
+        if: github.actor != 'dependabot[bot]'
+        run: |
+          # tag build to the review env for vars and secrets
+          tf_vars_file=terraform/aks/config/review.tfvars.json
+          echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: azure/login@v1
+        if: github.actor != 'dependabot[bot]'
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+
+      - uses: DFE-Digital/keyvault-yaml-secret@v1
+        if: github.actor != 'dependabot[bot]'
+        id: get-secret
+        with:
+          keyvault: ${{ env.KEY_VAULT_NAME }}
+          secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
+          key: SNYK_TOKEN
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          tags: |
+            ${{env.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+            ${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+          push: false
+          load: true
+          cache-to: type=inline
+          cache-from: |
+            type=registry,ref=${{env.DOCKER_IMAGE}}:main
+            type=registry,ref=${{env.DOCKER_IMAGE}}:${{env.IMAGE_TAG}}
+            type=registry,ref=${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+          build-args: COMMIT_SHA=${{ github.sha }}
+
+      - name: Push ${{ env.DOCKER_IMAGE }} images for review
+        if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        if: github.actor != 'dependabot[bot]'
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
+        with:
+          image: ${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}
+          args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
+
+      - name: Push ${{ env.DOCKER_IMAGE }} images
+        if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}

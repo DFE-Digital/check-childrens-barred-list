@@ -14,3 +14,7 @@ storage
 tmp
 vendor/cache
 yarn-debug.log*
+terraform
+.terraform
+tfplan
+Dockerfile

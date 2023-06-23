@@ -23,3 +23,8 @@ tmp/*
 tmp/pids/*
 !tmp/pids/
 !tmp/pids/.keep
+
+.terraform
+terraform/aks/vendor
+terraform.tfstate*
+bin/terrafile
