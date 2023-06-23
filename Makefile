@@ -3,6 +3,13 @@ ARM_TEMPLATE_TAG=1.1.0
 RG_TAGS={"Product" : "Teacher services cloud"}
 SERVICE_SHORT=ccbl
 
+.PHONY: install-konduit
+install-konduit: ## Install the konduit script, for accessing backend services
+	[ ! -f bin/konduit.sh ] \
+		&& curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/master/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh \
+		|| true
+
 review:
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
 	$(eval include global_config/review.sh)
