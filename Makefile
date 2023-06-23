@@ -10,6 +10,12 @@ install-konduit: ## Install the konduit script, for accessing backend services
 		&& chmod +x bin/konduit.sh \
 		|| true
 
+install-fetch-config:
+	[ ! -f bin/fetch_config.rb ] \
+		&& curl -s https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/scripts/fetch_config/fetch_config.rb -o bin/fetch_config.rb \
+		&& chmod +x bin/fetch_config.rb \
+		|| true
+
 review:
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
 	$(eval include global_config/review.sh)
@@ -54,10 +60,29 @@ terraform-apply: terraform-init
 terraform-destroy: terraform-init
 	terraform -chdir=terraform/aks destroy -var-file "config/$(CONFIG).tfvars.json" $(AUTO_APPROVE)
 
+read-tf-config:
+	$(eval key_vault_name=$(shell jq -r '.key_vault_name' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_infra_secret_name=$(shell jq -r '.key_vault_infra_secret_name' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
+
 read-cluster-config:
 	$(eval CLUSTER=$(shell jq -r '.cluster' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
 	$(eval NAMESPACE=$(shell jq -r '.namespace' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
 	$(eval CONFIG_LONG=$(shell jq -r '.environment' terraform/aks/config/$(DEPLOY_ENV).tfvars.json))
+
+edit-app-secrets: read-tf-config install-fetch-config set-azure-account
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
+		-e -d azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} -f yaml -c
+
+edit-infra-secrets: read-tf-config install-fetch-config set-azure-account
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
+		-e -d azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} -f yaml -c
+
+print-app-secrets: read-tf-config install-fetch-config set-azure-account
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} -f yaml
+
+print-infra-secrets: read-tf-config install-fetch-config set-azure-account
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} -f yaml
 
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 	az aks get-credentials --overwrite-existing -g ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER}-aks
