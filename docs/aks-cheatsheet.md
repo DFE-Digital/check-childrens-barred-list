@@ -102,13 +102,13 @@ kubectl -n tra-development get pods
 Without tail:
 
 ```shell
-kubectl -n tra-development logs teacher-relocation-payments-qa-some-number
+kubectl -n tra-development logs check-childrens-barred-list-qa-some-number
 ```
 
 Tail:
 
 ```shell
-kubectl -n tra-development logs teacher-relocation-payments-qa-some-number -f
+kubectl -n tra-development logs check-childrens-barred-list-qa-some-number -f
 ```
 
 Logs from the ingress:
@@ -120,7 +120,7 @@ kubectl logs deployment/ingress-nginx-controller -f
 Alternatively you can install kubetail and run:
 
 ```shell
-kubetail -n tra-development teacher-relocation-payments-qa-*
+kubetail -n tra-development check-childrens-barred-list-qa-*
 ```
 
 You can also get logs from a deployed app using make with logs:
@@ -134,13 +134,13 @@ make qa logs
 
 ```shell
 kubectl -n tra-development get deployments
-kubectl -n tra-development exec -ti deployment/teacher-relocation-payments-pr-1234 -- sh
+kubectl -n tra-development exec -ti deployment/check-childrens-barred-list-pr-1234 -- sh
 ```
 
 Alternatively you can enter directly on a pod:
 
 ```shell
-kubectl -n tra-development exec -ti teacher-relocation-payments-qa-some-number -- sh
+kubectl -n tra-development exec -ti check-childrens-barred-list-qa-some-number -- sh
 ```
 
 You can run a rails console on a deployed app using make with console:
@@ -174,7 +174,7 @@ kubectl top pod -A
 ## More info on a pod
 
 ```shell
-kubectl -n tra-development describe pods teacher-relocation-payments-somenumber-of-the-pod
+kubectl -n tra-development describe pods check-childrens-barred-list-somenumber-of-the-pod
 ```
 
 ## Scaling
@@ -182,19 +182,19 @@ kubectl -n tra-development describe pods teacher-relocation-payments-somenumber-
 The app:
 
 ```shell
-kubectl -n tra-development scale deployment/teacher-relocation-payments-loadtest --replicas 2
+kubectl -n tra-development scale deployment/check-childrens-barred-list-loadtest --replicas 2
 ```
 
 ### Enter on console
 
 ```shell
-kubectl -n tra-development exec -ti teacher-relocation-payments-loadtest-some-pod-number -- bundle exec rails c
+kubectl -n tra-development exec -ti check-childrens-barred-lists-loadtest-some-pod-number -- bundle exec rails c
 ```
 
 ### Running tasks
 
 ```shell
-kubectl -n tra-development exec -ti teacher-relocation-payments-loadtest-some-pod-number -- bundle exec rake -T
+kubectl -n tra-development exec -ti check-childrens-barred-list-loadtest-some-pod-number -- bundle exec rake -T
 ```
 
 ### Access the DB
@@ -207,7 +207,7 @@ bin/konduit.sh app-name -- psql
 Example of loading test:
 
 ```shell
-bin/konduit.sh teacher-relocation-payments-loadtest -- psql
+bin/konduit.sh check-childrens-barred-list-loadtest -- psql
 ```
 
 ## More info
