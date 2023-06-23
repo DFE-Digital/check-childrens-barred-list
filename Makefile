@@ -38,7 +38,7 @@ terraform-init: install-terrafile set-azure-account
 	terraform -chdir=terraform/aks init -upgrade -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
-		-backend-config=key=${KEY_PREFIX}_kubernetes.tfstate
+		-backend-config=key=${KEY_PREFIX}.tfstate
 
 	$(eval export TF_VAR_azure_resource_prefix=$(AZURE_RESOURCE_PREFIX))
 	$(eval export TF_VAR_config_short=$(CONFIG_SHORT))
