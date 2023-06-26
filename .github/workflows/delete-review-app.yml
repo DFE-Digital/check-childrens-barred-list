@@ -45,15 +45,6 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-      # - name: Validate Azure Key Vault secrets
-      #   if: env.TF_STATE_EXISTS == 'true'
-      #   uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
-      #   with:
-      #     KEY_VAULT: ${{ env.key_vault_name }}
-      #     SECRETS: |
-      #       ${{ env.key_vault_app_secret_name }}
-      #       ${{ env.key_vault_infra_secret_name }}
-
       - uses: DFE-Digital/github-actions/set-arm-environment-variables@master
         if: env.TF_STATE_EXISTS == 'true'
         with:
@@ -78,11 +69,3 @@ jobs:
           step: deactivate-env
           token: ${{ secrets.GITHUB_TOKEN }}
           env: review-${{ env.PR_NUMBER }}
-
-      # - name: Delete review-${{ env.PR_NUMBER }} environment
-      #   if:   always() && (steps.deactivate-env.outcome == 'success')
-      #   uses: bobheadxi/deployments@v1
-      #   with:
-      #     step:   delete-env
-      #     token:  ${{ secrets.API_TOKEN_FOR_GITHUB_ACTION }}
-      #     env:    review-${{ env.PR_NUMBER }}
