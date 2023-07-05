@@ -143,3 +143,28 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy_review.outputs.deploy-url }}
+
+  deploy_nonprod:
+    name: Deploy to ${{ matrix.environment }} environment
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    concurrency: deploy_${{ matrix.environment }}
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [development, test]
+    environment:
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy.outputs.url }}
+    outputs:
+      environment_name: ${{ matrix.environment }}
+      environment_url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy/
+        id: deploy
+        with:
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          docker-image: ${{ needs.build.outputs.docker_image }}
+          environment: ${{ matrix.environment }}
