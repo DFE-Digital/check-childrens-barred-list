@@ -1,7 +1,7 @@
-# Check the Children's Barred List
+# Check the Children’s Barred List
 
-A servive that allows employers and agencies to check whether someone appears on
-the Children's Barred List.
+A service that allows employers and agencies to check whether someone appears on
+the Children’s Barred List.
 
 ## Setup
 
@@ -70,7 +70,7 @@ dependencies and you want completion):
 bin/bundle exec yard gems
 ```
 
-You'll also need to configure your editor's `solargraph` plugin to
+You’ll also need to configure your editor’s `solargraph` plugin to
 `useBundler`:
 
 ```diff
