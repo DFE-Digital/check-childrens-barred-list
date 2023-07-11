@@ -63,6 +63,11 @@ variable "environment" {
   type = string
 }
 
+variable "external_url" {
+  type    = string
+  default = null
+}
+
 variable "gov_uk_host_names" {
   default = []
   type    = list(any)
