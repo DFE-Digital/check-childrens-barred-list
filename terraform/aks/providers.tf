@@ -16,5 +16,5 @@ provider "kubernetes" {
 }
 
 provider "statuscake" {
-  api_token = try(local.infra_secrets.STATUSCAKE_API_TOKEN, null)
+  api_token = local.infra_secrets.STATUSCAKE_API_TOKEN
 }
