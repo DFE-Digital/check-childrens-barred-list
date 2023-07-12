@@ -30,6 +30,9 @@ gem "bootsnap", require: false
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
 
+# Provide endpoint for server healthchecks
+gem "okcomputer"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
 end

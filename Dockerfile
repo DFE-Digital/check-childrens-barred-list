@@ -73,5 +73,8 @@ RUN apk add --no-cache libpq
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
+ARG COMMIT_SHA
+ENV COMMIT_SHA=$COMMIT_SHA
+
 CMD bundle exec rails db:migrate && \
     bundle exec rails server -b 0.0.0.0
