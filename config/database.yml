@@ -84,3 +84,4 @@ production:
   database: check_the_childrens_barred_list_production
   username: check_the_childrens_barred_list
   password: <%= ENV["CHECK_THE_CHILDRENS_BARRED_LIST_DATABASE_PASSWORD"] %>
+  sslmode: <%= ENV.fetch("DB_SSLMODE") { "require" } %>

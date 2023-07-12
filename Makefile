@@ -23,6 +23,16 @@ review:
 	$(eval export TF_VAR_app_name=$(APP_NAME))
 	echo https://check-childrens-barred-list-$(APP_NAME).test.teacherservices.cloud will be created in aks
 
+test:
+	$(eval include global_config/test.sh)
+	$(eval DEPLOY_ENV=test)
+	echo https://check-childrens-barred-list-test.test.teacherservices.cloud will be created in aks
+
+preproduction:
+	$(eval include global_config/preproduction.sh)
+	$(eval DEPLOY_ENV=preproduction)
+	echo https://check-childrens-barred-list-preproduction.test.teacherservices.cloud will be created in aks
+
 ci:
 	$(eval export AUTO_APPROVE=-auto-approve)
 

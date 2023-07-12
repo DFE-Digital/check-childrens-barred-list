@@ -1,7 +1,17 @@
 default: &default
   RAILS_SERVE_STATIC_FILES: true
 
+preproduction:
+  <<: *default
+  RAILS_ENV: production
+  RACK_ENV: production
+
 review:
   <<: *default
   RAILS_ENV: review
   RACK_ENV: review
+
+test:
+  <<: *default
+  RAILS_ENV: production
+  RACK_ENV: production
