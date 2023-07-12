@@ -166,5 +166,5 @@ jobs:
         id: deploy
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          docker-image: ${{ needs.build.outputs.docker_image }}
           environment: ${{ matrix.environment }}
+          sha: ${{ needs.build.outputs.IMAGE_TAG }}
