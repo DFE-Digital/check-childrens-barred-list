@@ -33,4 +33,7 @@ module "application_configuration" {
   config_variables      = local.app_env_values
   secret_variables      = local.app_secrets
   secret_yaml_key       = var.key_vault_app_secret_name
+
+  # This sets the RAILS_LOG_TO_STDOUT env var for logs
+  is_rails_application = true
 }
