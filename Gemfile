@@ -37,6 +37,9 @@ gem "okcomputer"
 gem "sentry-rails"
 gem "sentry-ruby"
 
+# Feature switching
+gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
 end
