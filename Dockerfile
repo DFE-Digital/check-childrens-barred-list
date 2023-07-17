@@ -21,6 +21,9 @@ RUN apk add --update --no-cache tzdata && \
 # postgresql-dev: postgres driver and libraries
 RUN apk add --no-cache build-base yarn postgresql13-dev
 
+# git: required to clone DFE repos
+RUN apk add --no-cache git
+
 # Install gems defined in Gemfile
 COPY .ruby-version Gemfile Gemfile.lock ./
 

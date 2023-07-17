@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/DFE-Digital/govuk_feature_flags.git
+  revision: 0d70b78786bce833d0e1554a645a6170896d7449
+  branch: main
+  specs:
+    govuk_feature_flags (0.1.0)
+      rails (>= 7.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -345,6 +353,7 @@ DEPENDENCIES
   debug
   govuk-components
   govuk_design_system_formbuilder
+  govuk_feature_flags!
   jsbundling-rails
   okcomputer
   pg (~> 1.1)
