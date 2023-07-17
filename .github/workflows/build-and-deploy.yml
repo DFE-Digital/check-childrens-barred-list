@@ -168,3 +168,23 @@ jobs:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           environment: ${{ matrix.environment }}
           sha: ${{ needs.build.outputs.IMAGE_TAG }}
+
+  deploy_production:
+    name: Deploy to production AKS environment
+    needs: [build, deploy_nonprod]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    concurrency: deploy_production
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/deploy
+        id: deploy
+        with:
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: production
+          sha: ${{ needs.build.outputs.IMAGE_TAG }}
