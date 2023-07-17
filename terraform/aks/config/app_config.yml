@@ -6,6 +6,11 @@ preproduction:
   RAILS_ENV: production
   RACK_ENV: production
 
+production:
+  <<: *default
+  RAILS_ENV: production
+  RACK_ENV: production
+
 review:
   <<: *default
   RAILS_ENV: review

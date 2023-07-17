@@ -33,6 +33,11 @@ preproduction:
 	$(eval DEPLOY_ENV=preproduction)
 	echo https://check-childrens-barred-list-preproduction.test.teacherservices.cloud will be created in aks
 
+production:
+	$(eval include global_config/production.sh)
+	$(eval DEPLOY_ENV=production)
+	echo https://check-childrens-barred-list-production.teacherservices.cloud will be created in aks
+
 ci:
 	$(eval export AUTO_APPROVE=-auto-approve)
 

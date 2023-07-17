@@ -131,6 +131,11 @@ variable "startup_command" {
   type = list(string)
 }
 
+variable "statuscake_contact_groups" {
+  type    = list(number)
+  default = []
+}
+
 locals {
   service_name = "check-childrens-barred-list"
   version      = "1.9.7"

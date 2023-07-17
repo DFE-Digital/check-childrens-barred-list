@@ -6,5 +6,5 @@ module "statuscake" {
   uptime_urls = compact([module.web_application.probe_url, var.external_url])
   ssl_urls    = compact([var.external_url])
 
-  contact_groups = [249142]
+  contact_groups = var.statuscake_contact_groups
 }
