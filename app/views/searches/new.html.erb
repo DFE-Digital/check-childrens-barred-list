@@ -2,7 +2,9 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Check the Children’s Barred List</h1>
 
-    <%= form_with(url: result_path, method: :get) do |f| %>
+    <%= form_with(model: @search_form, url: result_path, method: :get) do |f| %>
+      <%= f.govuk_error_summary %>
+
       <%= f.govuk_text_field :last_name, class: "govuk-input--width-20", label: { text: "Last name", size: "s" } %>
 
       <%= f.govuk_submit "Search" %>

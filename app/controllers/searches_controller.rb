@@ -2,15 +2,22 @@
 
 class SearchesController < ApplicationController
   def new
+    @search_form = SearchForm.new
   end
 
   def show
-    @result = OpenStruct.new(last_name: search_params[:last_name])
+    @search_form = SearchForm.new(search_params)
+
+    if @search_form.valid?
+      @result = OpenStruct.new(last_name: search_params[:last_name])
+    else
+      render :new
+    end
   end
 
   private
 
   def search_params
-    params.permit(:last_name)
+    params.require(:search_form).permit(:last_name)
   end
 end

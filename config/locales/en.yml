@@ -3,3 +3,10 @@ en:
     name: Check the Childen's Barred List
     email: employer.access@education.gov.uk
     dbs_email: dbscost@dbs.gov.uk
+  activemodel:
+    errors:
+      models:
+        search_form:
+          attributes:
+            last_name:
+              blank: Enter a last name
