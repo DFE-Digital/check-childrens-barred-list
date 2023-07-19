@@ -4,6 +4,6 @@ class ChildrensBarredListEntry < ApplicationRecord
   validates :date_of_birth, presence: true
 
   def self.includes_record?(last_name:)
-    where(last_name: last_name).any?
+    where("lower(last_name) = ?", last_name.downcase).any?
   end
 end
