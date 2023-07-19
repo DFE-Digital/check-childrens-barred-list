@@ -9,7 +9,7 @@ class SearchesController < ApplicationController
     @search_form = SearchForm.new(search_params)
 
     if @search_form.valid?
-      @result = OpenStruct.new(last_name: search_params[:last_name])
+      render :no_record unless any_records?
     else
       render :new
     end
@@ -19,5 +19,11 @@ class SearchesController < ApplicationController
 
   def search_params
     params.require(:search_form).permit(:last_name)
+  end
+
+  def any_records?
+    ChildrensBarredListEntry.includes_record?(
+      last_name: search_params[:last_name],
+    )
   end
 end
