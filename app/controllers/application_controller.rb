@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   default_form_builder(GOVUKDesignSystemFormBuilder::FormBuilder)
 
-  before_action :authenticate
+  before_action :authenticate, unless: -> { FeatureFlags::FeatureFlag.active?("service_open") }
 
   def authenticate
     valid_credentials = [

@@ -1,0 +1,11 @@
+<h1 class="govuk-heading-l">Record found</h1>
+
+<%= govuk_summary_list(
+  rows: [
+    { key: { text: "Last name" }, value: { text: @result.last_name } }
+  ])
+%>
+
+<p class="govuk-body">
+  Contact DBS at <%= govuk_mail_to t('service.dbs_email'), t('service.dbs_email') %> for more details.
+</p>

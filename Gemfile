@@ -65,4 +65,5 @@ end
 group :test, :development do
   gem "rspec"
   gem "rspec-rails"
+  gem "launchy"
 end
