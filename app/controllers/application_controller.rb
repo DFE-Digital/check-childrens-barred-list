@@ -7,8 +7,8 @@ class ApplicationController < ActionController::Base
     valid_credentials = [
       {
         username: ENV.fetch("SUPPORT_USERNAME", "support"),
-        password: ENV.fetch("SUPPORT_PASSWORD", "support"),
-      },
+        password: ENV.fetch("SUPPORT_PASSWORD", "support")
+      }
     ]
 
     authenticate_or_request_with_http_basic do |username, password|
