@@ -9,7 +9,9 @@ RSpec.describe "Valid search", type: :system do
     given_the_service_is_open
     and_there_is_a_record
     and_i_visit_the_search_page
-    and_i_search_for_their_last_name
+    and_i_enter_their_last_name
+    and_i_enter_their_date_of_birth
+    and_i_click_search
     then_i_see_a_result
   end
 
@@ -23,8 +25,17 @@ RSpec.describe "Valid search", type: :system do
     visit search_path
   end
 
-  def and_i_search_for_their_last_name
+  def and_i_enter_their_last_name
     fill_in "Last name", with: @record.last_name
+  end
+
+  def and_i_enter_their_date_of_birth
+    fill_in("Day", with: @record.date_of_birth.day)
+    fill_in("Month", with: @record.date_of_birth.month)
+    fill_in("Year", with: @record.date_of_birth.year)
+  end
+
+  def and_i_click_search
     click_button "Search"
   end
 
