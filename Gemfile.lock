@@ -106,6 +106,11 @@ GEM
     diff-lcs (1.5.0)
     e2mmap (0.1.0)
     erubi (1.12.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
     ferrum (0.13)
       addressable (~> 2.5)
       concurrent-ruby (~> 1.1)
@@ -142,6 +147,8 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.3)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -353,10 +360,12 @@ DEPENDENCIES
   cssbundling-rails
   cuprite
   debug
+  factory_bot_rails
   govuk-components
   govuk_design_system_formbuilder
   govuk_feature_flags!
   jsbundling-rails
+  launchy
   okcomputer
   pg (~> 1.1)
   prettier_print

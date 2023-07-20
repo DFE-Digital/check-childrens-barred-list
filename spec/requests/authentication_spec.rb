@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "Pages", type: :request do
-  describe "GET /home" do
+RSpec.describe "Authentication", type: :request do
+  describe "GET /" do
     it "requires authentication" do
       get "/"
       expect(response).to have_http_status(:unauthorized)
@@ -11,7 +11,7 @@ RSpec.describe "Pages", type: :request do
       let(:credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(
           ENV.fetch("SUPPORT_USERNAME", "support"),
-          ENV.fetch("SUPPORT_PASSWORD", "support")
+          ENV.fetch("SUPPORT_PASSWORD", "support"),
         )
       end
 

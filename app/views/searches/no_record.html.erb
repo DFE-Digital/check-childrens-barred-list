@@ -1,0 +1,17 @@
+<% content_for :page_title, "No record found" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">No record found</h1>
+
+    <%= govuk_summary_list(
+      rows: [
+        { key: { text: "Last name" }, value: { text: @search_form.last_name } }
+      ])
+    %>
+
+    <p class="govuk_body">
+      <%= govuk_link_to "Try another search", search_path %>
+    </p>
+  </div>
+</div>
