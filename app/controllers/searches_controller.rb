@@ -34,7 +34,8 @@ class SearchesController < ApplicationController
 
   def any_records?
     ChildrensBarredListEntry.includes_record?(
-      last_name: search_params[:last_name],
+      last_name: @search_form.last_name,
+      date_of_birth: @search_form.date_of_birth,
     )
   end
 end

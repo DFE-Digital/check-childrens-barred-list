@@ -1,15 +1,15 @@
 require "rails_helper"
 
-RSpec.describe DayMonthYearValidator do
-  class Validatable
-    include ActiveModel::Model
-    attr_accessor :day, :month, :year, :date_attribute
+class Validatable
+  include ActiveModel::Model
+  attr_accessor :day, :month, :year, :date_attribute
 
-    validate do |record|
-      DayMonthYearValidator.new.validate(record, :date_attribute)
-    end
+  validate do |record|
+    DayMonthYearValidator.new.validate(record, :date_attribute)
   end
+end
 
+RSpec.describe DayMonthYearValidator do
   subject(:validatable) { Validatable.new(valid_attributes) }
 
   let(:valid_attributes) { { day: "15", month: "6", year: "1990" } }
