@@ -1,6 +1,6 @@
 en:
   service:
-    name: Check the Childen's Barred List
+    name: Check the Childen’s Barred List
     email: employer.access@education.gov.uk
     dbs_email: dbscost@dbs.gov.uk
   activemodel:

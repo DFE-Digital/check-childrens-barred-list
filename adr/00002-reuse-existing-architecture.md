@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-Check the Children's Barred List is a monolithic Rails application and should
+Check the Children’s Barred List is a monolithic Rails application and should
 use a similar architecture to other monoliths, like
 [Find a lost TRN](https://github.com/DFE-Digital/find-a-lost-trn).
 
