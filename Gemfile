@@ -65,6 +65,7 @@ end
 group :test, :development do
   gem "factory_bot_rails"
   gem "launchy"
+  gem "pry-byebug"
   gem "rspec"
   gem "rspec-rails"
 end

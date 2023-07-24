@@ -8,6 +8,7 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_field :last_name, class: "govuk-input--width-20", label: { text: "Last name", size: "s" } %>
+      <%= f.govuk_date_field :date_of_birth, date_of_birth: true, legend: { text: "Date of birth", size: "s" } %>
 
       <%= f.govuk_submit "Search" %>
     <% end %>

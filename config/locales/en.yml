@@ -1,6 +1,6 @@
 en:
   service:
-    name: Check the Childen's Barred List
+    name: Check the Childen’s Barred List
     email: employer.access@education.gov.uk
     dbs_email: dbscost@dbs.gov.uk
   activemodel:
@@ -10,3 +10,6 @@ en:
           attributes:
             last_name:
               blank: Enter a last name
+            date_of_birth:
+              blank: Enter a date of birth
+              invalid: Enter a valid date of birth
