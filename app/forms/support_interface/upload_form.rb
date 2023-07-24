@@ -10,6 +10,9 @@ module SupportInterface
       return false unless valid?
 
       CreateChildrensBarredListEntries.new(file.read).call
+    rescue CSV::MalformedCSVError
+      errors.add(:file, :invalid_csv)
+      false
     end
   end
 end

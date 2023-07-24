@@ -28,5 +28,18 @@ RSpec.describe SupportInterface::UploadForm, type: :model do
         expect { form.save }.to change { ChildrensBarredListEntry.count }.by(2)
       end
     end
+
+    context "when the file contents are invalid" do
+      let(:invalid_csv_data) { %(1, "foo", 3) }
+
+      subject(:form) do
+        described_class.new(file: StringIO.new(invalid_csv_data))
+      end
+
+      it "adds an error to the file attribute" do
+        expect(form.save).to eq(false)
+        expect(form.errors[:file]).to include("Please ensure file is in CSV format and try again")
+      end
+    end
   end
 end

@@ -8,6 +8,7 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_file_field :file, 
+                             accept: "text/csv",
                              label: { text: "Select a file to upload", class: "govuk-heading-m" },
                              hint: { text: "You should upload your files in CSV format." } %>
 

@@ -17,3 +17,4 @@ en:
           attributes:
             file:
               blank: Please select a CSV file to upload
+              invalid_csv: Please ensure file is in CSV format and try again

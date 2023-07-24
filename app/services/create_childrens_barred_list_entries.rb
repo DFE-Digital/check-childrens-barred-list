@@ -1,6 +1,8 @@
 require "csv"
 
 class CreateChildrensBarredListEntries
+  TITLES_REGEX = /^(mr|mrs|miss|ms|dr|prof)\.? /i
+
   def initialize(raw_data)
     @raw_data = raw_data
   end
@@ -30,7 +32,7 @@ class CreateChildrensBarredListEntries
   end
 
   def format_names(names)
-    names.gsub!(/^(mr|mrs|miss|ms|dr|prof)\.? /i, "")
+    names.gsub!(TITLES_REGEX, "")
     names.split(" ").map(&:capitalize).join(" ")
   end
 end
