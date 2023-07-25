@@ -13,3 +13,8 @@ en:
             date_of_birth:
               blank: Enter a date of birth
               invalid: Enter a valid date of birth
+        "support_interface/upload_form":
+          attributes:
+            file:
+              blank: Please select a CSV file to upload
+              invalid_csv: Please ensure file is in CSV format and try again
