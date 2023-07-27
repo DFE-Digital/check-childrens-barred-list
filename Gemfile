@@ -47,6 +47,9 @@ gem "omniauth-oauth2", "~> 1.8"
 gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
+# Sending events to BigQuery
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.7.0"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
 end
