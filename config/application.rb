@@ -35,7 +35,9 @@ module CheckTheChildrensBarredList
     config.generators.system_tests = nil
 
     config.assets.paths << Rails.root.join(
-      "node_modules/govuk-frontend/govuk/assets"
+      "node_modules/govuk-frontend/govuk/assets",
     )
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end
