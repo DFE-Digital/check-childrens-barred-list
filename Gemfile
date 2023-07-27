@@ -37,6 +37,8 @@ gem "okcomputer"
 gem "sentry-rails"
 gem "sentry-ruby"
 
+gem "sidekiq"
+
 # Feature switching
 gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
 
