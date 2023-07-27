@@ -50,10 +50,6 @@ gem "omniauth-rails_csrf_protection"
 # Sending events to BigQuery
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.7.0"
 
-group :development, :test do
-  gem "debug", platforms: %i[mri mingw x64_mingw]
-end
-
 group :development do
   gem "prettier_print", require: false
   gem "rladr"
@@ -73,6 +69,7 @@ group :test do
 end
 
 group :test, :development do
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
   gem "launchy"
   gem "pry-byebug"
