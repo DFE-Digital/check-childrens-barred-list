@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe "Valid search", type: :system do
   include ActivateFeaturesSteps
   include AuthenticationSteps
+  include CommonSteps
 
   scenario "User searches with a last name", test: :with_stubbed_auth do
     given_the_service_is_open
@@ -15,6 +16,7 @@ RSpec.describe "Valid search", type: :system do
     and_i_enter_their_date_of_birth
     and_i_click_search
     then_i_see_a_result
+    and_event_tracking_is_working
   end
 
   private

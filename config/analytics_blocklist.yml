@@ -1,0 +1,11 @@
+---
+shared:
+  :childrens_barred_list_entries:
+    - id
+    - trn
+    - first_names
+    - last_name
+    - date_of_birth
+    - national_insurance_number
+    - created_at
+    - updated_at

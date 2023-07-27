@@ -9,6 +9,9 @@ end
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+require "dfe/analytics/testing"
+require "dfe/analytics/rspec/matchers"
+
 require "capybara/cuprite"
 Capybara.register_driver(:cuprite) do |app|
   Capybara::Cuprite::Driver.new(
@@ -32,6 +35,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include ActiveJob::TestHelper
   config.fixture_path = Rails.root.join("spec/fixtures")
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
