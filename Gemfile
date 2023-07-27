@@ -70,6 +70,7 @@ group :test do
 end
 
 group :test, :development do
+  gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "launchy"
   gem "pry-byebug"
