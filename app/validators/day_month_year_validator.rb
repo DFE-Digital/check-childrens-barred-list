@@ -6,8 +6,14 @@ class DayMonthYearValidator
 
     return true unless all_present?
 
-    record.errors.add(attribute, :invalid) unless valid?
-    record.errors.add(attribute, :invalid_year) unless year_valid?
+    unless valid?
+      record.errors.add(attribute, :invalid)
+      return
+    end
+
+    record.errors.add(attribute, :invalid_year) if invalid_year?
+    record.errors.add(attribute, :future) if date.future?
+    record.errors.add(attribute, :under_16) if under_16?
   end
 
   private
@@ -28,7 +34,15 @@ class DayMonthYearValidator
     false
   end
 
-  def year_valid?
-    @record.year.length == 4
+  def invalid_year?
+    @record.year.length != 4
+  end
+
+  def under_16?
+    date >= 16.years.ago
+  end
+
+  def date
+    @date ||= Date.new(@record.year.to_i, @record.month.to_i, @record.day.to_i)
   end
 end

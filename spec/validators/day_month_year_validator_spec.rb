@@ -63,6 +63,26 @@ RSpec.describe DayMonthYearValidator do
       end
     end
 
+    context "when the date is in the future" do
+      let(:attributes) { { day: "15", month: "6", year: 1.year.from_now.year.to_s } }
+
+      it "fails validation" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("future")
+      end
+    end
+
+    context "when the date less than 16 years ago" do
+      let(:attributes) { { day: "15", month: "6", year: 15.years.ago.year.to_s } }
+
+      it "fails validation" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("under_16")
+      end
+    end
+
     context "when day is missing" do
       let(:attributes) { { day: nil, month: "6", year: "1990" } }
 
