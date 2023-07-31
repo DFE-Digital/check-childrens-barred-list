@@ -83,6 +83,16 @@ RSpec.describe DayMonthYearValidator do
       end
     end
 
+    context "when the date more than 100 years ago" do
+      let(:attributes) { { day: "15", month: "6", year: 101.years.ago.year.to_s } }
+
+      it "fails validation" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("over_100")
+      end
+    end
+
     context "when day is missing" do
       let(:attributes) { { day: nil, month: "6", year: "1990" } }
 

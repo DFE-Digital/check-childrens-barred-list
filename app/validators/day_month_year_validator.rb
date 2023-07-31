@@ -13,6 +13,7 @@ class DayMonthYearValidator
 
     record.errors.add(attribute, :invalid_year) if invalid_year?
     record.errors.add(attribute, :future) if date.future?
+    record.errors.add(attribute, :over_100) if over_100?
     record.errors.add(attribute, :under_16) if under_16?
   end
 
@@ -40,6 +41,10 @@ class DayMonthYearValidator
 
   def under_16?
     date >= 16.years.ago
+  end
+
+  def over_100?
+    date <= 100.years.ago
   end
 
   def date
