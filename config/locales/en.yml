@@ -12,7 +12,8 @@ en:
               blank: Enter a last name
             date_of_birth:
               blank: Enter a date of birth
-              invalid: Enter a valid date of birth
+              invalid: Date of birth must be a real date
+              invalid_year: Year must include 4 numbers
         "support_interface/upload_form":
           attributes:
             file:
