@@ -4,9 +4,11 @@ require "rails_helper"
 
 RSpec.describe "Invalid search", type: :system do
   include ActivateFeaturesSteps
+  include AuthenticationSteps
 
-  scenario "User searches without a last name" do
+  scenario "User searches without a last name", test: :with_stubbed_auth do
     given_the_service_is_open
+    and_i_am_signed_in_via_dsi
     and_i_visit_the_search_page
     and_i_click_search
     then_i_see_an_error

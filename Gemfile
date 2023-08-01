@@ -42,6 +42,11 @@ gem "sidekiq"
 # Feature switching
 gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
 
+# Authentication
+gem "omniauth-oauth2", "~> 1.8"
+gem "omniauth_openid_connect"
+gem "omniauth-rails_csrf_protection"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
 end
@@ -65,6 +70,7 @@ group :test do
 end
 
 group :test, :development do
+  gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "launchy"
   gem "pry-byebug"

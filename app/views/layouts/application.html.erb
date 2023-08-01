@@ -27,7 +27,13 @@
 
     <%= govuk_skip_link %>
 
-    <%= govuk_header(service_name: t("service.name")) %>
+    <%= govuk_header(service_name: t("service.name")) do |header|
+      if current_dsi_user
+        header.with_navigation_item(href: "/sign-out", text: "Sign out")
+      else
+        header.with_navigation_item(href: "/sign-in", text: "Sign in")
+      end
+    end %>
 
     <div class="govuk-width-container">
       <%= govuk_phase_banner(tag: { text: "Beta" }) do %>

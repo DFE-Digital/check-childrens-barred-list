@@ -37,6 +37,12 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
   config.before(:each, type: :system) { driven_by(:cuprite) }
+  config.around(:each, test: :with_stubbed_auth) do |example|
+    OmniAuth.config.test_mode = true
+    example.run
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth.delete(:dfe)
+  end
 end
 
 Shoulda::Matchers.configure do |config|

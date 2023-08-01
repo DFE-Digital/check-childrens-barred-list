@@ -4,9 +4,11 @@ require "rails_helper"
 
 RSpec.describe "No matching record search", type: :system do
   include ActivateFeaturesSteps
+  include AuthenticationSteps
 
-  scenario "User searches with no matching last name" do
+  scenario "User searches with no matching last name", test: :with_stubbed_auth do
     given_the_service_is_open
+    and_i_am_signed_in_via_dsi
     and_there_is_a_record
     and_i_visit_the_search_page
     and_i_search_for_a_different_last_name
