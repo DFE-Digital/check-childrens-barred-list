@@ -33,6 +33,11 @@
       else
         header.with_navigation_item(href: "/sign-in", text: "Sign in")
       end
+
+      if support_interface?
+        header.with_navigation_item(href: "/support/features", text: "Features")
+        header.with_navigation_item(href: "/support/uploads/new", text: "File upload")
+      end
     end %>
 
     <div class="govuk-width-container">
