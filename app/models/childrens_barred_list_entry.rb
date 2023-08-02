@@ -8,6 +8,9 @@ class ChildrensBarredListEntry < ApplicationRecord
   validates :date_of_birth, presence: true
 
   def self.includes_record?(last_name:, date_of_birth:)
-    where("lower(last_name) = ?", last_name.downcase).and(where(date_of_birth:)).any?
+    where(
+      "lower(unaccent(last_name)) = ?",
+      ActiveSupport::Inflector.transliterate(last_name.downcase)
+    ).and(where(date_of_birth:)).any?
   end
 end
