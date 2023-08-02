@@ -10,7 +10,7 @@ class ChildrensBarredListEntry < ApplicationRecord
   def self.includes_record?(last_name:, date_of_birth:)
     where(
       "lower(unaccent(last_name)) = ?",
-      ActiveSupport::Inflector.transliterate(last_name.downcase)
+      ActiveSupport::Inflector.transliterate(last_name.strip.downcase)
     ).and(where(date_of_birth:)).any?
   end
 end

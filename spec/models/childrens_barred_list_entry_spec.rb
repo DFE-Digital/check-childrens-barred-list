@@ -41,6 +41,17 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
       end
     end
 
+    context "with a whitespace insensitive match on last_name" do
+      it "returns true" do
+        expect(
+          described_class.includes_record?(
+            last_name: " Doe ",
+            date_of_birth: record.date_of_birth,
+          ),
+        ).to be_truthy
+      end
+    end
+
     context "with matching DoB but no matching last_name" do
       it "returns false" do
         expect(
