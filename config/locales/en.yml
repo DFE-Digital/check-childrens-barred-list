@@ -12,7 +12,11 @@ en:
               blank: Enter a last name
             date_of_birth:
               blank: Enter a date of birth
-              invalid: Enter a valid date of birth
+              future: Date of birth must be in the past
+              invalid: Date of birth must be a real date
+              invalid_year: Year must include 4 numbers
+              over_100: Date of birth cannot be more than 100 years ago
+              under_16: Date of birth must be at least 16 years ago
         "support_interface/upload_form":
           attributes:
             file:
