@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe CreateChildrensBarredListEntries do
   let(:csv_data) do
     [
-      ["12567", "SMITH", "DR. JOHN JAMES", "01/02/1990", "AB123456C"].join(","),
-      ["1234568", "jones", "mrs jane jemima", "07/05/1980", "AB123456D"].join(",")
+      ["12567", "SMITH ", "DR. JOHN JAMES ", "01/02/1990", "AB123456C"].join(","),
+      ["1234568", " jones ", " mrs jane jemima", "07/05/1980", "AB123456D"].join(",")
     ].join("\n")
   end
 
@@ -33,6 +33,8 @@ RSpec.describe CreateChildrensBarredListEntries do
   it "formats the names" do
     service.call
     expect(ChildrensBarredListEntry.first.first_names).to eq("John James")
+    expect(ChildrensBarredListEntry.first.last_name).to eq("Smith")
     expect(ChildrensBarredListEntry.last.first_names).to eq("Jane Jemima")
+    expect(ChildrensBarredListEntry.last.last_name).to eq("Jones")
   end
 end
