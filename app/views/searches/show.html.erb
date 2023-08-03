@@ -7,8 +7,8 @@
 
     <%= govuk_summary_list(
       rows: [
-        { key: { text: "Last name" }, value: { text: @search_form.last_name } },
-        { key: { text: "Date of birth" }, value: { text: @search_form.date_of_birth.to_fs(:long_uk) } }
+        { key: { text: "Last name" }, value: { text: @record.last_name } },
+        { key: { text: "Date of birth" }, value: { text: @record.date_of_birth.to_fs(:long_uk) } }
       ])
     %>
 
