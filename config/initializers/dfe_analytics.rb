@@ -1,6 +1,11 @@
+require "hosting_environment"
+
 DfE::Analytics.configure do |config|
+  # config.async = false
+  # config.log_only = true
+
   config.queue = :analytics
-  # TODO: set environment here?
+  config.environment = HostingEnvironment.environment_name
 
   config.enable_analytics =
     proc do

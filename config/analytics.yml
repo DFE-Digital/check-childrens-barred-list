@@ -21,6 +21,14 @@ shared:
     - record_id
     - blob_id
     - created_at
+  :dsi_users:
+    - id
+    - email
+    - first_name
+    - last_name
+    - uid
+    - created_at
+    - updated_at
   :feature_flags_features:
     - id
     - name
