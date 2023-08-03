@@ -15,6 +15,19 @@ namespace :example_data do
     # information before attempting to generate factories
     ChildrensBarredListEntry.reset_column_information
 
-    FactoryBot.create(:childrens_barred_list_entry, date_of_birth: Date.new(1980, 1, 1))
+    entries = [
+      { first_names: "Mickey", last_name: "Mousé" },
+      { first_names: "John", last_name: "Doe" },
+      { first_names: "Ally", last_name: "Mc Ally" },
+    ]
+
+    entries.each do |entry|
+      FactoryBot.create(
+        :childrens_barred_list_entry,
+        first_names: entry[:first_names],
+        last_name: entry[:last_name],
+        date_of_birth: Date.new(1980, 1, 1)
+      )
+    end
   end
 end
