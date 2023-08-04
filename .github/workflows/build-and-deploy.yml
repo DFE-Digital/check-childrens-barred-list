@@ -153,7 +153,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [test, preproduction]
+        environment: [preproduction]
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy.outputs.url }}
