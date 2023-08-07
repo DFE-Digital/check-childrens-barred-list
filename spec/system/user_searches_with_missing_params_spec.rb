@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Invalid search", type: :system do
   include ActivateFeaturesSteps
   include AuthenticationSteps
-  include CommonSteps
+  include AnalyticsSteps
 
   scenario "User searches without a last name", test: :with_stubbed_auth do
     given_the_service_is_open
