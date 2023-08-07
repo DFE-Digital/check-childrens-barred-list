@@ -71,9 +71,12 @@ end
 
 group :test, :development do
   gem "dotenv-rails"
-  gem "factory_bot_rails"
   gem "launchy"
   gem "pry-byebug"
   gem "rspec"
   gem "rspec-rails"
+end
+
+group :development, :test, :review do
+  gem "factory_bot_rails"
 end

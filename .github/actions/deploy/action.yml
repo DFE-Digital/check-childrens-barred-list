@@ -38,6 +38,7 @@ runs:
         echo "key_vault_name=$(jq -r '.key_vault_name' $TFVARS)" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' $TFVARS)" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name'  $TFVARS)" >> $GITHUB_ENV
+        echo "namespace=$(jq -r '.namespace' $TFVARS)" >> $GITHUB_ENV
 
         if [ -n "${{ inputs.pr-number }}" ]; then
           APP_NAME=pr-${{ inputs.pr-number }}
@@ -111,3 +112,8 @@ runs:
       run: |
         az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
         make install-konduit
+
+    - name: Generate example data
+      shell: bash
+      if: inputs.environment == 'review'
+      run: kubectl exec -n ${{ env.namespace }} deployment/check-childrens-barred-list-${APP_NAME} -- /bin/sh -c "cd /app && bundle exec rails example_data:generate"
