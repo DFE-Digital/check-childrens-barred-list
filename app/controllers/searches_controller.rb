@@ -15,7 +15,7 @@ class SearchesController < ApplicationController
     @search_form = SearchForm.new(search_params)
 
     if @search_form.valid?
-      render :no_record unless any_records?
+      render :no_record if record.nil?
     else
       render :new
     end
@@ -32,8 +32,8 @@ class SearchesController < ApplicationController
       end
   end
 
-  def any_records?
-    ChildrensBarredListEntry.includes_record?(
+  def record
+    @record ||= ChildrensBarredListEntry.search(
       last_name: @search_form.last_name,
       date_of_birth: @search_form.date_of_birth,
     )
