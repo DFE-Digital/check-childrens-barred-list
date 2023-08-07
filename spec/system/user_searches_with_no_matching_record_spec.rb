@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "No matching record search", type: :system do
   include ActivateFeaturesSteps
   include AuthenticationSteps
-  include CommonSteps
+  include AnalyticsSteps
 
   scenario "User searches with no matching last name", test: :with_stubbed_auth do
     given_the_service_is_open
