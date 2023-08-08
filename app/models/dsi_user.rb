@@ -1,4 +1,7 @@
 class DsiUser < ApplicationRecord
+  encrypts :email, deterministic: true
+  encrypts :first_name, :last_name
+
   def self.create_or_update_from_dsi(dsi_payload)
     dsi_user = find_or_initialize_by(email: dsi_payload.info.fetch(:email))
 
