@@ -15,7 +15,7 @@ should be kept secret.
 
 ### Accessing the key
 
-To gain access to this key, you can call `make dev print-keyvault-secret | grep RAILS_MASTER_KEY` and
+To gain access to this key, you can call `make test print-app-secrets | grep RAILS_MASTER_KEY` and
 then copy the value from the output to your local `config/master.key` file.
 
 ### Rotating keys
