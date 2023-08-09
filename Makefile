@@ -102,10 +102,6 @@ print-infra-secrets: read-tf-config install-fetch-config set-azure-account
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 	az aks get-credentials --overwrite-existing -g ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER}-aks
 
-logs: get-cluster-credentials
-	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
-	kubectl -n ${NAMESPACE} logs -l app=check-childrens-barred-list-${APP_ID} --tail=-1 --timestamps=true
-
 set-what-if:
 	$(eval WHAT_IF=--what-if)
 
@@ -162,3 +158,15 @@ action-group-resources: set-azure-account # make production action-group-resourc
 	echo ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg
 	az group create -l uksouth -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Database of Qualified Teachers" "Environment=${DEPLOY_ENV}" "Service Offering=Database of Qualified Teachers"
 	az monitor action-group create -n ${AZURE_RESOURCE_PREFIX}-check-childrens-barred-list -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
+
+console: get-cluster-credentials
+	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
+	kubectl -n ${NAMESPACE} exec -ti --tty deployment/check-childrens-barred-list-${APP_ID} -- /bin/sh -c "cd /app && /usr/local/bin/bundle exec rails c"
+
+logs: get-cluster-credentials
+	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
+	kubectl -n ${NAMESPACE} logs -l app=check-childrens-barred-list-${APP_ID} --tail=-1 --timestamps=true
+
+ssh: get-cluster-credentials
+	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
+	kubectl -n ${NAMESPACE} exec -ti --tty deployment/check-childrens-barred-list-${APP_ID} -- /bin/sh
