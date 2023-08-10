@@ -5,7 +5,7 @@ the Children’s Barred List.
 
 ## Setup
 
-### Prerequisites
+### Dependencies
 
 This project depends on:
 
@@ -14,6 +14,7 @@ This project depends on:
 - [NodeJS](https://nodejs.org/)
 - [Yarn](https://yarnpkg.com/)
 - [Postgres](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 
 Install dependencies using your preferred method, using `asdf` or `rbenv` or
 `nvm`. Example with `asdf`:
@@ -30,7 +31,24 @@ asdf plugin add postgres
 asdf install
 ```
 
-Setup the project:
+#### Redis
+
+You’ll need to install Redis. The way to do this is different on each operating system, but on macOS you can try the following:
+
+```bash
+brew install redis
+brew services start redis
+```
+
+If installing Redis manually, you'll need to start it in a separate terminal:
+
+```bash
+redis-server
+```
+
+### Application
+
+Setup the project (re-run after `Gemfile` or `package.json` updates, automatically restarts any running Rails server):
 
 ```bash
 bin/setup
