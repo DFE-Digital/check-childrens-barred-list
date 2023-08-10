@@ -21,6 +21,26 @@ module "web_application" {
   web_external_hostnames = var.gov_uk_host_names
 }
 
+module "worker_application" {
+  source = "./vendor/modules/aks//aks/application"
+
+  name   = "worker"
+  is_web = false
+
+  namespace    = var.namespace
+  environment  = local.app_name_suffix
+  service_name = local.service_name
+
+  cluster_configuration_map = module.cluster_data.configuration_map
+
+  kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
+  kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
+
+  docker_image  = var.app_docker_image
+  command       = ["bundle", "exec", "sidekiq", "-C", "./config/sidekiq.yml"]
+  probe_command = ["pgrep", "-f", "sidekiq"]
+}
+
 module "application_configuration" {
 
   source = "./vendor/modules/aks//aks/application_configuration"
