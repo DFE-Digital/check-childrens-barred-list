@@ -30,8 +30,3 @@ terraform.tfstate*
 bin/terrafile
 bin/konduit.sh
 bin/fetch_config.rb
-
-config/credentials/test.key
-config/credentials/review.key
-
-/config/credentials/production.key
