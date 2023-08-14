@@ -27,6 +27,6 @@ RSpec.describe "Upload file", type: :system do
   end
 
   def then_i_see_a_success_message
-    expect(page).to have_content("CSV file uploaded successfully")
+    expect(page).to have_content("Records uploaded")
   end
 end
