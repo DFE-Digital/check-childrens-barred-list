@@ -105,3 +105,5 @@ We use `rladr` to generate the boilerplate for new records:
 ```bash
 bin/bundle exec rladr new title
 ```
+
+## REMOVE ME!
