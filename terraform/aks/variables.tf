@@ -152,10 +152,11 @@ locals {
   app_env_values = merge(
     local.app_config,
     {
-      DB_SSLMODE = local.postgres_ssl_mode
       BIGQUERY_PROJECT_ID = "teaching-qualifications",
       BIGQUERY_DATASET    = "ccbl_events_${var.environment}",
       BIGQUERY_TABLE_NAME = "events",
+      DB_SSLMODE = local.postgres_ssl_mode,
+      HOSTING_ENVIRONMENT = var.environment,
     }
   )
 
