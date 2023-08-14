@@ -154,7 +154,7 @@ locals {
     {
       DB_SSLMODE = local.postgres_ssl_mode
       BIGQUERY_PROJECT_ID = "teaching-qualifications",
-      BIGQUERY_DATASET    = "events_${var.environment}",
+      BIGQUERY_DATASET    = "ccbl_events_${var.environment}",
       BIGQUERY_TABLE_NAME = "events",
     }
   )
