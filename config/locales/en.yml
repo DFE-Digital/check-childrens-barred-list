@@ -20,5 +20,5 @@ en:
         "support_interface/upload_form":
           attributes:
             file:
-              blank: Please select a CSV file to upload
-              invalid_csv: Please ensure file is in CSV format and try again
+              blank: Select a file
+              invalid_csv: The selected file must be a CSV

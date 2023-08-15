@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
     mount FeatureFlags::Engine => "/features"
 
-    resources :uploads, only: %i[new create index]
+    resources :uploads, only: %i[new create]
+    get "/uploads/success", to: "uploads#success", as: :upload_success
   end
 end

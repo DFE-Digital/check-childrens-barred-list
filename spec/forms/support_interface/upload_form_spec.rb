@@ -38,7 +38,7 @@ RSpec.describe SupportInterface::UploadForm, type: :model do
 
       it "adds an error to the file attribute" do
         expect(form.save).to eq(false)
-        expect(form.errors[:file]).to include("Please ensure file is in CSV format and try again")
+        expect(form.errors[:file]).to include("The selected file must be a CSV")
       end
     end
   end

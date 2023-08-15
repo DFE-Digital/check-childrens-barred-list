@@ -1,16 +1,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <h1 class="govuk-heading-l">Check the Children’s Barred List</h1>
-
-    <h2 class="govuk-heading-m">Upload file</h2>
-
     <%= form_with model: @upload_form, url: [:support_interface, :uploads] do |f| %>
-      <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary("There’s a problem") %>
 
       <%= f.govuk_file_field :file, 
-                             accept: "text/csv",
-                             label: { text: "Select a file to upload", class: "govuk-heading-m" },
-                             hint: { text: "You should upload your files in CSV format." } %>
+                             label: { text: "Upload records (CSV)", size: "l", tag: "h1" },
+                             accept: "text/csv" %>
 
       <%= f.govuk_submit "Upload file" %>
     <% end %>
