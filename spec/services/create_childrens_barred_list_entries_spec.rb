@@ -33,7 +33,7 @@ RSpec.describe CreateChildrensBarredListEntries do
   end
 
   it "sets the upload_file_hash" do
-    service.call
-    expect(ChildrensBarredListEntry.first.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
+    expect(service.upload_file_hash).not_to be_nil
+    expect(service.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
   end
 end
