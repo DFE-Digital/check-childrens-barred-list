@@ -23,6 +23,13 @@
       <% end %>
       </tbody>
     </table>
-    <%= govuk_button_to "Confirm", support_interface_upload_confirm_path(upload_file_hash: @upload_file_hash) %>
+    <div class="govuk-button-group">
+      <%= govuk_button_to("Confirm", support_interface_upload_confirm_path(upload_file_hash: @upload_file_hash)) %>
+      <%= govuk_button_to(
+        "Cancel",
+        support_interface_upload_cancel_path(upload_file_hash: @upload_file_hash),
+        class: "govuk-button--warning",
+      ) %>
+    </div>
   </div>
 </div>

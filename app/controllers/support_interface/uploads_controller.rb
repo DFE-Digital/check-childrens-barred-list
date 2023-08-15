@@ -25,6 +25,16 @@ module SupportInterface
       if ConfirmChildrensBarredListEntries.new.call(upload_file_hash_param)
         redirect_to support_interface_upload_success_path
       else
+        @upload_file_hash = upload_file_hash_param
+        render :preview
+      end
+    end
+
+    def cancel
+      if DeleteUnconfirmedChildrensBarredListEntries.new.call(upload_file_hash_param)
+        redirect_to new_support_interface_upload_path
+      else
+        @upload_file_hash = upload_file_hash_param
         render :preview
       end
     end

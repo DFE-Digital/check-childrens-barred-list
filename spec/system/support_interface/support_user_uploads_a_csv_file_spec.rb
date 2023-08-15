@@ -10,6 +10,10 @@ RSpec.describe "Upload file", type: :system do
     and_i_am_on_the_upload_page
     when_i_upload_a_valid_csv_file
     then_i_see_a_preview_of_the_data
+    when_i_cancel_the_upload
+    then_i_am_redirected_to_the_upload_page
+    and_unconfirmed_entries_are_removed
+    when_i_upload_a_valid_csv_file
     when_i_confirm_the_upload
     then_i_see_a_success_message
   end
@@ -21,6 +25,8 @@ RSpec.describe "Upload file", type: :system do
   def and_i_am_on_the_upload_page
     visit new_support_interface_upload_path
   end
+
+  alias_method :then_i_am_redirected_to_the_upload_page, :and_i_am_on_the_upload_page
 
   def when_i_upload_a_valid_csv_file
     attach_file "support_interface_upload_form[file]",
@@ -45,6 +51,14 @@ RSpec.describe "Upload file", type: :system do
       expect(page).to have_content("Banner")
       expect(page).to have_content("Bruce Angry")
     end
+  end
+
+  def when_i_cancel_the_upload
+    click_on "Cancel"
+  end
+
+  def and_unconfirmed_entries_are_removed
+    expect(ChildrensBarredListEntry.count).to eq(0)
   end
 
   def when_i_confirm_the_upload

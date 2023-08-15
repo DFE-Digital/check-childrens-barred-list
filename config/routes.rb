@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :uploads, only: %i[new create]
     get "/uploads/preview", to: "uploads#preview", as: :upload_preview
     post "/uploads/confirm", to: "uploads#confirm", as: :upload_confirm
+    post "/uploads/cancel", to: "uploads#cancel", as: :upload_cancel
     get "/uploads/success", to: "uploads#success", as: :upload_success
   end
 end
