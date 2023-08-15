@@ -22,3 +22,16 @@ en:
             file:
               blank: Select a file
               invalid_csv: The selected file must be a CSV
+  activerecord:
+    errors:
+      models:
+        feedback:
+          attributes:
+            satisfaction_rating:
+              inclusion: Select how satisfied you are with the service
+            improvement_suggestion:
+              blank: Enter how we can improve the service
+            contact_permission_given:
+              inclusion: Select yes if we can contact you about your feedback
+            email:
+              blank: Enter an email address

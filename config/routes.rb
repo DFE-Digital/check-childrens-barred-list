@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   get "/auth/dfe/callback", to: "omniauth_callbacks#dfe"
   post "/auth/developer/callback" => "omniauth_callbacks#dfe_bypass"
 
+  scope "/feedback" do
+    get "/" => "feedbacks#new", :as => :feedbacks
+    post "/" => "feedbacks#create"
+    get "/confirmation" => "feedbacks#confirmation"
+  end
+
   namespace :support_interface, path: "/support" do
     root to: redirect("/support/features")
 
