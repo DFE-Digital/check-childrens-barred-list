@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     mount FeatureFlags::Engine => "/features"
 
     resources :uploads, only: %i[new create]
+    get "/uploads/preview", to: "uploads#preview", as: :upload_preview
+    post "/uploads/confirm", to: "uploads#confirm", as: :upload_confirm
     get "/uploads/success", to: "uploads#success", as: :upload_success
   end
 end
