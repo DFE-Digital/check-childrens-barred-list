@@ -1,2 +1,7 @@
 ---
-shared: {}
+shared:
+  :dsi_users:
+    - email
+    - first_name
+    - last_name
+    - uid
