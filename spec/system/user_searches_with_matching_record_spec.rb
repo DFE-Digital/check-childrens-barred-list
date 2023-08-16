@@ -34,9 +34,10 @@ RSpec.describe "Valid search", type: :system do
   end
 
   def and_i_enter_their_date_of_birth
-    fill_in("Day", with: @record.date_of_birth.day)
-    fill_in("Month", with: @record.date_of_birth.month)
-    fill_in("Year", with: @record.date_of_birth.year)
+    date_of_birth = Date.parse(@record.date_of_birth)
+    fill_in("Day", with: date_of_birth.day)
+    fill_in("Month", with: date_of_birth.month)
+    fill_in("Year", with: date_of_birth.year)
   end
 
   def and_i_click_search
