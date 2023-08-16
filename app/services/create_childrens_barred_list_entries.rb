@@ -18,7 +18,7 @@ class CreateChildrensBarredListEntries
           trn: pad_trn(row[0]),
           last_name: format_names(row[1]),
           first_names: format_names(row[2]),
-          date_of_birth: row[3],
+          date_of_birth: Date.parse(row[3]).to_fs(:db),
           national_insurance_number: row[4],
           upload_file_hash:,
         )
