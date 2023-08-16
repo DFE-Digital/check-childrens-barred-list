@@ -5,6 +5,7 @@ shared:
     - trn
     - first_names
     - last_name
+    - searchable_last_name
     - date_of_birth
     - national_insurance_number
     - confirmed
