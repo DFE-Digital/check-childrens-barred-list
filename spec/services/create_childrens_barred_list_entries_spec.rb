@@ -23,8 +23,10 @@ RSpec.describe CreateChildrensBarredListEntries do
     service.call
     expect(ChildrensBarredListEntry.first.first_names).to eq("John James")
     expect(ChildrensBarredListEntry.first.last_name).to eq("Smith")
+    expect(ChildrensBarredListEntry.first.searchable_last_name).to eq("smith")
     expect(ChildrensBarredListEntry.last.first_names).to eq("Jane Jemima")
     expect(ChildrensBarredListEntry.last.last_name).to eq("Jones")
+    expect(ChildrensBarredListEntry.last.searchable_last_name).to eq("jones")
   end
 
   it "sets the confirmed field to false" do
