@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
     t.boolean "confirmed", default: false, null: false
     t.datetime "confirmed_at"
     t.string "upload_file_hash"
+    t.string "searchable_last_name"
     t.index ["first_names", "last_name", "date_of_birth"], name: "index_childrens_barred_list_entries_on_names_and_dob", unique: true
   end
 
