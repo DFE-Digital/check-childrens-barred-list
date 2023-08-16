@@ -20,7 +20,7 @@ class SearchesController < ApplicationController
       SearchLog.create!(
         dsi_user: current_dsi_user,
         last_name: @search_form.last_name,
-        date_of_birth: @search_form.date_of_birth.to_s,
+        date_of_birth: @search_form.date_of_birth.to_fs(:db),
         result_returned: true
       )
     else

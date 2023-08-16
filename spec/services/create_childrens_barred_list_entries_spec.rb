@@ -92,7 +92,12 @@ RSpec.describe CreateChildrensBarredListEntries do
   end
 
   it "compiles a list of failed entries" do
-    create(:childrens_barred_list_entry, first_names: "John James", last_name: "Smith", date_of_birth: "01/02/1990")
+    create(
+      :childrens_barred_list_entry,
+      first_names: "John James",
+      last_name: "Smith",
+      date_of_birth: Date.parse("01/02/1990").to_fs(:db),
+    )
     service.call
     expect(service.failed_entries.size).to eq(1)
   end
