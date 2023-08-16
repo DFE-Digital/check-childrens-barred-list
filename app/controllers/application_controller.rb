@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include DfE::Analytics::Requests
   default_form_builder(GOVUKDesignSystemFormBuilder::FormBuilder)
 
   before_action :http_basic_authenticate, unless: -> { FeatureFlags::FeatureFlag.active?(:service_open) }

@@ -151,7 +151,13 @@ locals {
 
   app_env_values = merge(
     local.app_config,
-    { DB_SSLMODE = local.postgres_ssl_mode }
+    {
+      BIGQUERY_PROJECT_ID = "teaching-qualifications",
+      BIGQUERY_DATASET    = "ccbl_events_${var.environment}",
+      BIGQUERY_TABLE_NAME = "events",
+      DB_SSLMODE = local.postgres_ssl_mode,
+      HOSTING_ENVIRONMENT = var.environment,
+    }
   )
 
   app_resource_group_name = "${var.azure_resource_prefix}-${var.service_short}-${var.config_short}-rg"
