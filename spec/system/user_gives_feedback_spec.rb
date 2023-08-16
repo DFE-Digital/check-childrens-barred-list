@@ -65,7 +65,7 @@ RSpec.feature "Feedback", type: :system do
   end
 
   def then_i_see_the_feedback_sent_page
-    expect(page).to have_current_path("/feedback/confirmation")
+    expect(page).to have_current_path("/feedback/success")
     expect(page).to have_title("Feedback sent")
     expect(page).to have_content("What you can do next")
   end

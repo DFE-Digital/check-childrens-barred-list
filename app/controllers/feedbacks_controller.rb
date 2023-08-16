@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class FeedbacksController < ApplicationController
   def new
     @feedback = Feedback.new
@@ -9,7 +7,7 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new(feedback_params)
 
     if @feedback.save
-      redirect_to :confirmation
+      redirect_to :success
     else
       render :new
     end

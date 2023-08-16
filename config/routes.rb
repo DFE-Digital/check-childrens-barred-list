@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   scope "/feedback" do
     get "/" => "feedbacks#new", :as => :feedbacks
     post "/" => "feedbacks#create"
-    get "/confirmation" => "feedbacks#confirmation"
+    get "/success" => "feedbacks#success"
   end
 
   namespace :support_interface, path: "/support" do
