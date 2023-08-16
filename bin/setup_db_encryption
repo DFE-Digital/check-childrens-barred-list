@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require "fileutils"
+require "yaml"
+
+# path to your application root.
+APP_ROOT = File.expand_path("..", __dir__)
+
+FileUtils.chdir APP_ROOT do
+  puts "Generate new master key? [y/n]"
+  puts
+
+  answer = gets
+  new_master_key = answer.chomp.downcase.start_with?("y")
+
+  if new_master_key
+    master_key = %x[bin/rails secret | cut -c-32]
+  end
+
+  puts "*** Generating Rails DB encryption credentials ***"
+  puts
+  credentials_output = %x[bin/rails db:encryption:init]
+
+  credentials = YAML.load(credentials_output)
+  values = credentials["active_record_encryption"]
+
+  puts "Add the following to the appropriate .env file or keyvault for your application:"
+  puts
+  puts "RAILS_MASTER_KEY=#{master_key}" if new_master_key
+  puts "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=#{values['primary_key']}"
+  puts "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=#{values['deterministic_key']}"
+  puts "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=#{values['key_derivation_salt']}"
+end
