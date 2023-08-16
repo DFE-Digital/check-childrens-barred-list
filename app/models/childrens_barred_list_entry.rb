@@ -1,4 +1,7 @@
 class ChildrensBarredListEntry < ApplicationRecord
+  encrypts :date_of_birth, :first_names, :last_name, :searchable_last_name, deterministic: true
+  encrypts :trn, :national_insurance_number
+
   validates :first_names, presence: true
   validates :last_name,
             presence: true,
