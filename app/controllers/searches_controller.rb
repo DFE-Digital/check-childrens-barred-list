@@ -42,7 +42,7 @@ class SearchesController < ApplicationController
   def record
     @record ||= ChildrensBarredListEntry.search(
       last_name: @search_form.last_name,
-      date_of_birth: @search_form.date_of_birth,
+      date_of_birth: @search_form.date_of_birth.to_fs(:db),
     )
   end
 end
