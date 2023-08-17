@@ -23,9 +23,16 @@ RSpec.describe SupportInterface::UploadForm, type: :model do
       end
 
       subject(:form) { described_class.new(file: StringIO.new(csv_data)) }
+      let(:save!) { form.save }
 
       it "creates a new ChildrensBarredListEntry for each row in the CSV" do
         expect { form.save }.to change { ChildrensBarredListEntry.count }.by(2)
+      end
+
+      it "populates the upload_file_hash attribute" do
+        save!
+        expect(ChildrensBarredListEntry.first.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
+        expect(ChildrensBarredListEntry.last.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
       end
     end
 

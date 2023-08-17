@@ -14,17 +14,6 @@ RSpec.describe CreateChildrensBarredListEntries do
     expect { service.call }.to change { ChildrensBarredListEntry.count }.by(2)
   end
 
-  it "updates existing matching entries" do
-    existing_entry = ChildrensBarredListEntry.create!(
-      last_name: "Jones",
-      first_names: "Jane Jemima",
-      date_of_birth: "07/05/1980"
-    )
-    service.call
-    expect(existing_entry.reload.trn).to eq("1234568")
-    expect(existing_entry.national_insurance_number ).to eq("AB123456D")
-  end
-
   it "zero pads the TRN" do
     service.call
     expect(ChildrensBarredListEntry.first.trn).to eq("0012567")
@@ -36,5 +25,15 @@ RSpec.describe CreateChildrensBarredListEntries do
     expect(ChildrensBarredListEntry.first.last_name).to eq("Smith")
     expect(ChildrensBarredListEntry.last.first_names).to eq("Jane Jemima")
     expect(ChildrensBarredListEntry.last.last_name).to eq("Jones")
+  end
+
+  it "sets the confirmed field to false" do
+    service.call
+    expect(ChildrensBarredListEntry.first.confirmed).to eq(false)
+  end
+
+  it "sets the upload_file_hash" do
+    expect(service.upload_file_hash).not_to be_nil
+    expect(service.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
   end
 end

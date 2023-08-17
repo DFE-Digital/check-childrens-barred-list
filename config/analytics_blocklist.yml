@@ -7,5 +7,8 @@ shared:
     - last_name
     - date_of_birth
     - national_insurance_number
+    - confirmed
+    - confirmed_at
+    - upload_file_hash
     - created_at
     - updated_at

@@ -9,6 +9,12 @@ RSpec.describe "Upload file", type: :system do
     and_i_am_signed_in_via_dsi
     and_i_am_on_the_upload_page
     when_i_upload_a_valid_csv_file
+    then_i_see_a_preview_of_the_data
+    when_i_cancel_the_upload
+    then_i_am_redirected_to_the_upload_page
+    and_unconfirmed_entries_are_removed
+    when_i_upload_a_valid_csv_file
+    when_i_confirm_the_upload
     then_i_see_a_success_message
   end
 
@@ -20,10 +26,43 @@ RSpec.describe "Upload file", type: :system do
     visit new_support_interface_upload_path
   end
 
+  alias_method :then_i_am_redirected_to_the_upload_page, :and_i_am_on_the_upload_page
+
   def when_i_upload_a_valid_csv_file
     attach_file "support_interface_upload_form[file]",
                 Rails.root.join("spec/fixtures/example.csv")
     click_on "Upload file"
+  end
+
+  def then_i_see_a_preview_of_the_data
+    expect(page).to have_content("Review and confirm")
+    within("table thead") do
+      expect(page).to have_content("Last name")
+      expect(page).to have_content("First names")
+      expect(page).to have_content("Date of birth")
+      expect(page).to have_content("TRN")
+      expect(page).to have_content("NIN")
+    end
+
+    within("table tbody") do
+      expect(page).to have_content("Simpson")
+      expect(page).to have_content("Homer Duff")
+
+      expect(page).to have_content("Banner")
+      expect(page).to have_content("Bruce Angry")
+    end
+  end
+
+  def when_i_cancel_the_upload
+    click_on "Cancel"
+  end
+
+  def and_unconfirmed_entries_are_removed
+    expect(ChildrensBarredListEntry.count).to eq(0)
+  end
+
+  def when_i_confirm_the_upload
+    click_on "Confirm"
   end
 
   def then_i_see_a_success_message

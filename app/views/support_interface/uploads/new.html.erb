@@ -1,3 +1,5 @@
+<% content_for :page_title, "Upload records (CSV)" %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @upload_form, url: [:support_interface, :uploads] do |f| %>

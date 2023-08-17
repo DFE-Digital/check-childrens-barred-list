@@ -23,6 +23,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_140331) do
     t.string "national_insurance_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "confirmed", default: false, null: false
+    t.datetime "confirmed_at"
+    t.string "upload_file_hash"
     t.index ["first_names", "last_name", "date_of_birth"], name: "index_childrens_barred_list_entries_on_names_and_dob", unique: true
   end
 

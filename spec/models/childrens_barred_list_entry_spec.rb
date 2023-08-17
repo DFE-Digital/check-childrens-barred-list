@@ -84,5 +84,17 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
         ).to be_nil
       end
     end
+
+    context "with an unconfirmed record" do
+      let(:record) { create(:childrens_barred_list_entry, :unconfirmed) }
+      it "returns nil" do
+        expect(
+          described_class.search(
+            last_name: record.last_name,
+            date_of_birth: record.date_of_birth,
+          ),
+        ).to be_nil
+      end
+    end
   end
 end

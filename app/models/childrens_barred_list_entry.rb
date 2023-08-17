@@ -11,6 +11,8 @@ class ChildrensBarredListEntry < ApplicationRecord
     where(
       "lower(unaccent(last_name)) = ?",
       ActiveSupport::Inflector.transliterate(last_name.strip.downcase)
-    ).and(where(date_of_birth:)).first
+    )
+    .where(date_of_birth:, confirmed: true)
+    .first
   end
 end
