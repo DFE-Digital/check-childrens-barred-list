@@ -12,7 +12,7 @@ RSpec.describe Feedback, type: :model do
         %w[
           very_satisfied
           satisfied
-          neither_satisfied_or_dissatisfied
+          neither_satisfied_nor_dissatisfied
           dissatisfied
           very_dissatisfied
         ]
