@@ -2,6 +2,9 @@ class DsiUser < ApplicationRecord
   has_many :dsi_user_sessions, dependent: :destroy
   has_many :search_logs
 
+  encrypts :first_name, :last_name
+  encrypts :email, deterministic: true
+
   def self.create_or_update_from_dsi(dsi_payload, role = nil)
     dsi_user = find_or_initialize_by(email: dsi_payload.info.fetch(:email))
 
