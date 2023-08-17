@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <%= form_with(model: @search_form, url: result_path, method: :get) do |f| %>
-      <%= f.govuk_error_summary("There’s a problem", presenter: SearchFormErrorSummaryPresenter) %>
+      <%= f.govuk_error_summary(presenter: SearchFormErrorSummaryPresenter) %>
 
       <h1 class="govuk-heading-l">Check the Children’s Barred List</h1>
 

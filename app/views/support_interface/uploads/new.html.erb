@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @upload_form, url: [:support_interface, :uploads] do |f| %>
-      <%= f.govuk_error_summary("There’s a problem") %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_file_field :file, 
                              label: { text: "Upload records (CSV)", size: "l", tag: "h1" },

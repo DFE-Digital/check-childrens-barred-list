@@ -5,3 +5,6 @@ shared:
     - first_name
     - last_name
     - uid
+  :feedbacks:
+    - email
+    - improvement_suggestion

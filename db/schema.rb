@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_15_100506) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_15_140331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -44,4 +44,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_100506) do
     t.index ["name"], name: "index_feature_flags_features_on_name", unique: true
   end
 
+  create_table "feedbacks", force: :cascade do |t|
+    t.string "satisfaction_rating", null: false
+    t.text "improvement_suggestion", null: false
+    t.boolean "contact_permission_given", null: false
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 end
