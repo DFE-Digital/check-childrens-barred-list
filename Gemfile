@@ -30,6 +30,9 @@ gem "bootsnap", require: false
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
 
+# Convert Markdown into HTML
+gem "govuk_markdown"
+
 # Provide endpoint for server healthchecks
 gem "okcomputer"
 

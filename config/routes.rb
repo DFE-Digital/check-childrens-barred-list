@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     get "/success" => "feedbacks#success"
   end
 
+  get "/accessibility", to: "static#accessibility"
+  get "/cookies", to: "static#cookies"
+
   namespace :support_interface, path: "/support" do
     root to: redirect("/support/features")
 
