@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
     t.string "upload_file_hash"
     t.string "searchable_last_name"
     t.index ["first_names", "last_name", "date_of_birth"], name: "index_childrens_barred_list_entries_on_names_and_dob", unique: true
+    t.index ["searchable_last_name", "date_of_birth"], name: "index_cbl_entries_on_searchable_last_name_and_dob"
   end
 
   create_table "dsi_user_sessions", force: :cascade do |t|
