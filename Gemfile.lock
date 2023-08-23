@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: a814932b0ac9feef69da29e1b7522d3565dd7e61
-  tag: v1.7.0
+  revision: 11d75a3c92cc15439c00ea7f2f8686acffefc103
+  tag: v1.10.1
   specs:
-    dfe-analytics (1.7.0)
+    dfe-analytics (1.10.1)
       google-cloud-bigquery (~> 1.38)
       request_store_rails (~> 2)
 
@@ -83,7 +83,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
     ast (2.4.2)
@@ -298,7 +298,7 @@ GEM
     pry-byebug (3.10.1)
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
-    public_suffix (5.0.1)
+    public_suffix (5.0.3)
     puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.7.1)
