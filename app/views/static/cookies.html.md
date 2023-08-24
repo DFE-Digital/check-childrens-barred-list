@@ -28,10 +28,10 @@ t('service.name') %> service. We do not need to ask permission to use them.
         _check_the_childrens_barred_list_session
       </td>
       <td class="govuk-table__cell" width="50%">
-        Used to keep you signed in
+        Keeps you signed in
       </td>
       <td class="govuk-table__cell">
-        When the session ends
+        When you close your browser
       </td>
     </tr>
   </tbody>
