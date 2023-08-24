@@ -26,6 +26,6 @@ else
              discovery: true,
              issuer: "#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}",
              response_type: :code,
-             scope: %i[email first_name last_name]
+             scope: %i[email organisation profile]
   end
 end
