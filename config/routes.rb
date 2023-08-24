@@ -8,13 +8,16 @@ Rails.application.routes.draw do
   get "/sign-out", to: "sign_out#new"
 
   get "/auth/dfe/callback", to: "omniauth_callbacks#dfe"
-  post "/auth/developer/callback" => "omniauth_callbacks#dfe_bypass"
+  post "/auth/developer/callback", to: "omniauth_callbacks#dfe_bypass"
 
   scope "/feedback" do
-    get "/" => "feedbacks#new", :as => :feedbacks
-    post "/" => "feedbacks#create"
-    get "/success" => "feedbacks#success"
+    get "/", to: "feedbacks#new", as: :feedbacks
+    post "/", to: "feedbacks#create"
+    get "/success", to: "feedbacks#success"
   end
+
+  get "/accessibility", to: "static#accessibility"
+  get "/cookies", to: "static#cookies"
 
   namespace :support_interface, path: "/support" do
     root to: redirect("/support/features")
