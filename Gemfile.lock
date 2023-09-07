@@ -556,6 +556,7 @@ DEPENDENCIES
   govuk_feature_flags!
   govuk_markdown
   jsbundling-rails
+  jwt
   launchy
   okcomputer
   omniauth-oauth2 (~> 1.8)

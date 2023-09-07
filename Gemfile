@@ -56,6 +56,9 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.11.1"
 # Scheduling jobs
 gem "clockwork"
 
+# Generate JSON Web Tokens
+gem "jwt"
+
 group :development do
   gem "prettier_print", require: false
   gem "rladr"
