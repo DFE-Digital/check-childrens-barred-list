@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_15_140331) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_084304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -27,6 +27,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_140331) do
     t.datetime "confirmed_at"
     t.string "upload_file_hash"
     t.index ["first_names", "last_name", "date_of_birth"], name: "index_childrens_barred_list_entries_on_names_and_dob", unique: true
+  end
+
+  create_table "dsi_user_sessions", force: :cascade do |t|
+    t.bigint "dsi_user_id"
+    t.string "role_id"
+    t.string "role_code"
+    t.string "organisation_id"
+    t.string "organisation_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dsi_user_id"], name: "index_dsi_user_sessions_on_dsi_user_id"
   end
 
   create_table "dsi_users", force: :cascade do |t|
@@ -55,4 +66,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_140331) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
 end
