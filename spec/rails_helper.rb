@@ -9,10 +9,13 @@ end
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+require "capybara/cuprite"
 require "dfe/analytics/testing"
 require "dfe/analytics/rspec/matchers"
+require "webmock/rspec"
 
-require "capybara/cuprite"
+WebMock.disable_net_connect!(allow_localhost: true)
+
 Capybara.register_driver(:cuprite) do |app|
   Capybara::Cuprite::Driver.new(
     app,

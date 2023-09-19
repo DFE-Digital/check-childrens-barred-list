@@ -17,5 +17,6 @@ RSpec.describe "DSI authentication", type: :system do
   def then_i_am_signed_in
     within("header") { expect(page).to have_content "Sign out" }
     expect(DsiUser.count).to eq 1
+    expect(DsiUserSession.count).to eq 1
   end
 end

@@ -6,7 +6,19 @@ class OmniauthCallbacksController < ApplicationController
   skip_before_action :handle_expired_session!
 
   def dfe
-    @dsi_user = DsiUser.create_or_update_from_dsi(request.env["omniauth.auth"])
+    auth = request.env["omniauth.auth"]
+
+    unless DfESignIn.bypass?
+      role = DfESignInApi::GetUserAccessToService.new(
+        org_id: auth.extra.raw_info.organisation.id,
+        user_id: auth.uid,
+      ).call
+
+      return head(:unauthorized) unless role
+    end
+
+    @dsi_user = DsiUser.create_or_update_from_dsi(auth, role)
+
     session[:dsi_user_id] = @dsi_user.id
     session[:dsi_user_session_expiry] = 2.hours.from_now.to_i
 

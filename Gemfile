@@ -75,6 +75,7 @@ group :test do
   gem "capybara"
   gem "cuprite"
   gem "shoulda-matchers"
+  gem "webmock"
 end
 
 group :test, :development do
