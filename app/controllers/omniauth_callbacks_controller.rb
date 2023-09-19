@@ -14,7 +14,7 @@ class OmniauthCallbacksController < ApplicationController
         user_id: auth.uid,
       ).call
 
-      return head(:unauthorized) unless role
+      return redirect_to not_authorised_path unless role
     end
 
     @dsi_user = DsiUser.create_or_update_from_dsi(auth, role)
