@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get "/accessibility", to: "static#accessibility"
   get "/cookies", to: "static#cookies"
 
+  get '/401', to: 'errors#not_authorised', as: :not_authorised
+
   namespace :support_interface, path: "/support" do
     root to: redirect("/support/features")
 

@@ -16,5 +16,6 @@ RSpec.describe "DSI authentication", type: :system do
 
   def then_i_am_not_authorised
     expect(page.status_code).to eq 401
+    expect(page).to have_content("You are not authorised to access this service")
   end
 end
