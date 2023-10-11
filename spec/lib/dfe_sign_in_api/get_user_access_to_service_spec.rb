@@ -7,7 +7,10 @@ RSpec.describe DfESignInApi::GetUserAccessToService do
     let(:role_id) { "789" }
     let(:role_code) { ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",").first }
     let(:endpoint) do
-      "#{ENV.fetch("DFE_SIGN_IN_API_BASE_URL")}/services/checkchildrensbarredlist/organisations/#{org_id}/users/#{user_id}"
+      [
+        ENV.fetch("DFE_SIGN_IN_API_BASE_URL"),
+        "/services/checkchildrensbarredlist/organisations/#{org_id}/users/#{user_id}"
+      ].join
     end
 
     subject { described_class.new(org_id:, user_id:).call }
