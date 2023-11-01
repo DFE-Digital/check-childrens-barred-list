@@ -2,9 +2,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Authorisation required</h1>
+    <h1 class="govuk-heading-l">You cannot use the DfE Sign-in account for <%= session[:organisation_name] %> to check the children's barred list.</h1>
     <p class="govuk-body">
-      You are not authorised to access this service.
+      If you have access to another organisation in DfE Sign-in, you can <%= govuk_link_to("sign out and start again", dsi_sign_out_path(id_token_hint: session[:id_token])) %>.
     </p>
   </div>
 </div>
+
