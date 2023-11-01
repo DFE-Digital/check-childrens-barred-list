@@ -16,6 +16,9 @@ RSpec.describe "DSI authentication", type: :system do
 
   def then_i_am_not_authorised
     expect(page.status_code).to eq 401
-    expect(page).to have_content("You are not authorised to access this service")
+    expect(page).to have_content(
+      "You cannot use the DfE Sign-in account for Test School to check the children's barred list"
+    )
+    expect(page).to have_link("sign out and start again", href: "/auth/dfe/sign-out?id_token_hint=abc123")
   end
 end
