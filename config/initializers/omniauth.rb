@@ -3,6 +3,7 @@ require "omniauth/strategies/dfe_openid_connect"
 
 OmniAuth.config.logger = Rails.logger
 OmniAuth.config.add_camelization('dfe_openid_connect', 'DfEOpenIDConnect')
+OmniAuth.config.on_failure = proc { |env| AuthFailuresController.action(:failure).call(env) }
 
 if DfESignIn.bypass?
   Rails.application.config.middleware.use OmniAuth::Builder do
