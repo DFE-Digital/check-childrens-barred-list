@@ -20,6 +20,6 @@ RSpec.describe "DSI authentication", type: :system do
   end
 
   def then_i_am_redirected_to_the_sign_in_page
-    expect(page).to have_current_path(sign_in_path)
+    expect(page).to have_content "You are now signed out"
   end
 end

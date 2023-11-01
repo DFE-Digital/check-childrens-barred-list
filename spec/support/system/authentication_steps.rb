@@ -11,6 +11,9 @@ module AuthenticationSteps
       {
         provider: "dfe",
         uid: "123456",
+        credentials: {
+          id_token: "abc123",
+        },
         info: {
           email: "test@example.com",
           first_name: "Test",
@@ -20,6 +23,7 @@ module AuthenticationSteps
           raw_info: {
             organisation: {
               id: org_id,
+              name: "Test School",
             }
           }
         }

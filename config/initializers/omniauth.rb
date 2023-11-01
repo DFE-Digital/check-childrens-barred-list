@@ -1,6 +1,8 @@
 require "dfe_sign_in"
+require "omniauth/strategies/dfe_openid_connect"
 
 OmniAuth.config.logger = Rails.logger
+OmniAuth.config.add_camelization('dfe_openid_connect', 'DfEOpenIDConnect')
 
 if DfESignIn.bypass?
   Rails.application.config.middleware.use OmniAuth::Builder do
@@ -12,9 +14,11 @@ else
   dfe_sign_in_issuer_uri = URI(ENV.fetch("DFE_SIGN_IN_ISSUER", "example"))
 
   Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :openid_connect,
+    provider :dfe_openid_connect,
              name: :dfe,
              callback_path: "/auth/dfe/callback",
+             logout_path: "/sign-out",
+             post_logout_redirect_uri: "#{ENV['HOSTING_DOMAIN']}/sign-out",
              client_options: {
                host: dfe_sign_in_issuer_uri&.host,
                identifier: ENV["DFE_SIGN_IN_CLIENT_ID"],
