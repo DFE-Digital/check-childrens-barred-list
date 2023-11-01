@@ -28,10 +28,12 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(service_name: t("service.name")) do |header|
-      if current_dsi_user
-        header.with_navigation_item(href: dsi_sign_out_path(id_token_hint: session[:id_token]), text: "Sign out")
-      else
-        header.with_navigation_item(href: sign_in_path, text: "Sign in")
+      if request.path != not_authorised_path
+        if current_dsi_user
+          header.with_navigation_item(href: dsi_sign_out_path(id_token_hint: session[:id_token]), text: "Sign out")
+        else
+          header.with_navigation_item(href: sign_in_path, text: "Sign in")
+        end
       end
 
       if support_interface?
