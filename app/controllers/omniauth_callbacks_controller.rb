@@ -11,9 +11,7 @@ class OmniauthCallbacksController < ApplicationController
     if DfESignIn.bypass?
       create_or_update_dsi_user
     else
-      role = check_user_access_to_service
       return redirect_to not_authorised_path unless role
-
       create_or_update_dsi_user(role)
     end
 
@@ -38,8 +36,8 @@ class OmniauthCallbacksController < ApplicationController
     session[:dsi_user_session_expiry] = 2.hours.from_now.to_i
   end
 
-  def check_user_access_to_service
-    DfESignInApi::GetUserAccessToService.new(
+  def role
+    @role ||= DfESignInApi::GetUserAccessToService.new(
       org_id: auth.extra.raw_info.organisation.id,
       user_id: auth.uid,
     ).call
