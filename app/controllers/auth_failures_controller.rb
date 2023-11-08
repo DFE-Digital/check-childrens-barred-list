@@ -1,9 +1,12 @@
 class AuthFailuresController < ApplicationController
+  skip_before_action :authenticate_dsi_user!
+  skip_before_action :handle_expired_session!
+
   class OpenIdConnectProtocolError < StandardError; end
 
   def failure
     return redirect_to(dsi_sign_out_path(id_token_hint: session[:id_token])) if session_expired?
-    handle_failure_then_redirect_to sign_in_path
+    handle_failure_then_redirect_to sign_in_path(oauth_failure: true)
   end
 
   private
@@ -12,7 +15,6 @@ class AuthFailuresController < ApplicationController
     oidc_error = OpenIdConnectProtocolError.new(error_message)
     unless Rails.env.development?
       Sentry.capture_exception(oidc_error)
-      flash[:warning] = I18n.t("generic_oauth_failure")
       redirect_to(path) and return
     end
 

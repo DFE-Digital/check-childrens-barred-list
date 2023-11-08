@@ -5,7 +5,6 @@ class OmniauthCallbacksController < ApplicationController
   skip_before_action :authenticate_dsi_user!
   skip_before_action :handle_expired_session!
 
-  before_action :clear_session_attributes
   before_action :add_auth_attributes_to_session, only: :dfe
 
   def dfe
@@ -26,13 +25,6 @@ class OmniauthCallbacksController < ApplicationController
 
   def auth
     request.env["omniauth.auth"]
-  end
-
-  def clear_session_attributes
-    session[:organisation_name] = nil
-    session[:id_token] = nil
-    session[:dsi_user_id] = nil
-    session[:dsi_user_session_expiry] = nil
   end
 
   def add_auth_attributes_to_session
