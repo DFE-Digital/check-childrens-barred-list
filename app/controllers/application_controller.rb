@@ -3,8 +3,8 @@ class ApplicationController < ActionController::Base
   default_form_builder(GOVUKDesignSystemFormBuilder::FormBuilder)
 
   before_action :http_basic_authenticate, unless: -> { FeatureFlags::FeatureFlag.active?(:service_open) }
-  before_action :authenticate_dsi_user!, if: -> { FeatureFlags::FeatureFlag.active?(:service_open) }
-  before_action :handle_expired_session!, if: -> { FeatureFlags::FeatureFlag.active?(:service_open) }
+  before_action :authenticate_dsi_user!
+  before_action :handle_expired_session!
 
   def http_basic_authenticate
     valid_credentials = [
