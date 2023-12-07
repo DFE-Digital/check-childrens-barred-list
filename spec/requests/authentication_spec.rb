@@ -15,9 +15,10 @@ RSpec.describe "Authentication", type: :request do
         )
       end
 
-      it "returns http success" do
+      it "redirects to sign-in" do
         get "/", env: { "HTTP_AUTHORIZATION" => credentials }
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to("/sign-in")
       end
     end
   end
