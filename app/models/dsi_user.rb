@@ -21,4 +21,12 @@ class DsiUser < ApplicationRecord
 
     dsi_user
   end
+
+  def internal?
+    current_session&.role_code == ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
+  end
+
+  def current_session
+    dsi_user_sessions.order(created_at: :desc).first
+  end
 end

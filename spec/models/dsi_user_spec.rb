@@ -58,4 +58,42 @@ RSpec.describe DsiUser, type: :model do
       end
     end
   end
+
+  describe "#current_session" do
+    let(:dsi_user) { create(:dsi_user) }
+    let!(:expected_current_session) { create(:dsi_user_session, dsi_user:, created_at: 1.second.ago) }
+    let!(:dsi_user_sessions) do
+      [10.minutes.ago, 1.minute.ago].each do |created_at|
+        create(:dsi_user_session,dsi_user:, created_at:)
+      end
+    end
+
+    it "returns the latest session" do
+      expect(dsi_user.current_session).to eq expected_current_session
+    end
+  end
+
+  describe "#internal?" do
+    let(:dsi_user) { create(:dsi_user) }
+
+    context "when the user has the internal role in their current session" do
+      let!(:dsi_user_session) do
+        create(:dsi_user_session, dsi_user:, role_code: ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE"))
+      end
+
+      it "returns true" do
+        expect(dsi_user.internal?).to eq true
+      end
+    end
+
+    context "when the user does not have the internal role in their current session" do
+      let!(:dsi_user_session) do
+        create(:dsi_user_session, dsi_user:, role_code: "random role")
+      end
+
+      it "returns false" do
+        expect(dsi_user.internal?).to eq false
+      end
+    end
+  end
 end
