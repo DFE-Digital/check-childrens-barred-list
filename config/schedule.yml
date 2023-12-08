@@ -1,0 +1,3 @@
+trim_db_sessions:
+  cron: "0 4 * * *" # every day at 4am
+  class: "TrimSessionsJob"

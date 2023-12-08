@@ -41,6 +41,7 @@ gem "sentry-rails"
 gem "sentry-ruby"
 
 gem "sidekiq", "<7"
+gem "sidekiq-cron"
 
 # Feature switching
 gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
@@ -58,6 +59,8 @@ gem "clockwork"
 
 # Generate JSON Web Tokens
 gem "jwt"
+
+gem 'activerecord-session_store'
 
 group :development do
   gem "prettier_print", require: false
