@@ -1,18 +1,35 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Sign in</h1>
+    <h1 class="govuk-heading-l">Sign in to check the children’s barred list</h1>
 
     <p class="govuk-body">
-      You can use this service if you’re:
+      People on the children’s barred list are not allowed to work with children.
     </p>
+
+    <p class="govuk-body">
+      The list is usually checked as part of an enhanced Disclosure and Barring Service (DBS) check.
+    </p>
+
+    <p class="govuk_body">
+      Schools, colleges, local authorities and higher education institutions can also check the children’s barred list separately.
+    </p>
+
+    <p class="govuk_body">
+      You can search the list using a new employee’s last name and date of birth. You should only do this if they either:
+    </p>
+
     <ul class="govuk-list govuk-list--bullet">
       <li>
-        waiting for the result of a DBS check for a new employee
+        will start working with children while waiting for the result of an enhanced DBS check
       </li>
       <li>
-        checking the status of an employee who worked in a school or college less than 3 months ago
+        do not need an enhanced DBS check because they’ve worked with children in a school or college within the last 3 months
       </li>
     </ul>
+
+    <p class="govuk_body">
+      Independent training providers, 16 to 19 academies and special post-16 institutions cannot use this service.
+    </p>
 
     <%= form_with url: (DfESignIn.bypass? ? "/auth/developer" : "/auth/dfe") do |f| %>
       <button type="submit" class="govuk-button govuk-button--start">
