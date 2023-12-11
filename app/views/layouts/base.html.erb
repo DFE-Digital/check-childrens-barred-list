@@ -36,7 +36,7 @@
         end
       end
 
-      if support_interface?
+      if current_dsi_user&.internal?
         header.with_navigation_item(href: "/support/features", text: "Features")
         header.with_navigation_item(href: "/support/uploads/new", text: "File upload")
       end
