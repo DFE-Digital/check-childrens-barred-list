@@ -28,7 +28,8 @@ module DfESignInApi
     end
 
     def authorised_role_codes
-      ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",")
+      ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",") <<
+        ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
     end
   end
 end
