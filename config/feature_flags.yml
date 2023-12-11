@@ -1,3 +1,4 @@
+parent_controller: "SupportInterface::SupportInterfaceController"
 feature_flags:
   service_open:
     author: Steve Laing

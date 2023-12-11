@@ -31,10 +31,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def dsi_user_signed_in?
-    !!current_dsi_user
-  end
-
   def handle_expired_session!
     if session[:dsi_user_session_expiry].nil?
       redirect_to sign_out_path

@@ -1,0 +1,4 @@
+<h1 class="govuk-heading-l">You cannot use the DfE Sign-in account for <%= session[:organisation_name] %> to perform this action</h1>
+<p class="govuk-body">
+  If you have access to another organisation in DfE Sign-in, you can <%= govuk_link_to("sign out and start again", main_app.sign_out_path(id_token_hint: session[:id_token])) %>.
+</p>

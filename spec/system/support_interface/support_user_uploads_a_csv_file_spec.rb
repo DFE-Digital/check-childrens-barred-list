@@ -6,7 +6,7 @@ RSpec.describe "Upload file", type: :system do
 
   scenario "Support user uploads a valid CSV file", test: :with_stubbed_auth do
     given_the_service_is_open
-    and_i_am_signed_in_via_dsi
+    and_i_am_signed_in_as_an_internal_user_via_dsi
     and_i_am_on_the_upload_page
     when_i_upload_a_valid_csv_file
     then_i_see_a_preview_of_the_data

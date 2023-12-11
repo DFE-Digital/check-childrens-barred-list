@@ -12,3 +12,9 @@ shared:
     - upload_file_hash
     - created_at
     - updated_at
+  :sessions:
+    - id
+    - session_id
+    - data
+    - created_at
+    - updated_at
