@@ -10,6 +10,14 @@ RSpec.describe "DSI authentication", type: :system do
     given_the_service_is_open
     when_i_sign_in_via_dsi
     then_i_am_signed_in
+    and_i_cannot_access_the_support_interface
+  end
+
+  scenario "Internal user signs in via DfE Sign In", test: :with_stubbed_auth do
+    given_the_service_is_open
+    when_i_sign_in_as_an_internal_user_via_dsi
+    then_i_am_signed_in
+    and_i_can_access_the_support_interface
   end
 
   private
@@ -23,5 +31,20 @@ RSpec.describe "DSI authentication", type: :system do
     end
     expect(DsiUser.count).to eq 1
     expect(DsiUserSession.count).to eq 1
+  end
+
+  def and_i_can_access_the_support_interface
+    visit support_interface_root_path
+    expect(page).to have_content("Features")
+    visit new_support_interface_upload_path
+    expect(page).to have_content("Upload records")
+  end
+
+  def and_i_cannot_access_the_support_interface
+    not_authorised_message = "You cannot use the DfE Sign-in account for Test School to perform this action"
+    visit support_interface_root_path
+    expect(page).to have_content(not_authorised_message)
+    visit new_support_interface_upload_path
+    expect(page).to have_content(not_authorised_message)
   end
 end

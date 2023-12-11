@@ -1,12 +1,19 @@
 module AuthenticationSteps
   def when_i_sign_in_via_dsi(authorised: true)
-    given_dsi_auth_is_mocked(authorised:)
+    given_dsi_auth_is_mocked(authorised:, role_code:)
     when_i_visit_the_sign_in_page
     and_click_the_dsi_sign_in_button
   end
   alias_method :and_i_am_signed_in_via_dsi, :when_i_sign_in_via_dsi
 
-  def given_dsi_auth_is_mocked(authorised:)
+  def when_i_sign_in_as_an_internal_user_via_dsi
+    given_dsi_auth_is_mocked(authorised: true, role_code: internal_user_role_code )
+    when_i_visit_the_sign_in_page
+    and_click_the_dsi_sign_in_button
+  end
+  alias_method :and_i_am_signed_in_as_an_internal_user_via_dsi, :when_i_sign_in_as_an_internal_user_via_dsi
+
+  def given_dsi_auth_is_mocked(authorised:, role_code:)
     OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
       {
         provider: "dfe",
@@ -63,6 +70,10 @@ module AuthenticationSteps
 
   def role_code
     ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",").first
+  end
+
+  def internal_user_role_code
+    ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
   end
 
   def when_i_visit_the_sign_in_page

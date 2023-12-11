@@ -1,5 +1,5 @@
 module SupportInterface
-  class UploadsController < ApplicationController
+  class UploadsController < SupportInterfaceController
     def new
       @upload_form = UploadForm.new
     end
