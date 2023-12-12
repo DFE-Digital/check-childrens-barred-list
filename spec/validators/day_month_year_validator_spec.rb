@@ -96,24 +96,84 @@ RSpec.describe DayMonthYearValidator do
     context "when day is missing" do
       let(:attributes) { { day: nil, month: "6", year: "1990" } }
 
-      it "does not perform validation" do
-        expect(validatable).to be_valid
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_day")
       end
     end
 
     context "when month is missing" do
       let(:attributes) { { day: "15", month: nil, year: "1990" } }
 
-      it "does not perform validation" do
-        expect(validatable).to be_valid
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_month")
       end
     end
 
     context "when year is missing" do
       let(:attributes) { { day: "15", month: "6", year: nil } }
 
-      it "does not perform validation" do
-        expect(validatable).to be_valid
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_year")
+      end
+    end
+
+    context "when day and month are missing" do
+      let(:attributes) { { day: nil, month: nil, year: "1990" } }
+
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_day_and_month")
+      end
+    end
+
+    context "when day and year are missing" do
+      let(:attributes) { { day: nil, month: "6", year: nil } }
+
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_day_and_year")
+      end
+    end
+    
+    context "when month and year are missing" do
+      let(:attributes) { { day: "15", month: nil, year: nil } }
+
+      it "fails validation" do
+        expect(validatable).to be_invalid
+      end
+
+      it "adds an error message" do
+        validatable.valid?
+
+        expect(validatable.errors[:date_attribute].first).to include("missing_month_and_year")
       end
     end
   end

@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class DayMonthYearValidator
-  def validate(record, attribute)
-    @record = record
+  attr_accessor :attribute, :record
 
-    return true unless all_present?
+  def validate(record, attribute)
+    self.attribute = attribute
+    self.record = record
+
+    validate_date_parts_presence
 
     unless valid?
       record.errors.add(attribute, :invalid)
@@ -49,5 +52,36 @@ class DayMonthYearValidator
 
   def date
     @date ||= Date.new(@record.year.to_i, @record.month.to_i, @record.day.to_i)
+  end
+
+  def validate_date_parts_presence
+    if record.day.blank? && record.month.blank?
+      record.errors.add(attribute, :missing_day_and_month)
+      return
+    end
+
+    if record.day.blank? && record.year.blank?
+      record.errors.add(attribute, :missing_day_and_year)
+      return
+    end
+
+    if record.month.blank? && record.year.blank?
+      record.errors.add(attribute, :missing_month_and_year)
+      return
+    end
+
+    if record.day.blank?
+      record.errors.add(attribute, :missing_day) 
+      return
+    end
+
+    if record.month.blank?
+      record.errors.add(attribute, :missing_month)
+      return
+    end
+
+    if record.year.blank?
+      record.errors.add(attribute, :missing_year)
+    end
   end
 end
