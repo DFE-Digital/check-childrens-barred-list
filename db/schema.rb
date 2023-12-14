@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_08_160940) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -67,6 +67,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_160940) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "search_logs", force: :cascade do |t|
+    t.bigint "dsi_user_id"
+    t.string "last_name"
+    t.boolean "result_returned"
+    t.date "date_of_birth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dsi_user_id"], name: "index_search_logs_on_dsi_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
@@ -76,4 +86,5 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_160940) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
+  add_foreign_key "search_logs", "dsi_users"
 end
