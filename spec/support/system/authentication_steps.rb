@@ -1,19 +1,19 @@
 module AuthenticationSteps
   def when_i_sign_in_via_dsi(authorised: true)
-    given_dsi_auth_is_mocked(authorised:, role_code:)
+    given_dsi_auth_is_mocked(authorised:)
     when_i_visit_the_sign_in_page
     and_click_the_dsi_sign_in_button
   end
   alias_method :and_i_am_signed_in_via_dsi, :when_i_sign_in_via_dsi
 
   def when_i_sign_in_as_an_internal_user_via_dsi
-    given_dsi_auth_is_mocked(authorised: true, role_code: internal_user_role_code )
+    given_dsi_auth_is_mocked(authorised: true, internal: true)
     when_i_visit_the_sign_in_page
     and_click_the_dsi_sign_in_button
   end
   alias_method :and_i_am_signed_in_as_an_internal_user_via_dsi, :when_i_sign_in_as_an_internal_user_via_dsi
 
-  def given_dsi_auth_is_mocked(authorised:, role_code:)
+  def given_dsi_auth_is_mocked(authorised: true, internal: false)
     OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
       {
         provider: "dfe",
@@ -41,7 +41,7 @@ module AuthenticationSteps
       :get, user_roles_endpoint
     ).to_return_json(
       status: 200,
-      body: { "roles" => [{ "code" => (authorised ? role_code : "Unauthorised_Role") }] },
+      body: { "roles" => roles(authorised:, internal:) },
     )
   end
 
@@ -68,8 +68,18 @@ module AuthenticationSteps
     "12345678-1234-1234-1234-123456789012"
   end
 
-  def role_code
-    ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",").first
+  def roles(authorised: true, internal: false)
+    if authorised
+      role_codes(internal:).map { |role_code| { "code" => role_code } }
+    else
+      [{ "code" => "Unauthorised_Role" }]
+    end
+  end
+
+  def role_codes(internal: false)
+    role_codes = ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",")
+    role_codes << internal_user_role_code if internal
+    role_codes
   end
 
   def internal_user_role_code
