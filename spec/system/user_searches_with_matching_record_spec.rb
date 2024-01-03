@@ -16,6 +16,7 @@ RSpec.describe "Valid search", type: :system do
     and_i_enter_their_date_of_birth
     and_i_click_search
     then_i_see_a_result
+    and_my_search_is_logged
     and_event_tracking_is_working
   end
 
@@ -46,5 +47,11 @@ RSpec.describe "Valid search", type: :system do
   def then_i_see_a_result
     expect(page).to have_content "Record found"
     expect(page).to have_content @record.last_name
+  end
+
+  def and_my_search_is_logged
+    expect(SearchLog.last.last_name).to eq @record.last_name
+    expect(SearchLog.last.date_of_birth).to eq @record.date_of_birth
+    expect(SearchLog.last.result_returned).to eq true
   end
 end

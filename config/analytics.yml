@@ -31,3 +31,11 @@ shared:
     - email
     - created_at
     - updated_at
+  :search_logs:
+    - id
+    - dsi_user_id
+    - last_name
+    - date_of_birth
+    - result_returned
+    - created_at
+    - updated_at
