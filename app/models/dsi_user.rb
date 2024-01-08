@@ -24,7 +24,7 @@ class DsiUser < ApplicationRecord
   end
 
   def internal?
-    current_session&.role_code == ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
+    DfESignIn.bypass? || current_session&.role_code == ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
   end
 
   def current_session
