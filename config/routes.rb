@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get "/cookies", to: "static#cookies"
 
   get '/401', to: 'errors#not_authorised', as: :not_authorised
+  get '/422', to: 'errors#unprocessable_entity'
+  get '/404', to: 'errors#not_found'
+  get '/500', to: 'errors#internal_server_error'
 
   namespace :support_interface, path: "/support" do
     root to: redirect("/support/features")
