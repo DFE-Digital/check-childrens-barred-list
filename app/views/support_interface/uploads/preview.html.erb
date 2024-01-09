@@ -3,34 +3,23 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">Review and confirm</h1>
+    <% if @failed_entries.present? %>
+      <p class="govuk-body">
+        <%= pluralize(@failed_entries.size, "entry") %> will not be saved.
+      </p>
+      <%= render "entry_table", entries: @failed_entries, show_errors: true %>
+    <% end %>
+
     <% if @unconfirmed_entries.empty? %>
       <p class="govuk-body">No new entries found in upload.</p>
       <p class="govuk-body">
         <%= govuk_link_to("Upload another file", new_support_interface_upload_path) %>
       </p>
     <% else %>
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Last name</th>
-            <th scope="col" class="govuk-table__header">First names</th>
-            <th scope="col" class="govuk-table__header">Date of birth</th>
-            <th scope="col" class="govuk-table__header">TRN</th>
-            <th scope="col" class="govuk-table__header">NIN</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        <% @unconfirmed_entries.each do |entry| %>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header"><%= entry.last_name %></th>
-            <td class="govuk-table__cell"><%= entry.first_names %></td>
-            <td class="govuk-table__cell"><%= entry.date_of_birth %></td>
-            <td class="govuk-table__cell"><%= entry.trn %></td>
-            <td class="govuk-table__cell"><%= entry.national_insurance_number %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+      <p class="govuk-body">
+        <%= pluralize(@unconfirmed_entries.size, "entry") %> will be saved.
+      <%= render "entry_table", entries: @unconfirmed_entries, show_errors: false %>
+
       <div class="govuk-button-group">
         <%= govuk_button_to("Confirm", support_interface_upload_confirm_path(upload_file_hash: @upload_file_hash)) %>
         <%= govuk_button_to(

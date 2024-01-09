@@ -1,5 +1,7 @@
 module SupportInterface
   class UploadsController < SupportInterfaceController
+    before_action :clear_failed_entries, only: %i[confirm cancel]
+
     def new
       @upload_form = UploadForm.new
     end
@@ -7,6 +9,8 @@ module SupportInterface
     def create
       @upload_form = UploadForm.new(upload_form_params)
       if @upload_form.save
+        FailedChildrensBarredListEntries.new.set(@upload_form)
+
         redirect_to support_interface_upload_preview_path(
           upload_file_hash: @upload_form.upload_file_hash
         )
@@ -17,6 +21,7 @@ module SupportInterface
 
     def preview
       @upload_file_hash = upload_file_hash_param
+      @failed_entries = FailedChildrensBarredListEntries.new.get(@upload_file_hash)
       @unconfirmed_entries = ChildrensBarredListEntry
         .where(confirmed: false, upload_file_hash: upload_file_hash_param)
     end
@@ -40,6 +45,10 @@ module SupportInterface
     end
 
     private
+
+    def clear_failed_entries
+      FailedChildrensBarredListEntries.new.clear(upload_file_hash_param)
+    end
 
     def upload_form_params
       params.fetch(:support_interface_upload_form, {}).permit(:file)
