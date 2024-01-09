@@ -3,18 +3,19 @@ require "csv"
 class CreateChildrensBarredListEntries
   TITLES_REGEX = /^(mr|mrs|miss|ms|dr|prof)\.? /i
 
-  attr_reader :upload_file_hash
+  attr_reader :failed_entries, :upload_file_hash
 
   def initialize(raw_data)
     @raw_data = raw_data
     @upload_file_hash = Digest::SHA256.hexdigest(raw_data)
+    @failed_entries = []
   end
 
   def call
     CSV
       .parse(@raw_data, encoding: "ISO8859-1:utf-8")
       .each do |row|
-        ChildrensBarredListEntry.create(
+        entry = ChildrensBarredListEntry.create(
           trn: pad_trn(row[0]),
           last_name: format_names(row[1]),
           first_names: format_names(row[2]),
@@ -22,6 +23,8 @@ class CreateChildrensBarredListEntries
           national_insurance_number: row[4],
           upload_file_hash:,
         )
+
+        @failed_entries << entry unless entry.persisted?
       end
   end
 
