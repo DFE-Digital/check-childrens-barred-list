@@ -32,6 +32,10 @@ en:
   activerecord:
     errors:
       models:
+        childrens_barred_list_entry:
+          attributes:
+            last_name:
+              taken: with same first names and date of birth already exists
         feedback:
           attributes:
             satisfaction_rating:
