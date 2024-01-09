@@ -36,4 +36,40 @@ RSpec.describe CreateChildrensBarredListEntries do
     expect(service.upload_file_hash).not_to be_nil
     expect(service.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
   end
+
+  context 'when a row is blank' do
+    let(:csv_data) do
+      [
+        [nil, nil, nil, nil, nil].join(",")
+      ].join("\n")
+    end
+
+    it "does not create a new ChildrensBarredListEntry" do
+      expect { service.call }.not_to(change { ChildrensBarredListEntry.count })
+    end
+  end
+
+  context 'when a row has a missing last name field' do
+    let(:csv_data) do
+      [
+        ["12567", nil, "DR. JOHN JAMES ", "01/02/1990", "AB123456C"].join(",")
+      ].join("\n")
+    end
+
+    it "does not create a new ChildrensBarredListEntry" do
+      expect { service.call }.not_to(change { ChildrensBarredListEntry.count })
+    end
+  end
+
+  context 'when a row has a missing first name field' do
+    let(:csv_data) do
+      [
+        ["12567", "SMITH ", nil, "01/02/1990", "AB123456C"].join(",")
+      ].join("\n")
+    end
+
+    it "does not create a new ChildrensBarredListEntry" do
+      expect { service.call }.not_to(change { ChildrensBarredListEntry.count })
+    end
+  end
 end

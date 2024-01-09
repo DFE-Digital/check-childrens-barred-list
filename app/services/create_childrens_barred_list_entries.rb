@@ -32,6 +32,8 @@ class CreateChildrensBarredListEntries
   end
 
   def format_names(names)
+    return if names.blank?
+
     names.strip!
     names.gsub!(TITLES_REGEX, "")
     names.downcase.split(" ").map(&:capitalize).join(" ")
