@@ -12,7 +12,7 @@ class CreateChildrensBarredListEntries
 
   def call
     CSV
-      .parse(@raw_data)
+      .parse(@raw_data, encoding: "ISO8859-1:utf-8")
       .each do |row|
         ChildrensBarredListEntry.create(
           trn: pad_trn(row[0]),

@@ -37,7 +37,7 @@ RSpec.describe CreateChildrensBarredListEntries do
     expect(service.upload_file_hash).to eq(Digest::SHA256.hexdigest(csv_data))
   end
 
-  context 'when a row is blank' do
+  context "when a row is blank" do
     let(:csv_data) do
       [
         [nil, nil, nil, nil, nil].join(",")
@@ -49,7 +49,7 @@ RSpec.describe CreateChildrensBarredListEntries do
     end
   end
 
-  context 'when a row has a missing last name field' do
+  context "when a row has a missing last name field" do
     let(:csv_data) do
       [
         ["12567", nil, "DR. JOHN JAMES ", "01/02/1990", "AB123456C"].join(",")
@@ -61,7 +61,7 @@ RSpec.describe CreateChildrensBarredListEntries do
     end
   end
 
-  context 'when a row has a missing first name field' do
+  context "when a row has a missing first name field" do
     let(:csv_data) do
       [
         ["12567", "SMITH ", nil, "01/02/1990", "AB123456C"].join(",")
@@ -70,6 +70,22 @@ RSpec.describe CreateChildrensBarredListEntries do
 
     it "does not create a new ChildrensBarredListEntry" do
       expect { service.call }.not_to(change { ChildrensBarredListEntry.count })
+    end
+  end
+
+  context "when a row contains non-UTF-8 characters" do
+    let(:csv_data) do
+      [
+        ["12567", "Sánchezera-blobbá", "Angélina", "01/11/1990", "AB123456C"].join(","),
+      ].join("\n").encode("ISO-8859-1")
+    end
+
+    it "encodes as UTF-8" do
+      expect { service.call }.to change { ChildrensBarredListEntry.count }.by(1)
+      expect(ChildrensBarredListEntry.first.first_names).to eq("Angélina")
+      expect(ChildrensBarredListEntry.first.first_names.encoding).to eq(Encoding::UTF_8)
+      expect(ChildrensBarredListEntry.first.last_name).to eq("Sánchezera-blobbá")
+      expect(ChildrensBarredListEntry.first.last_name.encoding).to eq(Encoding::UTF_8)
     end
   end
 end
