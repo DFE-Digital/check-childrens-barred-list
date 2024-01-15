@@ -6,6 +6,10 @@ class ChildrensBarredListEntry < ApplicationRecord
               scope: %i[first_names date_of_birth]
             }
   validates :date_of_birth, presence: true
+  validates :national_insurance_number,
+    format: {
+      with: /\A[a-z]{2}[0-9]{6}[a-d]{1}\Z/i
+    }, if: -> { national_insurance_number.present? }
 
   def self.search(last_name:, date_of_birth:)
     where(
