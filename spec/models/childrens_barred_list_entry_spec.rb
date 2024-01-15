@@ -5,6 +5,21 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
   it { is_expected.to validate_presence_of(:last_name) }
   it { is_expected.to validate_presence_of(:date_of_birth) }
 
+  describe "validations" do
+    it "is valid with a valid national_insurance_number format" do
+      entry = build(:childrens_barred_list_entry)
+      entry.national_insurance_number = "AB123456D"
+      expect(entry).to be_valid
+    end
+
+    it "is invalid with an invalid national_insurance_number format" do
+      entry = build(:childrens_barred_list_entry)
+      entry.national_insurance_number = "AB6D"
+      expect(entry).not_to be_valid
+      expect(entry.errors.full_messages).to include("National insurance number is invalid")
+    end
+  end
+
   describe "#self.search" do
     let(:record) { create(:childrens_barred_list_entry) }
 
