@@ -2,7 +2,7 @@ module SupportInterface
   class UploadForm
     include ActiveModel::Model
 
-    attr_accessor :file, :upload_file_hash
+    attr_accessor :file, :failed_entries, :upload_file_hash
 
     validates :file, presence: true
 
@@ -11,6 +11,7 @@ module SupportInterface
 
       service = CreateChildrensBarredListEntries.new(file.read)
       @upload_file_hash = service.upload_file_hash
+      @failed_entries = service.failed_entries
       service.call
     rescue CSV::MalformedCSVError
       errors.add(:file, :invalid_csv)

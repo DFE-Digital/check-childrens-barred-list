@@ -88,4 +88,10 @@ RSpec.describe CreateChildrensBarredListEntries do
       expect(ChildrensBarredListEntry.first.last_name.encoding).to eq(Encoding::UTF_8)
     end
   end
+
+  it "compiles a list of failed entries" do
+    create(:childrens_barred_list_entry, first_names: "John James", last_name: "Smith", date_of_birth: "01/02/1990")
+    service.call
+    expect(service.failed_entries.size).to eq(1)
+  end
 end
