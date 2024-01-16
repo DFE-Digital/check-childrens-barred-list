@@ -42,4 +42,18 @@ class OmniauthCallbacksController < ApplicationController
       user_id: auth.uid,
     ).call
   end
+
+  def organisations
+    @organisations ||= DfESignInApi::GetOrganisationsForUser.new(
+      user_id: auth.uid,
+    ).call
+  end
+
+  def organisation_ids
+    organisations&.map { |org| org["id"] }
+  end
+
+  def authenticated_organisation_id
+    auth.extra.raw_info.organisation.id
+  end
 end
