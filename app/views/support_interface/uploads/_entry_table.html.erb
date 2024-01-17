@@ -20,7 +20,7 @@
       <td class="govuk-table__cell"><%= Date.parse(entry.date_of_birth.to_s).to_fs(:dob) if entry.date_of_birth.present? %></td>
       <td class="govuk-table__cell"><%= entry.trn %></td>
       <% if show_errors %>
-        <td class="govuk-table__cell govuk-error-message govuk-!-margin-bottom-0"><%= entry.failure_messages.join("<br/>") %></td>
+        <td class="govuk-table__cell govuk-error-message govuk-!-margin-bottom-0"><%== entry.failure_messages.join("<br/>") %></td>
       <% else %>
         <td class="govuk-table__cell"><%= entry.national_insurance_number %></td>
       <% end %>
