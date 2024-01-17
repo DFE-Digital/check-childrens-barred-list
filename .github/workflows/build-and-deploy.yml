@@ -40,8 +40,9 @@ jobs:
       - uses: actions/checkout@v4
         name: Checkout
 
-      - name: Set environment variables (push)
-        if: github.event_name == 'push'
+      - name: Set environment variables (push, workflow_dispatch)
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
         run: |
           GIT_BRANCH=${GITHUB_REF##*/}
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV # GIT_BRANCH will be main for refs/heads/main
@@ -154,16 +155,32 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy_review.outputs.deploy-url }}
 
+  set_matrix:
+    name: Set deployment matrix
+    runs-on: ubuntu-latest
+    needs: [build]
+    outputs:
+      deployment_matrix: ${{ steps.set-matrix.outputs.deployment_matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            DEPLOYMENT_MATRIX="{ 'environment': ['${{ github.event.inputs.environment }}'] }"
+          else
+            DEPLOYMENT_MATRIX="{ 'environment': ['test', 'preproduction'] }"
+          fi
+          echo "deployment_matrix=$DEPLOYMENT_MATRIX" >> $GITHUB_OUTPUT
+
   deploy_nonprod:
     name: Deploy to ${{ matrix.environment }} environment
     runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [build, set_matrix]
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
     concurrency: deploy_${{ matrix.environment }}
     strategy:
-      fail-fast: false
-      matrix:
-        environment: [test, preproduction]
+      fail-fast: false # this is necessary to prevent early terminiation of terraform deployments that will result in tfstate locks
+      max-parallel: 3
+      matrix: ${{ fromJson(needs.set_matrix.outputs.deployment_matrix) }}
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy.outputs.url }}
