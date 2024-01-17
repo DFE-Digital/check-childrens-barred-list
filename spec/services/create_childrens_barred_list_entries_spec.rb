@@ -23,8 +23,10 @@ RSpec.describe CreateChildrensBarredListEntries do
     service.call
     expect(ChildrensBarredListEntry.first.first_names).to eq("John James")
     expect(ChildrensBarredListEntry.first.last_name).to eq("Smith")
+    expect(ChildrensBarredListEntry.first.searchable_last_name).to eq("smith")
     expect(ChildrensBarredListEntry.last.first_names).to eq("Jane Jemima")
     expect(ChildrensBarredListEntry.last.last_name).to eq("Jones")
+    expect(ChildrensBarredListEntry.last.searchable_last_name).to eq("jones")
   end
 
   it "sets the confirmed field to false" do
@@ -90,7 +92,12 @@ RSpec.describe CreateChildrensBarredListEntries do
   end
 
   it "compiles a list of failed entries" do
-    create(:childrens_barred_list_entry, first_names: "John James", last_name: "Smith", date_of_birth: "01/02/1990")
+    create(
+      :childrens_barred_list_entry,
+      first_names: "John James",
+      last_name: "Smith",
+      date_of_birth: Date.parse("01/02/1990").to_fs(:db),
+    )
     service.call
     expect(service.failed_entries.size).to eq(1)
   end

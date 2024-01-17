@@ -1,4 +1,7 @@
 class ChildrensBarredListEntry < ApplicationRecord
+  encrypts :date_of_birth, :first_names, :last_name, :searchable_last_name, deterministic: true
+  encrypts :trn, :national_insurance_number
+
   validates :first_names, presence: true
   validates :last_name,
             presence: true,
@@ -9,13 +12,22 @@ class ChildrensBarredListEntry < ApplicationRecord
       with: /\A[a-z]{2}[0-9]{6}[a-d]{1}\Z/i
     }, if: -> { national_insurance_number.present? }
 
+  before_save :populate_searchable_last_name
+
   def self.search(last_name:, date_of_birth:)
     where(
-      "lower(unaccent(last_name)) = ?",
-      ActiveSupport::Inflector.transliterate(last_name.strip.downcase)
-    )
-    .where(date_of_birth:, confirmed: true)
-    .first
+      searchable_last_name: searchable(last_name),
+      confirmed: true,
+      date_of_birth:,
+    ).first
+  end
+
+  def populate_searchable_last_name
+    self.searchable_last_name = self.class.searchable(last_name)
+  end
+
+  def self.searchable(value)
+    ActiveSupport::Inflector.transliterate(value.strip.downcase)
   end
 
   def as_json(options = {})

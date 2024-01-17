@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_17_114434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -19,14 +19,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
     t.string "trn"
     t.string "first_names", null: false
     t.string "last_name", null: false
-    t.date "date_of_birth", null: false
+    t.string "date_of_birth", null: false
     t.string "national_insurance_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "confirmed", default: false, null: false
     t.datetime "confirmed_at"
     t.string "upload_file_hash"
+    t.string "searchable_last_name"
     t.index ["first_names", "last_name", "date_of_birth"], name: "index_childrens_barred_list_entries_on_names_and_dob", unique: true
+    t.index ["searchable_last_name", "date_of_birth"], name: "index_cbl_entries_on_searchable_last_name_and_dob"
   end
 
   create_table "dsi_user_sessions", force: :cascade do |t|
@@ -71,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
     t.bigint "dsi_user_id"
     t.string "last_name"
     t.boolean "result_returned"
-    t.date "date_of_birth"
+    t.string "date_of_birth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dsi_user_id"], name: "index_search_logs_on_dsi_user_id"

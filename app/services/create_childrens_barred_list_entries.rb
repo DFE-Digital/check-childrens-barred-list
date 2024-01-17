@@ -19,7 +19,7 @@ class CreateChildrensBarredListEntries
           trn: pad_trn(row[0]),
           last_name: format_names(row[1]),
           first_names: format_names(row[2]),
-          date_of_birth: row[3],
+          date_of_birth: format_date_of_birth(row[3]),
           national_insurance_number: row[4],
           upload_file_hash:,
         )
@@ -40,5 +40,13 @@ class CreateChildrensBarredListEntries
     names.strip!
     names.gsub!(TITLES_REGEX, "")
     names.downcase.split(" ").map(&:capitalize).join(" ")
+  end
+
+  def format_date_of_birth(date_of_birth)
+    return if date_of_birth.blank?
+
+    Date.parse(date_of_birth).to_fs(:db)
+  rescue Date::Error
+    nil
   end
 end

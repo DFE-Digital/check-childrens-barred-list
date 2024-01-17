@@ -112,4 +112,12 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
       end
     end
   end
+
+  describe ".before_save" do
+    it "populates searchable_last_name" do
+      record = build(:childrens_barred_list_entry, last_name: "Doé")
+      record.save!
+      expect(record.searchable_last_name).to eq("doe")
+    end
+  end
 end
