@@ -1,9 +1,9 @@
-<% content_for :page_title, "Record found" %>
+<% content_for :page_title, "Possible match with the children’s barred list" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: { "Home" => root_path, "Search results" => nil }) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Record found on the Children’s Barred List</h1>
+    <h1 class="govuk-heading-l">Possible match with the children’s barred list</h1>
 
     <%= govuk_summary_list(
       rows: [
@@ -13,7 +13,12 @@
     %>
 
     <p class="govuk-body">
-      Contact DBS at <%= govuk_mail_to t('service.dbs_email'), t('service.dbs_email') %> for more details.
+      There’s a record on the children’s barred list with this last name and date of birth.
+    </p>
+
+    <p class="govuk-body">
+      Email the Disclosure and Barring Service (DBS) at <%= govuk_mail_to t('service.dbs_email'), t('service.dbs_email') %> to check if the person you searched for is allowed to work with children.
     </p>
   </div>
 </div>
+
