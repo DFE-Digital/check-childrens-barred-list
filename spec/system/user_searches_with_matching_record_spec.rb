@@ -46,7 +46,7 @@ RSpec.describe "Valid search", type: :system do
   end
 
   def then_i_see_a_result
-    expect(page).to have_content "Record found"
+    expect(page).to have_content "Possible match with the children’s barred list"
     expect(page).to have_content @record.last_name
   end
 
