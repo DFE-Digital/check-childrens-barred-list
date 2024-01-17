@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
-
+ActiveRecord::Schema[7.1].define(version: 2024_01_17_114434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -74,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_120835) do
     t.bigint "dsi_user_id"
     t.string "last_name"
     t.boolean "result_returned"
-    t.date "date_of_birth"
+    t.string "date_of_birth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dsi_user_id"], name: "index_search_logs_on_dsi_user_id"
