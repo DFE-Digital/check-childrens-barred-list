@@ -30,6 +30,12 @@ en:
               blank: Select a file
               invalid_csv: The selected file must be a CSV
   activerecord:
+    models:
+      childrens_barred_list_entry: Children’s Barred List entry
+      feedback: Feedback
+    attributes:
+      childrens_barred_list_entry:
+        source_column_count: The uploaded file
     errors:
       models:
         childrens_barred_list_entry:
@@ -37,7 +43,7 @@ en:
             last_name:
               taken: with same first names and date of birth already exists
             source_column_count:
-              invalid: The uploaded file must have %{required_count} columns
+              invalid: must have %{required_count} columns
         feedback:
           attributes:
             satisfaction_rating:

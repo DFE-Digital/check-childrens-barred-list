@@ -20,6 +20,15 @@ RSpec.describe "Upload file", type: :system do
     then_i_see_a_success_message
   end
 
+  scenario "Support user uploads an CSV file that contains rows with an incorrect number of columns",
+test: :with_stubbed_auth do
+    given_the_service_is_open
+    and_i_am_signed_in_as_an_internal_user_via_dsi
+    and_i_am_on_the_upload_page
+    when_i_upload_a_csv_file_with_an_incorrect_number_of_columns
+    then_i_see_failed_entries
+  end
+
   def given_the_service_is_open
     FeatureFlags::FeatureFlag.activate(:service_open)
   end
@@ -74,7 +83,6 @@ RSpec.describe "Upload file", type: :system do
   def and_i_can_see_what_will_not_be_saved
     expect(page).to have_content("1 entry will not be saved")
 
-    invalid_entries_table = page.all("table")[0]
     within(invalid_entries_table) do
       expect(page).to have_content("Simpson")
       expect(page).to have_content("Homer Duff")
@@ -91,6 +99,23 @@ RSpec.describe "Upload file", type: :system do
     expect(page).to have_content("Records uploaded")
   end
 
+  def when_i_upload_a_csv_file_with_an_incorrect_number_of_columns
+    attach_file "support_interface_upload_form[file]",
+                Rails.root.join("spec/fixtures/example-incorrect-columns.csv")
+    click_on "Upload file"
+  end
+
+  def then_i_see_failed_entries
+    expect(page).to have_content("4 entries will not be saved")
+
+    within(invalid_entries_table) do
+      expect(page).to have_content("Darby")
+      expect(page).to have_content("James")
+      expect(page).to have_content("10/11/1979")
+      expect(page).to have_content("The uploaded file must have 6 columns")
+    end
+  end
+
   def valid_entries_table
     page.all("table")[1]
   end
@@ -98,4 +123,5 @@ RSpec.describe "Upload file", type: :system do
   def invalid_entries_table
     page.all("table")[0]
   end
+
 end

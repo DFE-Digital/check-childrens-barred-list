@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe CreateChildrensBarredListEntries do
   let(:csv_data) do
     [
-      ["12567", "SMITH ", "DR. JOHN JAMES ", "01/02/1990", "AB123456C"].join(","),
-      ["1234568", " jones ", " mrs jane jemima", "07/05/1980", "AB123456D"].join(",")
+      ["12567", "SMITH ", "DR. JOHN JAMES ", "01/02/1990", "AB123456C, N"].join(","),
+      ["1234568", " jones ", " mrs jane jemima", "07/05/1980", "AB123456D, N"].join(",")
     ].join("\n")
   end
 
@@ -78,7 +78,7 @@ RSpec.describe CreateChildrensBarredListEntries do
   context "when a row contains non-UTF-8 characters" do
     let(:csv_data) do
       [
-        ["12567", "Sánchezera-blobbá", "Angélina", "01/11/1990", "AB123456C"].join(","),
+        ["12567", "Sánchezera-blobbá", "Angélina", "01/11/1990", "AB123456C", "N"].join(","),
       ].join("\n").encode("ISO-8859-1")
     end
 
