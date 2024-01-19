@@ -36,6 +36,8 @@ en:
           attributes:
             last_name:
               taken: with same first names and date of birth already exists
+            source_column_count:
+              invalid: The uploaded file must have %{required_count} columns
         feedback:
           attributes:
             satisfaction_rating:
