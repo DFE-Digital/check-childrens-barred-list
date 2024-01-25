@@ -15,6 +15,7 @@ class CreateChildrensBarredListEntries
     CSV
       .parse(@raw_data, encoding: "ISO8859-1:utf-8")
       .each do |row|
+        source_column_count = row.count
         entry = ChildrensBarredListEntry.create(
           trn: pad_trn(row[0]),
           last_name: format_names(row[1]),
@@ -22,6 +23,7 @@ class CreateChildrensBarredListEntries
           date_of_birth: format_date_of_birth(row[3]),
           national_insurance_number: row[4],
           upload_file_hash:,
+          source_column_count:
         )
 
         @failed_entries << entry unless entry.persisted?

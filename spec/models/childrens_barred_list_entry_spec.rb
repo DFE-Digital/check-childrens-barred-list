@@ -18,6 +18,31 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
       expect(entry).not_to be_valid
       expect(entry.errors.full_messages).to include("National insurance number is invalid")
     end
+
+    describe "source_column_count" do
+      let(:params) { attributes_for(:childrens_barred_list_entry) }
+      subject { described_class.new(params) }
+
+      context "when not passed" do
+        it { is_expected.to be_valid }
+      end
+
+      context "when passed" do
+        let(:params) { super().merge(source_column_count:) }
+
+        context "when it is REQUIRED_SOURCE_COLUMN_COUNT" do
+          let(:source_column_count) { ChildrensBarredListEntry::REQUIRED_SOURCE_COLUMN_COUNT }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when it is not REQUIRED_SOURCE_COLUMN_COUNT" do
+          let(:source_column_count) { ChildrensBarredListEntry::REQUIRED_SOURCE_COLUMN_COUNT - 1 }
+
+          it { is_expected.not_to be_valid }
+        end
+      end
+    end
   end
 
   describe "#self.search" do

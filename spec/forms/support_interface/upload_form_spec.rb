@@ -15,8 +15,8 @@ RSpec.describe SupportInterface::UploadForm, type: :model do
     context "when the form is valid" do
       let(:csv_data) do
         [
-          ["12567", "Smith", "John James", "01/02/1990", "AB123456C"].join(","),
-          ["1234568", "Smith", "Jane Jemima", "07/05/1980", "AB123456D"].join(
+          ["12567", "Smith", "John James", "01/02/1990", "AB123456C", "N"].join(","),
+          ["1234568", "Smith", "Jane Jemima", "07/05/1980", "AB123456D", "N"].join(
             ","
           )
         ].join("\n")
