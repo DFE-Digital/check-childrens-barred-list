@@ -3,7 +3,7 @@
 # production: runs the actual app
 
 # Build builder image
-FROM ruby:3.2.2-alpine as builder
+FROM ruby:3.3.0-alpine as builder
 
 # RUN apk -U upgrade && \
 #     apk add --update --no-cache gcc git libc6-compat libc-dev make nodejs \
@@ -58,7 +58,7 @@ RUN rm -rf node_modules log/* tmp/* /tmp && \
     find /usr/local/bundle/gems -name "*.html" -delete
 
 # Build runtime image
-FROM ruby:3.2.2-alpine as production
+FROM ruby:3.3.0-alpine as production
 
 # Upgrade ssl, crypto and curl libraries to latest version
 RUN apk upgrade --no-cache openssl libssl3 libcrypto3 curl
