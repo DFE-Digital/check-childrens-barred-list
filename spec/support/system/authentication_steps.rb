@@ -1,6 +1,6 @@
 module AuthenticationSteps
-  def when_i_sign_in_via_dsi(authorised: true)
-    given_dsi_auth_is_mocked(authorised:)
+  def when_i_sign_in_via_dsi(authorised: true, orgs: [organisation])
+    given_dsi_auth_is_mocked(authorised:, orgs:)
     when_i_visit_the_sign_in_page
     and_click_the_dsi_sign_in_button
   end
@@ -13,7 +13,7 @@ module AuthenticationSteps
   end
   alias_method :and_i_am_signed_in_as_an_internal_user_via_dsi, :when_i_sign_in_as_an_internal_user_via_dsi
 
-  def given_dsi_auth_is_mocked(authorised: true, internal: false)
+  def given_dsi_auth_is_mocked(authorised: true, internal: false, orgs: [organisation])
     OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
       {
         provider: "dfe",
@@ -35,6 +35,13 @@ module AuthenticationSteps
           }
         }
       }
+    )
+
+    stub_request(
+      :get, organisations_endpoint
+    ).to_return_json(
+      status: 200,
+      body: orgs,
     )
 
     stub_request(
@@ -92,5 +99,17 @@ module AuthenticationSteps
 
   def and_click_the_dsi_sign_in_button
     click_button "Sign in"
+  end
+
+  def organisations_endpoint
+    "#{ENV.fetch("DFE_SIGN_IN_API_BASE_URL")}/users/123456/organisations"
+  end
+
+  def organisation(status: "Open")
+    {
+      "id" => org_id,
+      "name" => "Test School",
+      "status" => { "id" => 1, "name" => status },
+    }
   end
 end
