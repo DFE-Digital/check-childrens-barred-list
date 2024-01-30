@@ -103,8 +103,8 @@ print-infra-secrets: read-tf-config install-fetch-config set-azure-account
 
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 ifeq ($(GITHUB_ACTIONS),)
-	$(eval cluster_rg= ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER_SHORT}-rg)
-	$(eval cluster_name= ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER}-aks)
+	$(eval export cluster_rg= ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER_SHORT}-rg)
+	$(eval export cluster_name= ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER}-aks)
 endif
 	az aks get-credentials --overwrite-existing -g ${cluster_rg} -n ${cluster_name}
 	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)

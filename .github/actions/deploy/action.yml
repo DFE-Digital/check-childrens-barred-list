@@ -110,7 +110,7 @@ runs:
     - name: K8 setup
       shell: bash
       run: |
-        make get-cluster-credentials  cluster_rg=${{ env.cluster_rg }} cluster_name=${{ env.cluster_name }}
+        make ${{inputs.environment}} get-cluster-credentials
         make install-konduit
 
     - name: Generate example data
