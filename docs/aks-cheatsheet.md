@@ -62,7 +62,7 @@ Get access credentials for a managed Kubernetes cluster (passing the
 resource group and the name):
 
 ```shell
-az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
+make review get-cluster-credentials
 ```
 
 When you have multiple cluster credentials loaded, you can switch between clusters
