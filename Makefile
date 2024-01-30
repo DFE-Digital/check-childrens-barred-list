@@ -2,6 +2,8 @@ TERRAFILE_VERSION=0.8
 ARM_TEMPLATE_TAG=1.1.0
 RG_TAGS={"Product" : "Database of Qualified Teachers"}
 SERVICE_SHORT=ccbl
+cluster_rg=""
+cluster_name=""
 
 .PHONY: install-konduit
 install-konduit: ## Install the konduit script, for accessing backend services
