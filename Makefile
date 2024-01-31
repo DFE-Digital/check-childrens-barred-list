@@ -28,7 +28,7 @@ test: test-cluster
 	$(eval DEPLOY_ENV=test)
 	echo https://check-childrens-barred-list-test.test.teacherservices.cloud will be created in aks
 
-preproduction: production-cluster
+preproduction: test-cluster
 	$(eval include global_config/preproduction.sh)
 	$(eval DEPLOY_ENV=preproduction)
 	echo https://check-childrens-barred-list-preproduction.test.teacherservices.cloud will be created in aks
