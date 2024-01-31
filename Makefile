@@ -16,24 +16,24 @@ install-fetch-config:
 		&& chmod +x bin/fetch_config.rb \
 		|| true
 
-review:
+review: test-cluster
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
 	$(eval include global_config/review.sh)
 	$(eval DEPLOY_ENV=review)
 	$(eval export TF_VAR_app_name=$(APP_NAME))
 	echo https://check-childrens-barred-list-$(APP_NAME).test.teacherservices.cloud will be created in aks
 
-test:
+test: test-cluster
 	$(eval include global_config/test.sh)
 	$(eval DEPLOY_ENV=test)
 	echo https://check-childrens-barred-list-test.test.teacherservices.cloud will be created in aks
 
-preproduction:
+preproduction: production-cluster
 	$(eval include global_config/preproduction.sh)
 	$(eval DEPLOY_ENV=preproduction)
 	echo https://check-childrens-barred-list-preproduction.test.teacherservices.cloud will be created in aks
 
-production:
+production: production-cluster
 	$(eval include global_config/production.sh)
 	$(eval DEPLOY_ENV=production)
 	echo https://check-childrens-barred-list-production.teacherservices.cloud will be created in aks
@@ -99,8 +99,17 @@ print-app-secrets: read-tf-config install-fetch-config set-azure-account
 print-infra-secrets: read-tf-config install-fetch-config set-azure-account
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} -f yaml
 
-get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
-	az aks get-credentials --overwrite-existing -g ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${AZURE_RESOURCE_PREFIX}-tsc-${CLUSTER}-aks
+test-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189t01-tsc-ts-rg)
+	$(eval CLUSTER_NAME=s189t01-tsc-test-aks)
+
+production-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
+	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
+
+get-cluster-credentials: set-azure-account
+	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
