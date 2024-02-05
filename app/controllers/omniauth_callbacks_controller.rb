@@ -37,9 +37,25 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def role
+    return if organisation_ids.exclude?(authenticated_organisation_id)
+
     @role ||= DfESignInApi::GetUserAccessToService.new(
-      org_id: auth.extra.raw_info.organisation.id,
+      org_id: authenticated_organisation_id,
       user_id: auth.uid,
     ).call
+  end
+
+  def organisations
+    @organisations ||= DfESignInApi::GetOrganisationsForUser.new(
+      user_id: auth.uid,
+    ).call
+  end
+
+  def organisation_ids
+    organisations&.map { |org| org["id"] }
+  end
+
+  def authenticated_organisation_id
+    auth.extra.raw_info.organisation.id
   end
 end
