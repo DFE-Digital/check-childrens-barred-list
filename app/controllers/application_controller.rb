@@ -1,3 +1,5 @@
+require "dfe/analytics/filtered_request_event"
+
 class ApplicationController < ActionController::Base
   include DfE::Analytics::Requests
   default_form_builder(GOVUKDesignSystemFormBuilder::FormBuilder)

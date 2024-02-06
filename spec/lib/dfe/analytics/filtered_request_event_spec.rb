@@ -1,5 +1,4 @@
 require "rails_helper"
-require "dfe/analytics/filtered_request_event"
 
 RSpec.describe DfE::Analytics::FilteredRequestEvent do
   describe "#with_request_details" do
