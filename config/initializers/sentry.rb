@@ -16,6 +16,8 @@ end
 Sentry.init do |config|
   config.breadcrumbs_logger = %i[active_support_logger http_logger]
 
+  config.environment = HostingEnvironment.environment_name
+
   filter =
     ActiveSupport::ParameterFilter.new(
       Rails.application.config.filter_parameters
