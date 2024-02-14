@@ -4,3 +4,4 @@ postgres 13.5
 ruby 3.3.0
 terraform 1.4.6
 yarn 1.22.19
+kubelogin 0.1.0
