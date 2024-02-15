@@ -1,3 +1,7 @@
 trim_db_sessions:
   cron: "0 4 * * *" # every day at 4am
   class: "TrimSessionsJob"
+send_entity_table_check_data:
+  cron: "30 0 * * *" # Every day at 00:30.
+  class: "DfE::Analytics::EntityTableCheckJob"
+  queue: analytics
