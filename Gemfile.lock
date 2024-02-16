@@ -145,9 +145,9 @@ GEM
       reline (>= 0.3.8)
     declarative (0.0.20)
     diff-lcs (1.5.1)
-    dotenv (3.0.0)
-    dotenv-rails (3.0.0)
-      dotenv (= 3.0.0)
+    dotenv (3.0.2)
+    dotenv-rails (3.0.2)
+      dotenv (= 3.0.2)
       railties (>= 6.1)
     drb (2.2.0)
       ruby2_keywords
