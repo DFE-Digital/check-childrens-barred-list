@@ -3,6 +3,7 @@ require "hosting_environment"
 DfE::Analytics.configure do |config|
   config.queue = :analytics
   config.environment = HostingEnvironment.environment_name
+  config.entity_table_checks_enabled = true
 
   config.enable_analytics =
     proc do
