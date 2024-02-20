@@ -8,8 +8,9 @@ module "domains" {
   domains               = each.value.domains
   environment           = each.value.environment_short
   host_name             = each.value.origin_hostname
-  null_host_header      = try(each.value.null_host_header, false)
+  null_host_header      = true
   cached_paths          = try(each.value.cached_paths, [])
+  redirect_rules        = try(each.value.redirect_rules, null)
 }
 
 # Takes values from hosted_zone.domain_name.cnames (or txt_records, a-records). Use for domains which are not associated with front door.
