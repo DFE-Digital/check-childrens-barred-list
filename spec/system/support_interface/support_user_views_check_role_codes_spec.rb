@@ -12,6 +12,10 @@ RSpec.describe "Viewing Check role codes" do
     and_roles_exist
     when_i_navigate_to_the_roles_section
     then_i_can_see_roles
+    when_i_add_a_role
+    then_the_role_is_added
+    when_i_edit_the_role
+    then_the_role_is_updated
   end
 
   private
@@ -28,6 +32,43 @@ RSpec.describe "Viewing Check role codes" do
   def then_i_can_see_roles
     expect(page).to have_content "TestCode"
   end
+
+  def when_i_add_a_role
+    click_link "Add role"
+    fill_in "Code", with: "AnotherCode"
+    click_button "Continue"
+  end
+
+  def then_the_role_is_added
+    expect(page).to have_content "AnotherCode"
+
+    within last_row_of_roles_table do
+      expect(page).to have_content "enabled"
+    end
+  end
+
+  def when_i_edit_the_role
+    within last_row_of_roles_table do
+      click_link "Edit"
+    end
+
+    fill_in "Code", with: "UpdatedCode"
+    select "No", from: "Enabled"
+    click_button "Continue"
+  end
+
+  def then_the_role_is_updated
+    expect(page).to have_content "UpdatedCode"
+    expect(page).to_not have_content "AnotherCode"
+
+    within last_row_of_roles_table do
+      expect(page).to have_content "not enabled"
+    end
+  end
+
+  private
+
+  def last_row_of_roles_table
+    all(".govuk-table__row").last
+  end
 end
-
-

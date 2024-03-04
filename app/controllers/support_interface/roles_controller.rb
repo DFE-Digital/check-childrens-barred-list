@@ -17,6 +17,19 @@ module SupportInterface
       end
     end
 
+    def edit
+      @role = Role.find(params[:id])
+    end
+
+    def update
+      @role = Role.find(params[:id])
+      if @role.update(role_params)
+        redirect_to support_interface_roles_path
+      else
+        render :edit
+      end
+    end
+
     private
 
     def role_params
