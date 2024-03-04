@@ -17,7 +17,13 @@
         <% @roles.each do |role| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header"><%= role.code %></th>
-            <td class="govuk-table__cell"></td>
+            <td class="govuk-table__cell">
+              <% if role.enabled? %>
+                <%= govuk_tag(text: "enabled", colour: "green") %>
+              <% else %>
+                <%= govuk_tag(text: "not enabled", colour: "red") %>
+              <% end %>
+            </td>
             <td class="govuk-table__cell"></td>
           </tr>
         <% end %>
