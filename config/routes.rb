@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
     mount FeatureFlags::Engine => "/features"
 
+    resources :roles, only: %i[index]
     resources :uploads, only: %i[new create]
     get "/uploads/preview", to: "uploads#preview", as: :upload_preview
     post "/uploads/confirm", to: "uploads#confirm", as: :upload_confirm

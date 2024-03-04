@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_17_114434) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_04_091643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -65,6 +65,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_114434) do
     t.text "improvement_suggestion", null: false
     t.boolean "contact_permission_given", null: false
     t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "code", null: false
+    t.boolean "enabled", default: false, null: false
+    t.boolean "internal", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
