@@ -9,8 +9,12 @@ module SupportInterface
     end
 
     def create
-      @role = Role.create!(role_params)
-      redirect_to support_interface_roles_path
+      @role = Role.new(role_params)
+      if @role.save
+        redirect_to support_interface_roles_path
+      else
+        render :new
+      end
     end
 
     private
