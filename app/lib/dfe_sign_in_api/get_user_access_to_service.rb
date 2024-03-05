@@ -13,8 +13,8 @@ module DfESignInApi
       response = client.get(endpoint)
 
       if response.success? && response.body.key?("roles")
-        response.body["roles"].find { |role| role["code"] == ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE") } ||
-          response.body["roles"].find { |role| authorised_role_codes.include?(role["code"]) }
+        response.body["roles"].find { |role| Role.enabled.internal.pluck(:code).include?(role["code"]) } ||
+          response.body["roles"].find { |role| Role.enabled.external.pluck(:code).include?(role["code"]) }
       end
     end
 
