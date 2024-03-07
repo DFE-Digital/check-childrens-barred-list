@@ -78,7 +78,7 @@ RSpec.describe DsiUser, type: :model do
 
     context "when the user has the internal role in their current session" do
       let!(:dsi_user_session) do
-        create(:dsi_user_session, dsi_user:, role_code: ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE"))
+        create(:dsi_user_session, dsi_user:, role_code: create(:role, :enabled, :internal).code)
       end
 
       it "returns true" do

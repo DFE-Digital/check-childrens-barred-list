@@ -5,8 +5,9 @@ RSpec.describe DfESignInApi::GetUserAccessToService do
     let(:org_id) { "123" }
     let(:user_id) { "456" }
     let(:role_id) { "789" }
-    let(:standard_role_code) { ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",").first }
-    let(:internal_role_code) { ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE") }
+    let(:internal_role_id) { "321" }
+    let(:role_code) { create(:role, :enabled).code }
+    let(:internal_role_code) { create(:role, :enabled, :internal).code }
     let(:endpoint) do
       [
         ENV.fetch("DFE_SIGN_IN_API_BASE_URL"),
@@ -26,8 +27,6 @@ RSpec.describe DfESignInApi::GetUserAccessToService do
 
     context "when the user is authorised" do
       context "with a standard role code" do
-        let(:role_code) { standard_role_code }
-
         it { is_expected.to eq({ "id" => role_id, "code" => role_code }) }
       end
 
@@ -42,6 +41,23 @@ RSpec.describe DfESignInApi::GetUserAccessToService do
       let(:role_code) { "Unauthorised_Role" }
 
       it { is_expected.to be_nil }
+    end
+
+    context "when the user has an internal and external role" do
+      before do
+        stub_request(:get, endpoint)
+        .to_return_json(
+          status: 200,
+          body: {
+            "roles" => [
+              { "id" => role_id, "code" => role_code },
+              { "id" => internal_role_id, "code" => internal_role_code }
+            ]
+          },
+        )
+      end
+
+      it { is_expected.to eq({ "id" => internal_role_id, "code" => internal_role_code }) }
     end
   end
 end

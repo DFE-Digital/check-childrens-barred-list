@@ -84,13 +84,10 @@ module AuthenticationSteps
   end
 
   def role_codes(internal: false)
-    role_codes = ENV.fetch("DFE_SIGN_IN_API_ROLE_CODES").split(",")
-    role_codes << internal_user_role_code if internal
-    role_codes
-  end
-
-  def internal_user_role_code
-    ENV.fetch("DFE_SIGN_IN_API_INTERNAL_USER_ROLE_CODE")
+    [].tap do |ary|
+      ary << create(:role, :enabled).code
+      ary << create(:role, :enabled, :internal).code if internal
+    end
   end
 
   def when_i_visit_the_sign_in_page
