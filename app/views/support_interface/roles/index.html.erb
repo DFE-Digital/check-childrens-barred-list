@@ -10,6 +10,7 @@
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Code</th>
           <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header">Access</th>
           <th scope="col" class="govuk-table__header"></th>
         </tr>
       </thead>
@@ -23,6 +24,9 @@
               <% else %>
                 <%= govuk_tag(text: "not enabled", colour: "red") %>
               <% end %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= govuk_tag(text: role.internal? ? "internal" : "external", colour: "orange") %>
             </td>
             <td class="govuk-table__cell"><%= link_to "Edit", edit_support_interface_role_path(role) %></td>
           </tr>
