@@ -5,7 +5,7 @@
 
     <%= form_with model: @role, url: support_interface_roles_path, method: :post do |form| %>
       <%= form.govuk_text_field :code, required: true %>
-      <%= form.govuk_check_box :internal, true %>
+      <%= form.govuk_check_box :internal, true, multiple: false %>
       <%= form.govuk_select :enabled, options_for_select([["Yes", true], ["No", false]]) %>
       <%= form.govuk_submit %>
     <% end %>
