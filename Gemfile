@@ -52,7 +52,7 @@ gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
 # Sending events to BigQuery
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.11.7"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.12.0"
 
 # Scheduling jobs
 gem "clockwork"
