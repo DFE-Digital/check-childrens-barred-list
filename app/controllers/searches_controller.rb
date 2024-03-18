@@ -15,14 +15,16 @@ class SearchesController < ApplicationController
     @search_form = SearchForm.new(search_params)
 
     if @search_form.valid?
-      render :no_record and return if record.nil?
+      result_returned = record.present?
 
       SearchLog.create!(
         dsi_user: current_dsi_user,
         last_name: @search_form.last_name,
         date_of_birth: @search_form.date_of_birth.to_fs(:db),
-        result_returned: true
+        result_returned:
       )
+
+      render :no_record and return unless result_returned
     else
       render :new
     end
