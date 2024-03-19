@@ -1,7 +1,7 @@
 en:
   service:
     name: Check the children’s barred list
-    email: employer.access@education.gov.uk
+    email: teaching.status@education.gov.uk
     dbs_email: dbscost@dbs.gov.uk
   generic_oauth_failure: There was a problem signing you in. Please try again.
   activemodel:
