@@ -10,6 +10,16 @@ class Validatable
 end
 
 RSpec.describe DayMonthYearValidator do
+  # We don't have translations for our Validatable test class
+  # avoid I18n::MissingTranslationData exceptions by turning off
+  # I18n.exception_handler for this particular spec.
+  around do |example|
+    exception_handler = I18n.exception_handler
+    I18n.exception_handler = nil
+    example.run
+    I18n.exception_handler = exception_handler
+  end
+
   subject(:validatable) { Validatable.new(attributes) }
 
   describe "#validate" do
@@ -42,7 +52,7 @@ RSpec.describe DayMonthYearValidator do
         expect(validatable.errors[:date_attribute]).to include("is invalid")
       end
     end
-    
+
     context "when the date is negative" do
       let(:attributes) { { day: -1, month: "6", year: "1990" } }
 
@@ -162,7 +172,7 @@ RSpec.describe DayMonthYearValidator do
         expect(validatable.errors[:date_attribute].first).to include("missing_day_and_year")
       end
     end
-    
+
     context "when month and year are missing" do
       let(:attributes) { { day: "15", month: nil, year: nil } }
 
