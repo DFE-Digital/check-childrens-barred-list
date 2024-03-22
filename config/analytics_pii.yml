@@ -7,7 +7,6 @@ shared:
     - uid
   :feedbacks:
     - email
-    - improvement_suggestion
   :search_logs:
     - last_name
     - date_of_birth
