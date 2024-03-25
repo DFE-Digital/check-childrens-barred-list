@@ -1,5 +1,10 @@
 <% content_for :page_title, "Possible match with the children’s barred list" %>
-<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: { "Home" => root_path, "Search results" => nil }) %>
+<% content_for :breadcrumbs do %>
+  <%= govuk_breadcrumbs(breadcrumbs: { "Home" => root_path, "Search results" => nil }) %>
+  <span class="govuk-caption-m">
+    Searched at <%= @search.created_at.to_fs(:time_on_date_long) %>
+  </span>
+<% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -21,4 +26,3 @@
     </p>
   </div>
 </div>
-

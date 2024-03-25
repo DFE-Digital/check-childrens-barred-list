@@ -46,8 +46,10 @@ RSpec.describe "No matching record search", type: :system do
   end
 
   def then_i_see_the_no_record_page
+    expect(page).to have_content "Searched at #{SearchLog.last.created_at.to_fs(:time_on_date_long)}"
     expect(page).to have_content "No record found"
-    expect(page).to have_content "Random name"
+    expect(page).to have_content(
+      "No record found for Random name born on #{Date.parse(@record.date_of_birth).to_fs(:long_uk)}")
   end
 
   def and_my_search_is_logged

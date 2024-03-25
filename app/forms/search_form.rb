@@ -4,7 +4,7 @@ class SearchForm
   include ActiveModel::Model
   include ActiveModel::Validations::Callbacks
 
-  attr_accessor :last_name, :day, :month, :year
+  attr_accessor :last_name, :day, :month, :year, :searched_at
 
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
