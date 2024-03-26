@@ -3,5 +3,6 @@ class SignOutController < ApplicationController
   before_action :reset_session
 
   def new
+    redirect_to sign_in_path
   end
 end
