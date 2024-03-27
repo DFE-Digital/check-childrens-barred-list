@@ -59,6 +59,8 @@ gem "clockwork"
 
 # Generate JSON Web Tokens
 gem "jwt"
+gem "logstash-logger"
+gem "rails_semantic_logger"
 
 gem 'activerecord-session_store'
 
