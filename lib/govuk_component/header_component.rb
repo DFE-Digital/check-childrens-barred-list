@@ -1,6 +1,6 @@
 class GovukComponent::HeaderComponent
-  class GovukComponent::HeaderComponent::NavigationItem
-    attr_reader :post, :params
+  class NavigationItem
+    attr_reader :post
 
     def initialize(text:, href: nil, post: false, options: {}, active: nil, classes: [], html_attributes: {})
       @text            = text
@@ -8,11 +8,6 @@ class GovukComponent::HeaderComponent
       @options         = options
       @active_override = active
       @post            = post
-
-      if button_to?
-        query = URI(@href).query
-        @params = query.present? ? Hash[URI.decode_www_form(query)] : {}
-      end
 
       super(classes:, html_attributes:)
     end
@@ -24,7 +19,7 @@ class GovukComponent::HeaderComponent
     def call
       tag.li(**html_attributes) do
         if button_to?
-          button_to(text, href, params:, class: "#{brand}-header__link", **options)
+          button_to(text, href, class: "#{brand}-header__link", **options)
         elsif link?
           link_to(text, href, class: "#{brand}-header__link", **options)
         else

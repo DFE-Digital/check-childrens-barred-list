@@ -28,7 +28,11 @@
     <%= govuk_header(service_name: t("service.name")) do |header|
       if request.path != main_app.not_authorised_path
         if current_dsi_user
-          header.with_navigation_item(href: main_app.dsi_sign_out_path(id_token_hint: session[:id_token]), text: "Sign out")
+          header.with_navigation_item(
+            href: main_app.dsi_sign_out_post_path({ id_token_hint: session[:id_token] }),
+            post: true,
+            text: "Sign out"
+          )
         else
           header.with_navigation_item(href: main_app.sign_in_path, text: "Sign in")
         end

@@ -7,11 +7,15 @@ $govuk-images-path: "/";
 @import "govuk-frontend/dist/govuk/all";
 
 button.govuk-header__link {
-  background: none !important;
+  background: none;
   border: none;
-  padding: 0 !important;
-  color: #fff;
+  padding: 0;
+  color: $govuk-body-background-colour;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
+}
+
+button.govuk-header__link:focus {
+  background-color: $govuk-focus-colour;
 }
