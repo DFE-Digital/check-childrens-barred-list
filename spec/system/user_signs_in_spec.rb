@@ -24,10 +24,11 @@ RSpec.describe "DSI authentication", type: :system do
 
   def then_i_am_signed_in
     within("header") do
-      expect(page).to have_link("Sign out")
-      sign_out_link = find_link("Sign out")
-      # Expect the token from mocked auth to be in the sign out link
-      expect(sign_out_link[:href]).to include "id_token_hint=abc123"
+      expect(page).to have_button("Sign out")
+      sign_out_button = find_button("Sign out")
+      sign_out_form = sign_out_button.ancestor("form")
+      # Expect the token from mocked auth to be in the sign out form action
+      expect(sign_out_form["action"]).to end_with("/auth/dfe/sign-out?id_token_hint=abc123")
     end
     expect(DsiUser.count).to eq 1
     expect(DsiUserSession.count).to eq 1
