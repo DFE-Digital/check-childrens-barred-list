@@ -153,7 +153,7 @@ locals {
     local.app_config,
     {
       BIGQUERY_PROJECT_ID = "teaching-qualifications",
-      BIGQUERY_DATASET    = "ccbl_events_${var.environment}",
+      BIGQUERY_DATASET    = "ccbl_events_${var.environment_short_name}",
       BIGQUERY_TABLE_NAME = "events",
       DB_SSLMODE = local.postgres_ssl_mode,
       HOSTING_ENVIRONMENT = var.environment,
