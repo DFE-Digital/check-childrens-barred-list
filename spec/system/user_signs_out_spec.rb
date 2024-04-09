@@ -20,6 +20,7 @@ RSpec.describe "DSI authentication", type: :system do
   end
 
   def then_i_am_redirected_to_the_sign_in_page
-    expect(page).to have_content "You are now signed out"
+    expect(page).to have_content "Sign in to check the children’s barred list"
+    expect(page).to have_button "Sign in"
   end
 end
