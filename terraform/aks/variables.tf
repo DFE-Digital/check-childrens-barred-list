@@ -136,6 +136,8 @@ variable "statuscake_contact_groups" {
   default = []
 }
 
+variable "enable_logit" { default = false }
+
 locals {
   service_name = "check-childrens-barred-list"
   version      = "1.9.7"

@@ -19,6 +19,7 @@ module "web_application" {
   probe_path    = var.probe_path
 
   web_external_hostnames = var.gov_uk_host_names
+  enable_logit           = var.enable_logit
 }
 
 module "worker_application" {
@@ -39,6 +40,7 @@ module "worker_application" {
   docker_image  = var.app_docker_image
   command       = ["bundle", "exec", "sidekiq", "-C", "./config/sidekiq.yml"]
   probe_command = ["pgrep", "-f", "sidekiq"]
+  enable_logit           = var.enable_logit
 }
 
 module "application_configuration" {
