@@ -59,8 +59,6 @@ gem "clockwork"
 
 # Generate JSON Web Tokens
 gem "jwt"
-gem "logstash-logger"
-gem "rails_semantic_logger"
 
 gem 'activerecord-session_store'
 
@@ -94,4 +92,8 @@ end
 
 group :development, :test, :review do
   gem "factory_bot_rails"
+end
+
+group :development, :production do
+  gem "rails_semantic_logger"
 end
