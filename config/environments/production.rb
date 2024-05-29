@@ -80,4 +80,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.log_level = :info                                # Or :warn, or :error
+  config.log_format = :json                               # For parsing in Logit
+  config.rails_semantic_logger.add_file_appender = false  # Don't log to file
+  config.active_record.logger = nil                       # Don't log SQL
 end
