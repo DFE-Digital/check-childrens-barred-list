@@ -94,6 +94,6 @@ group :development, :test, :review do
   gem "factory_bot_rails"
 end
 
-group :development, :production do
+group :development, :production, :review do
   gem "rails_semantic_logger"
 end
