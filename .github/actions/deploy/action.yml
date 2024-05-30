@@ -80,7 +80,7 @@ runs:
           ${{ env.key_vault_app_secret_name }}
           ${{ env.key_vault_infra_secret_name }}
 
-    - uses: DFE-Digital/github-actions/set-kubelogin-environment@set-kubelogin-environment
+    - uses: DFE-Digital/github-actions/set-kubelogin-environment@1824-update-kubelogin
       with:
         azure-credentials: ${{ inputs.azure-credentials }}
 
