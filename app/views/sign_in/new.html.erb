@@ -1,39 +1,50 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Sign in to check the children’s barred list</h1>
+    <h1 class="govuk-heading-xl">
+      Check the children's barred list
+    </h1>
+  </div>
+</div>
 
-    <p class="govuk-body">
-      People on the children’s barred list are not allowed to work with children.
-    </p>
-
-    <p class="govuk-body">
-      The list is usually checked as part of a new employee’s enhanced Disclosure and Barring Service (DBS) check.
-    </p>
-
-    <p class="govuk_body">
-      Schools, colleges, local authorities and higher education institutions can check the children’s barred list separately if the new employee either:
-    </p>
-
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p>People on the children’s barred list are not allowed to work with children.</p>
+    <p>The list is usually checked as part of a new employee’s enhanced Disclosure and Barring Service (DBS) check.</p>
+    <p>Schools, colleges, local authorities and higher education institutions can check the children’s barred list separately if the new employee either:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>
-        will start working with children while waiting for the result of an enhanced DBS check
-      </li>
-      <li>
-        does not need an enhanced DBS check because they’ve worked with children in a school or college within the last 3 months
-      </li>
+      <li>will start working with children while waiting for the result of an enhanced DBS check</li>
+      <li>does not need an enhanced DBS check because they’ve worked with children in a school or college within the last 3 months</li>
     </ul>
-
-    <p class="govuk_body">
-      You’ll need the new employee’s last name and date of birth to check the children’s barred list.
-    </p>
+    <p>You’ll need the new employee’s last name and date of birth to check the children’s barred list.</p>
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p>You need a DfE Sign-in account. If you do not have one then you can:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>ask your organisation’s approver to create an account for you</li>
+      <li>use the <a href="https://help.signin.education.gov.uk/contact-us">contact form</a> to request an account if you do not have an approver</li>
+    </ul>
 
     <%= form_with url: (DfESignIn.bypass? ? "/auth/developer" : "/auth/dfe") do |f| %>
       <button type="submit" class="govuk-button govuk-button--start">
-        <%= DfESignIn.bypass? ? "Sign in with DSI bypass" : "Sign in" %>
+        <%= DfESignIn.bypass? ? "Sign in with DSI bypass" : "Start now" %>
         <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
           <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
         </svg>
       </button>
     <% end %>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <div>
+      <nav role="navigation" aria-labelledby="related-navigation-related-content">
+        <h2 class="govuk-heading-m" id="related-navigation-related-content">
+          Help and guidance
+        </h2>
+        <ul class="govuk-list">
+          <li>
+            <a href="#">Check the children's barred list: guidance</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </div>
