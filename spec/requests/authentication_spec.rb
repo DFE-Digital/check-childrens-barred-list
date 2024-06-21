@@ -10,8 +10,8 @@ RSpec.describe "Authentication", type: :request do
     context "with valid basic auth credentials" do
       let(:credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(
-          ENV.fetch("SUPPORT_USERNAME", "support"),
-          ENV.fetch("SUPPORT_PASSWORD", "support"),
+          ENV.fetch("SUPPORT_USERNAME", "test"),
+          ENV.fetch("SUPPORT_PASSWORD", "test"),
         )
       end
 

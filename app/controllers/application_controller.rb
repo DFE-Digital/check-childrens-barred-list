@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
   def http_basic_authenticate
     valid_credentials = [
       {
-        username: ENV.fetch("SUPPORT_USERNAME", "support"),
-        password: ENV.fetch("SUPPORT_PASSWORD", "support")
+        username: ENV.fetch("SUPPORT_USERNAME", "test"),
+        password: ENV.fetch("SUPPORT_PASSWORD", "test")
       }
     ]
 
