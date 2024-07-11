@@ -8,7 +8,7 @@ RSpec.describe "DSI authentication", type: :system do
 
   scenario "User belonging to closed organisation signs in via DfE Sign In", test: :with_stubbed_auth do
     given_the_service_is_open
-    when_i_sign_in_via_dsi(orgs: [organisation(status: "Closed")])
+    when_i_sign_in_via_dsi(orgs: [organisation(status: "Closed")], accept_terms_and_conditions: false)
     then_i_am_not_authorised
   end
 

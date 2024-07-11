@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :http_basic_authenticate, unless: -> { FeatureFlags::FeatureFlag.active?(:service_open) }
   before_action :authenticate_dsi_user!
   before_action :handle_expired_session!
+  before_action :enforce_terms_and_conditions_acceptance!
 
   def http_basic_authenticate
     valid_credentials = [
@@ -62,5 +63,11 @@ class ApplicationController < ActionController::Base
     request_event.with_namespace(current_namespace) if respond_to?(:current_namespace, true)
 
     DfE::Analytics::SendEvents.do([request_event.as_json])
+  end
+
+  def enforce_terms_and_conditions_acceptance!
+    if current_dsi_user&.acceptance_required?
+      redirect_to terms_and_conditions_path
+    end
   end
 end
