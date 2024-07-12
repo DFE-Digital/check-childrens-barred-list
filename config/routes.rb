@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get "/auth/dfe/callback", to: "omniauth_callbacks#dfe"
   post "/auth/developer/callback", to: "omniauth_callbacks#dfe_bypass"
 
+  get "/terms-and-conditions", to: "terms_and_conditions#show"
+  patch "/terms-and-conditions" => "terms_and_conditions#update"
+
   scope "/feedback" do
     get "/", to: "feedbacks#new", as: :feedbacks
     post "/", to: "feedbacks#create"

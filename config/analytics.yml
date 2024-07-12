@@ -8,6 +8,8 @@ shared:
     - uid
     - created_at
     - updated_at
+    - terms_and_conditions_version_accepted
+    - terms_and_conditions_accepted_at
   :dsi_user_sessions:
     - id
     - dsi_user_id

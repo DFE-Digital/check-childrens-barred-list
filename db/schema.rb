@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_04_093302) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_11_143411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -49,6 +49,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_04_093302) do
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "terms_and_conditions_version_accepted"
+    t.datetime "terms_and_conditions_accepted_at"
     t.index ["email"], name: "index_dsi_users_on_email", unique: true
   end
 

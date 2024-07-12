@@ -5,6 +5,8 @@ class DsiUser < ApplicationRecord
   encrypts :first_name, :last_name
   encrypts :email, deterministic: true
 
+  CURRENT_TERMS_AND_CONDITIONS_VERSION = "1.0".freeze
+
   def self.create_or_update_from_dsi(dsi_payload, role = nil)
     dsi_user = find_or_initialize_by(email: dsi_payload.info.fetch(:email))
 
@@ -24,6 +26,25 @@ class DsiUser < ApplicationRecord
     end
 
     dsi_user
+  end
+
+  def accept_terms!
+    update!(
+      terms_and_conditions_version_accepted: CURRENT_TERMS_AND_CONDITIONS_VERSION,
+      terms_and_conditions_accepted_at: Time.zone.now
+    )
+  end
+
+  def acceptance_required?
+    !current_version_accepted || acceptance_expired
+  end
+
+  def current_version_accepted
+    terms_and_conditions_version_accepted == CURRENT_TERMS_AND_CONDITIONS_VERSION
+  end
+
+  def acceptance_expired
+    terms_and_conditions_accepted_at < 12.months.ago
   end
 
   def internal?
