@@ -204,8 +204,10 @@
     <p class="govuk-body"><a class="govuk-link" mailto="teaching.status@education.gov.uk">Email: teaching.status@education.gov.uk</a></p>
 
     <p class="govuk-body">Website: <a class="govuk-link" href="https://www.gov.uk/government/organisations/teaching-regulation-agency">https://www.gov.uk/government/organisations/teaching-regulation-agency</a></p>
-    <%= form_with url: terms_and_conditions_path, method: :patch do |f| %>
-      <%= f.govuk_submit "Accept" %>
+    <% if current_dsi_user %>
+      <%= form_with url: terms_and_conditions_path, method: :patch do |f| %>
+        <%= f.govuk_submit "Accept" %>
+      <% end %>
     <% end %>
   </div>
 </div>
