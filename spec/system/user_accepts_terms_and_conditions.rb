@@ -7,6 +7,11 @@ RSpec.describe "Terms and conditions acceptance", type: :system do
 
   scenario "User accepts terms and conditions", test: :with_stubbed_auth do
     given_the_service_is_open
+    when_i_visit_the_sign_in_page
+    and_i_click_on_terms_and_conditions_footer_link
+    then_i_am_redirected_to_the_terms_and_conditions_page
+    and_the_accept_button_is_hidden
+
     when_i_sign_in_via_dsi(accept_terms_and_conditions: false)
     then_i_am_signed_in
     and_i_am_redirected_to_the_terms_and_conditions_page
@@ -48,6 +53,14 @@ RSpec.describe "Terms and conditions acceptance", type: :system do
     :then_i_am_redirected_to_the_terms_and_conditions_page,
     :and_i_am_redirected_to_the_terms_and_conditions_page,
     )
+
+  def and_i_click_on_terms_and_conditions_footer_link
+    click_link "Terms and conditions"
+  end
+
+  def and_the_accept_button_is_hidden
+    expect(page).not_to have_link "Accept"
+  end
 
   def when_i_click_accept
     click_on "Accept"
