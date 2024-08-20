@@ -8,14 +8,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">No record found on the Children’s Barred List</h1>
+    <h1 class="govuk-heading-l">No record found on the children’s barred list</h1>
 
     <p class="govuk_body">
-      No record found for <%= @search.last_name %> born on <%= Date.parse(@search.date_of_birth).to_fs(:long_uk) %>
+      No record found for <%= @search.last_name %> born on <%= Date.parse(@search.date_of_birth).to_fs(:long_uk) %>.
     </p>
 
     <p class="govuk_body">
-      <%= govuk_link_to "Try another search", root_path %>
+      <%= govuk_link_to "Search again", root_path %>
     </p>
   </div>
 </div>
