@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 79378cc466a40c6a6cba317e232cbf48ec79ab7d
-  tag: v1.14.1
+  revision: 706595e52fed211cee53ad99ceaeaabb47a059cc
+  tag: v1.14.2
   specs:
-    dfe-analytics (1.14.1)
+    dfe-analytics (1.14.2)
       google-cloud-bigquery (~> 1.38)
       httparty (~> 0.21)
       multi_xml (~> 0.6.0)
@@ -293,6 +293,8 @@ GEM
       net-protocol
     nio4r (2.7.0)
     nokogiri (1.16.7-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
@@ -595,6 +597,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-24
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
