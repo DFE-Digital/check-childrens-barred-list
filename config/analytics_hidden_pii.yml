@@ -1,0 +1,12 @@
+---
+shared:
+  :dsi_users:
+    - email
+    - first_name
+    - last_name
+    - uid
+  :feedbacks:
+    - email
+  :search_logs:
+    - last_name
+    - date_of_birth
