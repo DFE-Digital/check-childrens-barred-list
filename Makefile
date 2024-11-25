@@ -65,6 +65,7 @@ terraform-init: install-terrafile set-azure-account
 	$(eval export TF_VAR_config_short=$(CONFIG_SHORT))
 	$(eval export TF_VAR_service_short=$(SERVICE_SHORT))
 	$(eval export TF_VAR_rg_name=$(RESOURCE_GROUP_NAME))
+	$(eval export TF_VAR_config=${CONFIG})
 
 terraform-plan: terraform-init
 	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"

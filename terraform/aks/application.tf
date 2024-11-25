@@ -41,6 +41,8 @@ module "worker_application" {
   command       = ["bundle", "exec", "sidekiq", "-C", "./config/sidekiq.yml"]
   probe_command = ["pgrep", "-f", "sidekiq"]
   enable_logit           = var.enable_logit
+
+  enable_gcp_wif = var.enable_dfe_analytics_federated_auth
 }
 
 module "application_configuration" {
