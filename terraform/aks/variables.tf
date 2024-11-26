@@ -138,6 +138,15 @@ variable "statuscake_contact_groups" {
 
 variable "enable_logit" { default = false }
 
+variable "enable_dfe_analytics_federated_auth" {
+  description = "Create the resources in Google cloud for federated authentication and enable in application"
+  default     = false
+}
+
+variable "config" {
+  description = "Long name of the environment configuration, e.g. development, staging, production..."
+}
+
 locals {
   service_name = "check-childrens-barred-list"
   version      = "1.9.7"
@@ -169,6 +178,7 @@ locals {
     {
       DATABASE_URL = module.postgres.url,
       REDIS_URL    = module.redis.url,
+      GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
     }
   )
 }
