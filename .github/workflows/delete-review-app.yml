@@ -7,6 +7,7 @@ on:
 
 permissions:
   deployments: write
+  id-token: write
 
 jobs:
   delete-review-app:
@@ -21,6 +22,11 @@ jobs:
       - uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+
+      - uses: google-github-actions/auth@v2
+        with:
+          project_id: teaching-qualifications
+          workload_identity_provider: projects/708780292301/locations/global/workloadIdentityPools/check-childrens-barred-list/providers/check-childrens-barred-list
 
       - name: Set Environment variables
         run: |
@@ -40,6 +46,7 @@ jobs:
           # echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
           # echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
           # echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
       - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
         uses: hashicorp/setup-terraform@v3
         with:
@@ -61,6 +68,7 @@ jobs:
         run: |
           az storage blob delete -c terraform-state --name ${{ env.TF_STATE_FILE }} \
           --account-name "s189t01ccbltfstatervsa"
+
       - name: Update ${{ matrix.environment }} status
         id: deactivate-env
         if: ${{ always() && env.TF_STATE_EXISTS == 'true' }}
