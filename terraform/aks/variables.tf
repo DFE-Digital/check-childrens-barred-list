@@ -147,6 +147,12 @@ variable "config" {
   description = "Long name of the environment configuration, e.g. development, staging, production..."
 }
 
+variable "gcp_dataset_name" {
+  description = "Name of the GCP dataset used by Bigquery for an environment. If null will use ccbl_events_{var.config} "
+  type    = string
+  default = null
+}
+
 locals {
   service_name = "check-childrens-barred-list"
   version      = "1.9.7"

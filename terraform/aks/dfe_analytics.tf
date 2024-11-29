@@ -11,5 +11,5 @@ module "dfe_analytics" {
   namespace             = var.namespace
   service_short         = var.service_short
   environment           = local.app_name_suffix
-  gcp_dataset           = "ccbl_events_${var.config}"
+  gcp_dataset           = var.gcp_dataset_name != null ? var.gcp_dataset_name  : "ccbl_events_${var.config}"
 }
