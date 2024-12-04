@@ -41,21 +41,16 @@ production: production-cluster
 ci:
 	$(eval export AUTO_APPROVE=-auto-approve)
 
-install-terrafile: ## Install terrafile to manage terraform modules
-	[ ! -f bin/terrafile ] \
-		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
-		| tar xz -C ./bin terrafile \
-		|| true
-
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
-terraform-init: install-terrafile set-azure-account
+terraform-init: set-azure-account
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
 	$(eval export TF_VAR_app_docker_image=ghcr.io/dfe-digital/check-childrens-barred-list:$(IMAGE_TAG))
 
 	$(if $(APP_NAME), $(eval KEY_PREFIX=$(APP_NAME)), $(eval KEY_PREFIX=$(ENVIRONMENT)))
-	./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/config/$(CONFIG)_Terrafile
+	rm -rf terraform/aks/vendor/modules/aks
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/aks/vendor/modules/aks
 	terraform -chdir=terraform/aks init -upgrade -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
@@ -135,6 +130,9 @@ dns:
 	$(eval include global_config/dns-domain.sh)
 
 domains-infra-init: set-azure-account
+	rm -rf terraform/custom_domains/infrastructure/vendor/modules/domains
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/infrastructure/vendor/modules/domains
+
 	terraform -chdir=terraform/custom_domains/infrastructure init -reconfigure -upgrade \
 		-backend-config=config/${DOMAINS_ID}_backend.tfvars
 
@@ -145,6 +143,8 @@ domains-infra-apply: domains-infra-init # make dns domains-infra-apply
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file config/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
 
 domains-init: set-azure-account
+	rm -rf terraform/custom_domains/environment_domains/vendor/modules/domains
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/environment_domains/vendor/modules/domains
 	$(if $(PR_NUMBER), $(eval DEPLOY_ENV=${PR_NUMBER}))
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=config/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
