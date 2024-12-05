@@ -28,7 +28,8 @@ tmp/pids/*
 
 .terraform
 terraform/aks/vendor
+terraform/custom_domains/environment_domains/vendor
+terraform/custom_domains/infrastructure/vendor
 terraform.tfstate*
-bin/terrafile
 bin/konduit.sh
 bin/fetch_config.rb
