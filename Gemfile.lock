@@ -236,7 +236,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
     irb (1.14.0)
@@ -498,7 +498,7 @@ GEM
     sentry-ruby (5.19.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    shoulda-matchers (6.2.0)
+    shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
     sidekiq (6.5.12)
       connection_pool (>= 2.2.5, < 3)
