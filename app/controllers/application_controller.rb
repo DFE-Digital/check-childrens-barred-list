@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   def authenticate_dsi_user!
     if current_dsi_user.blank?
       flash[:warning] = "You need to sign in to continue."
-      redirect_to sign_in_path
+      redirect_to "/auth/dfe"
     end
   end
 

@@ -18,7 +18,7 @@ RSpec.describe "Authentication", type: :request do
       it "redirects to sign-in" do
         get "/", env: { "HTTP_AUTHORIZATION" => credentials }
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to("/sign-in")
+        expect(response).to redirect_to("/auth/dfe")
       end
     end
   end

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: "searches#new"
 
+  get "/start", to: "start#start"
+
   get "/search", to: "searches#new"
   get "/result", to: "searches#show"
 
