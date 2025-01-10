@@ -13,6 +13,7 @@ production:
 
 review:
   <<: *default
+  BYPASS_DSI: true
   RAILS_ENV: review
   RACK_ENV: review
 

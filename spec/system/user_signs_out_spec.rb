@@ -20,6 +20,6 @@ RSpec.describe "DSI authentication", type: :system do
   end
 
   def then_i_am_redirected_to_the_sign_in_page
-    expect(page).to have_button "Start now"
+    expect(page).to have_current_path(ENV.fetch("CHECK_CHILDRENS_BARRED_LIST_GUIDANCE_URL"))
   end
 end
