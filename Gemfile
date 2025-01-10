@@ -36,6 +36,7 @@ gem "govuk_markdown"
 # Provide endpoint for server healthchecks
 gem "okcomputer"
 
+gem "repost"
 # Sentry error reporting
 gem "sentry-rails"
 gem "sentry-ruby"
