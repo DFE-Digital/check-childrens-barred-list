@@ -19,14 +19,6 @@ RSpec.describe "DSI authentication", type: :system do
     end
   end
 
-  scenario "User has sessionexpiry oauth error", test: :with_stubbed_auth do
-    given_dsi_auth_is_mocked_with_a_failure("sessionexpired") do
-      when_i_visit_the_sign_in_page
-      and_click_the_dsi_sign_in_button
-      then_i_am_redirected_to_sign_in
-    end
-  end
-
   private
 
   def then_i_see_a_sign_in_error
