@@ -5,6 +5,7 @@ class SignOutController < ApplicationController
   before_action :reset_session
 
   def new
-    redirect_to sign_in_path
+    redirect_to ENV.fetch("CHECK_RECORDS_GUIDANCE_URL", "https://www.gov.uk/guidance/check-the-childrens-barred-list"),
+                allow_other_host: true
   end
 end
