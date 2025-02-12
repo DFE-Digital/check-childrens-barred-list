@@ -17,11 +17,6 @@ variable "app_name_suffix" {
   default = null
 }
 
-variable "azure_credentials_json" {
-  type    = string
-  default = null
-}
-
 variable "azure_maintenance_window" {
   type    = map
   default = null
@@ -157,7 +152,6 @@ locals {
   service_name = "check-childrens-barred-list"
   version      = "1.9.7"
 
-  azure_credentials = try(jsondecode(var.azure_sp_credentials_json), null)
 
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
 
