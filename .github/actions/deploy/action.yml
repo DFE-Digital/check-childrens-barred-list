@@ -2,7 +2,14 @@ name: deploy
 description: deploys application
 
 inputs:
-  azure-credentials:
+  azure-client-id:
+    description: Managed identity client ID
+    required: true
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: true
+  azure-tenant-id:
+    description: Azure tenant ID
     required: true
   environment:
     description: Environment to deploy to
@@ -68,9 +75,11 @@ runs:
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
-        creds: ${{ inputs.azure-credentials }}
+        client-id: ${{ inputs.azure-client-id }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
 
     - uses: google-github-actions/auth@v2
       with:
@@ -87,7 +96,9 @@ runs:
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
-        azure-credentials: ${{ inputs.azure-credentials }}
+        azure-client-id: ${{ inputs.azure-client-id }}
+        azure-tenant-id: ${{ inputs.azure-tenant-id }}
+        azure-subscription-id: ${{ inputs.azure-subscription-id }}
 
     - name: Terraform init, plan & apply
       shell: bash
@@ -95,7 +106,6 @@ runs:
       env:
         IMAGE_TAG: ${{ inputs.sha }}
         APP_NAME: ${{ env.APP_NAME }}
-        TF_VAR_azure_sp_credentials: ${{ inputs.azure-credentials }}
         CONFIRM_PRODUCTION: true
 
     - name: Set cluster environment variables

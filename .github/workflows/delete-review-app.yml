@@ -6,12 +6,14 @@ on:
     branches: [main]
 
 permissions:
+  contents: write
   deployments: write
   id-token: write
 
 jobs:
   delete-review-app:
     name: Delete Review App ${{ github.event.pull_request.number }}
+    environment: review
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
@@ -21,7 +23,9 @@ jobs:
 
       - uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - uses: google-github-actions/auth@v2
         with:
@@ -42,10 +46,6 @@ jobs:
            --account-name "s189t01ccbltfstatervsa" \
            --prefix $TF_STATE_FILE --query "[].name" -o tsv)
           if [ ! -z "$pr_state_file" ]; then echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
-          # tf_vars_file=terraform/aks/config/review.tfvars.json
-          # echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          # echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-          # echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
       - name: Use Terraform ${{ env.TERRAFORM_VERSION }}
         uses: hashicorp/setup-terraform@v3
@@ -55,13 +55,13 @@ jobs:
       - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
         if: env.TF_STATE_EXISTS == 'true'
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform destroy
         if: env.TF_STATE_EXISTS == 'true'
         run: make review ci terraform-destroy
-        env:
-          TF_VAR_azure_sp_credentials_json: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
 
       - name: Delete tf state file
         if: env.TF_STATE_EXISTS == 'true'
