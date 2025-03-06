@@ -128,7 +128,7 @@ check-auto-approve:
 dns:
 	$(eval include global_config/dns-domain.sh)
 
-domains-infra-init: set-azure-account
+domains-infra-init: dns set-azure-account
 	rm -rf terraform/custom_domains/infrastructure/vendor/modules/domains
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/infrastructure/vendor/modules/domains
 
@@ -141,7 +141,7 @@ domains-infra-plan: domains-infra-init # make dns domains-infra-plan
 domains-infra-apply: domains-infra-init # make dns domains-infra-apply
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file config/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
 
-domains-init: set-azure-account
+domains-init: dns set-azure-account
 	rm -rf terraform/custom_domains/environment_domains/vendor/modules/domains
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/environment_domains/vendor/modules/domains
 	$(if $(PR_NUMBER), $(eval DEPLOY_ENV=${PR_NUMBER}))
