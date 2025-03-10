@@ -294,6 +294,7 @@ jobs:
 
   deploy_domains_infra:
     name: Deploy Domains Infrastructure
+    needs: [deploy_production]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     concurrency: deploy_production
