@@ -30,7 +30,6 @@ permissions:
 jobs:
   build:
     name: Build
-    environment: review
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/check-childrens-barred-list
     outputs:
@@ -57,35 +56,12 @@ jobs:
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           echo "IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
-      - name: Set KV environment variables
-        if: github.actor != 'dependabot[bot]'
-        run: |
-          # tag build to the review env for vars and secrets
-          tf_vars_file=terraform/aks/config/review.tfvars.json
-          echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: azure/login@v2
-        if: github.actor != 'dependabot[bot]'
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - uses: DFE-Digital/keyvault-yaml-secret@v1
-        if: github.actor != 'dependabot[bot]'
-        id: get-secret
-        with:
-          keyvault: ${{ env.KEY_VAULT_NAME }}
-          secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
-          key: SNYK_TOKEN
 
       - name: Build Docker Image
         uses: docker/build-push-action@v6
@@ -110,7 +86,7 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: ${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}
           args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
