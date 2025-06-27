@@ -33,7 +33,7 @@ permissions:
 
 env:
   SERVICE_NAME: check-childrens-barred-list
-  SERVICE_SHORT: check-childrens-barred-list
+  SERVICE_SHORT: ccbl
   TF_VARS_PATH: terraform/aks/config
 
 jobs:
