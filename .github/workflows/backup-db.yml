@@ -24,6 +24,7 @@ on:
   push:
     branches:
       - add_db_workflows
+      - add_db_workflows-shahe
 
   schedule:
     - cron: "0 4 * * *" # 04:00 UTC
@@ -41,7 +42,7 @@ jobs:
     name: Backup database
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.environment || 'production' }}
+      name: test
     env:
       DEPLOY_ENV: test # ${{ inputs.environment || 'production'  }}
       BACKUP_FILE: test # ${{ inputs.backup-file || 'schedule'  }}
