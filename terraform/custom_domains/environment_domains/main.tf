@@ -12,6 +12,7 @@ module "domains" {
   cached_paths          = try(each.value.cached_paths, [])
   redirect_rules        = try(each.value.redirect_rules, null)
   rate_limit            = try(var.rate_limit, null)
+  rate_limit_max        = try(var.rate_limit_max, null)
 }
 
 # Takes values from hosted_zone.domain_name.cnames (or txt_records, a-records). Use for domains which are not associated with front door.
