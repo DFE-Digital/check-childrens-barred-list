@@ -42,9 +42,6 @@ runs:
 
         echo "cluster=$(jq -r '.cluster' $TFVARS)" >> $GITHUB_ENV
         echo "app_environment=$(jq -r '.environment' $TFVARS)" >> $GITHUB_ENV
-        echo "key_vault_name=$(jq -r '.key_vault_name' $TFVARS)" >> $GITHUB_ENV
-        echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' $TFVARS)" >> $GITHUB_ENV
-        echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name'  $TFVARS)" >> $GITHUB_ENV
         echo "namespace=$(jq -r '.namespace' $TFVARS)" >> $GITHUB_ENV
 
         if [ -n "${{ inputs.pr-number }}" ]; then
@@ -85,14 +82,6 @@ runs:
       with:
         project_id: teaching-qualifications
         workload_identity_provider: projects/708780292301/locations/global/workloadIdentityPools/check-childrens-barred-list/providers/check-childrens-barred-list
-
-    - name: Validate Azure Key Vault secrets
-      uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
-      with:
-        KEY_VAULT: ${{ env.key_vault_name }}
-        SECRETS: |
-          ${{ env.key_vault_app_secret_name }}
-          ${{ env.key_vault_infra_secret_name }}
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
