@@ -20,5 +20,5 @@ provider "kubernetes" {
 }
 
 provider "statuscake" {
-  api_token = local.infra_secrets.STATUSCAKE_API_TOKEN
+  api_token = data.azurerm_key_vault_secret.statuscake_api_token.value
 }
