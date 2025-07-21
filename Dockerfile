@@ -7,7 +7,7 @@ FROM ruby:3.4.4-alpine as builder
 
 # RUN apk -U upgrade && \
 #     apk add --update --no-cache gcc git libc6-compat libc-dev make nodejs \
-#     postgresql13-dev yarn
+#     postgresql15-dev yarn
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN apk add --update --no-cache tzdata && \
 # build-base: dependencies for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
-RUN apk add --no-cache build-base yarn postgresql13-dev
+RUN apk add --no-cache build-base yarn postgresql15-dev
 
 # git: required to clone DFE repos
 RUN apk add --no-cache git
