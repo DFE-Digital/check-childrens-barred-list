@@ -68,14 +68,6 @@ variable "gov_uk_host_names" {
   type    = list(any)
 }
 
-variable "key_vault_app_secret_name" {
-  type = string
-}
-
-variable "key_vault_infra_secret_name" {
-  type = string
-}
-
 variable "key_vault_name" {
   type = string
 }
@@ -156,8 +148,6 @@ locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
 
   app_name_suffix = var.app_name == null ? var.environment : var.app_name
-  kv_app_secrets  = yamldecode(data.azurerm_key_vault_secret.app_secrets.value)
-  infra_secrets   = yamldecode(data.azurerm_key_vault_secret.infra_secrets.value)
   app_config      = yamldecode(file(var.app_config_file))[var.environment]
 
   app_env_values = merge(
@@ -173,12 +163,9 @@ locals {
 
   app_resource_group_name = "${var.azure_resource_prefix}-${var.service_short}-${var.config_short}-rg"
 
-  app_secrets = merge(
-    local.kv_app_secrets,
-    {
-      DATABASE_URL = module.postgres.url,
-      REDIS_URL    = module.redis.url,
-      GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
-    }
-  )
+  app_secrets = {
+    DATABASE_URL = module.postgres.url,
+    REDIS_URL    = module.redis.url,
+    GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
+  }
 }
