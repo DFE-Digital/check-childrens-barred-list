@@ -3,11 +3,11 @@
 # production: runs the actual app
 
 # Build builder image
-FROM ruby:3.3.0-alpine as builder
+FROM ruby:3.4.4-alpine as builder
 
 # RUN apk -U upgrade && \
 #     apk add --update --no-cache gcc git libc6-compat libc-dev make nodejs \
-#     postgresql13-dev yarn
+#     postgresql15-dev yarn
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN apk add --update --no-cache tzdata && \
 # build-base: dependencies for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
-RUN apk add --no-cache build-base yarn postgresql13-dev
+RUN apk add --no-cache build-base yarn postgresql15-dev yaml-dev
 
 # git: required to clone DFE repos
 RUN apk add --no-cache git
@@ -58,7 +58,7 @@ RUN rm -rf node_modules log/* tmp/* /tmp && \
     find /usr/local/bundle/gems -name "*.html" -delete
 
 # Build runtime image
-FROM ruby:3.3.0-alpine as production
+FROM ruby:3.4.4-alpine as production
 
 # Upgrade ssl, crypto and curl libraries to latest version
 RUN apk upgrade --no-cache openssl libssl3 libcrypto3 curl
