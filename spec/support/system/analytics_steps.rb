@@ -1,5 +1,7 @@
 module AnalyticsSteps
   def and_event_tracking_is_working
-    expect(:web_request).to have_been_enqueued_as_analytics_events
+    expect(DfE::Analytics::SendEvents).to have_been_enqueued.on_queue("analytics")
+                                                            .with([hash_including("event_type" => "web_request")])
+                                                            .at_least(1).times
   end
 end
