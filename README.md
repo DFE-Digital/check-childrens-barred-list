@@ -46,6 +46,7 @@ If installing Redis manually, you'll need to start it in a separate terminal:
 redis-server
 ```
 
+
 ### Application
 
 Setup the project (re-run after `Gemfile` or `package.json` updates, automatically restarts any running Rails server):
