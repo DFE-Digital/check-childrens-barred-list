@@ -104,7 +104,7 @@ GEM
     attr_required (1.0.1)
     backport (1.2.0)
     base64 (0.3.0)
-    benchmark (0.3.0)
+    benchmark (0.4.1)
     bigdecimal (3.2.2)
     bindata (2.4.15)
     bindex (0.8.1)
@@ -133,7 +133,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.4.0)
+    cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.5)
     cuprite (0.15.1)
@@ -265,7 +265,7 @@ GEM
       addressable (~> 2.8)
       childprocess (~> 5.0)
     lint_roller (1.1.0)
-    logger (1.6.0)
+    logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
