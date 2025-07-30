@@ -63,6 +63,9 @@ gem "jwt"
 
 gem 'activerecord-session_store'
 
+# ostruct will stop being a part of the standard library in ruby 3.5
+gem 'ostruct'
+
 group :development do
   gem "prettier_print", require: false
   gem "rladr"
