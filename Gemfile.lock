@@ -344,7 +344,9 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.8)
+    pg (1.6.0-arm64-darwin)
+    pg (1.6.0-x86_64-darwin)
+    pg (1.6.0-x86_64-linux)
     pp (0.6.2)
       prettyprint
     prettier_print (1.2.1)
@@ -637,7 +639,7 @@ DEPENDENCIES
   omniauth-oauth2 (~> 1.8)
   omniauth-rails_csrf_protection
   omniauth_openid_connect
-  pg (~> 1.5)
+  pg (~> 1.6)
   prettier_print
   propshaft
   pry-byebug
