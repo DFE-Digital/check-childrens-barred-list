@@ -52,7 +52,7 @@ jobs:
           source global_config/${{ inputs.environment }}.sh
           tf_vars_file=${TF_VARS_PATH}/${{ inputs.environment }}.tfvars.json
           echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "RESOURCE_GROUP_NAME=${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
+          echo "RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
 
           DELETED_DB_SERVER="${{ inputs.deleted-server }}"
           echo "DELETED_DB_SERVER=${DELETED_DB_SERVER}" >> $GITHUB_ENV
