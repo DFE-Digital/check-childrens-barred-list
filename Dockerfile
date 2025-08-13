@@ -77,12 +77,21 @@ RUN apk add --update --no-cache tzdata && \
 # libpq: required to run postgres
 RUN apk add --no-cache libpq
 
+# Create non-root user and group with specific UIDs/GIDs
+RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
+
 # Copy files generated in the builder image
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=$COMMIT_SHA
+
+# Change ownership only for directories that need write access
+RUN mkdir -p /app/tmp /app/log && chown -R appuser:appgroup /app/tmp /app/log /app/public/
+
+# Switch to non-root user
+USER 10001
 
 CMD bundle exec rails db:migrate && \
     bundle exec rails server -b 0.0.0.0

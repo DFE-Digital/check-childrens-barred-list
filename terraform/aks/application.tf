@@ -20,6 +20,8 @@ module "web_application" {
 
   web_external_hostnames = var.gov_uk_host_names
   enable_logit           = var.enable_logit
+  
+  run_as_non_root = true
 }
 
 module "worker_application" {
@@ -43,6 +45,8 @@ module "worker_application" {
   enable_logit           = var.enable_logit
 
   enable_gcp_wif = var.enable_dfe_analytics_federated_auth
+  
+  run_as_non_root = true
 }
 
 module "application_configuration" {
