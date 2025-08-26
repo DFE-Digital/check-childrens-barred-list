@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post "/auth/dfe/sign-out", to: "sign_out#new", as: :dsi_sign_out_post
 
   get "/auth/dfe/callback", to: "omniauth_callbacks#dfe"
+  get "/auth/developer/callback" => "omniauth_callbacks#dfe_bypass"
   post "/auth/developer/callback", to: "omniauth_callbacks#dfe_bypass"
 
   get "/terms-and-conditions", to: "terms_and_conditions#show"

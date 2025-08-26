@@ -8,7 +8,7 @@ class SignInController < ApplicationController
 
   def new
     if DfESignIn.bypass?
-      redirect_post "/auth/developer/callback", options: { authenticity_token: :auto }
+      redirect_post "/auth/developer", options: { authenticity_token: :auto }
     else
       redirect_post "/auth/dfe", options: { authenticity_token: :auto }
     end
