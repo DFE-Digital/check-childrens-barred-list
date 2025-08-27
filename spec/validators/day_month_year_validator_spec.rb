@@ -1,26 +1,20 @@
 require "rails_helper"
 
-class Validatable
+# We are reusing an existing class here so that we can take advantage of the localisations
+# and avoid creating a whole new set of them just for this test.
+# This does mean that the example class has an unrelated attribute (last_name)
+# but this is not a problem for the purposes of these tests.
+class SearchForm
   include ActiveModel::Model
-  attr_accessor :day, :month, :year, :date_attribute
+  attr_accessor :day, :month, :year, :date_of_birth
 
   validate do |record|
-    DayMonthYearValidator.new.validate(record, :date_attribute)
+    DayMonthYearValidator.new.validate(record, :date_of_birth)
   end
 end
 
 RSpec.describe DayMonthYearValidator do
-  # We don't have translations for our Validatable test class
-  # avoid I18n::MissingTranslationData exceptions by turning off
-  # I18n.exception_handler for this particular spec.
-  around do |example|
-    exception_handler = I18n.exception_handler
-    I18n.exception_handler = nil
-    example.run
-    I18n.exception_handler = exception_handler
-  end
-
-  subject(:validatable) { Validatable.new(attributes) }
+  subject(:validatable) { SearchForm.new(attributes.merge(last_name: "Foo")) }
 
   describe "#validate" do
     context "when the date is valid" do
@@ -39,7 +33,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute]).to include("is invalid")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must be a real date")
       end
     end
 
@@ -49,7 +43,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute]).to include("is invalid")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must be a real date")
       end
     end
 
@@ -59,7 +53,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute]).to include("is invalid")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must be a real date")
       end
     end
 
@@ -69,7 +63,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("invalid_year")
+        expect(validatable.errors[:date_of_birth]).to include("Year must include 4 numbers")
       end
     end
 
@@ -79,7 +73,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("future")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must be in the past")
       end
     end
 
@@ -89,7 +83,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("under_16")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must be at least 16 years ago")
       end
     end
 
@@ -99,7 +93,7 @@ RSpec.describe DayMonthYearValidator do
       it "fails validation" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("over_100")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth cannot be more than 100 years ago")
       end
     end
 
@@ -113,7 +107,7 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_day")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a day")
       end
     end
 
@@ -127,7 +121,7 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_month")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a month")
       end
     end
 
@@ -141,7 +135,7 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_year")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a year")
       end
     end
 
@@ -155,7 +149,8 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_day_and_month")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a day")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a month")
       end
     end
 
@@ -169,7 +164,8 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_day_and_year")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a day")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a year")
       end
     end
 
@@ -183,7 +179,8 @@ RSpec.describe DayMonthYearValidator do
       it "adds an error message" do
         validatable.valid?
 
-        expect(validatable.errors[:date_attribute].first).to include("missing_month_and_year")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a month")
+        expect(validatable.errors[:date_of_birth]).to include("Date of birth must include a year")
       end
     end
   end

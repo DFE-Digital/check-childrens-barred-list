@@ -7,7 +7,6 @@ class SearchForm
   attr_accessor :last_name, :day, :month, :year, :searched_at
 
   validates :last_name, presence: true
-  validates :date_of_birth, presence: true
 
   validate do |search|
     DayMonthYearValidator.new.validate(search, :date_of_birth)

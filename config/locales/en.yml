@@ -19,9 +19,6 @@ en:
               missing_day: Date of birth must include a day
               missing_month: Date of birth must include a month
               missing_year: Date of birth must include a year
-              missing_day_and_month: Date of birth must include a day and month
-              missing_day_and_year: Date of birth must include a day and year
-              missing_month_and_year: Date of birth must include a month and year
               over_100: Date of birth cannot be more than 100 years ago
               under_16: Date of birth must be at least 16 years ago
         "support_interface/upload_form":
