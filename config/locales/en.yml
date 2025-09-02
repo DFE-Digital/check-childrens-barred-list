@@ -6,6 +6,14 @@ en:
   generic_oauth_failure: There was a problem signing you in. Please try again.
   activemodel:
     errors:
+      messages:
+        future: Date of birth must be in the past
+        invalid_year: Year must include 4 numbers
+        missing_day: Date of birth must include a day
+        missing_month: Date of birth must include a month
+        missing_year: Date of birth must include a year
+        over_100: Date of birth cannot be more than 100 years ago
+        under_16: Date of birth must be at least 16 years ago
       models:
         search_form:
           attributes:
@@ -15,12 +23,12 @@ en:
               blank: Enter a date of birth
               future: Date of birth must be in the past
               invalid: Date of birth must be a real date
-              invalid_year: Year must include 4 numbers
-              missing_day: Date of birth must include a day
-              missing_month: Date of birth must include a month
-              missing_year: Date of birth must include a year
-              over_100: Date of birth cannot be more than 100 years ago
-              under_16: Date of birth must be at least 16 years ago
+        validatable:
+          attributes:
+            date_of_birth:
+              blank: Enter a date of birth
+              future: Date of birth must be in the past
+              invalid: Date of birth must be a real date
         "support_interface/upload_form":
           attributes:
             file:

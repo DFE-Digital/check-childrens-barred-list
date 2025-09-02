@@ -1,10 +1,6 @@
 require "rails_helper"
 
-# We are reusing an existing class here so that we can take advantage of the localisations
-# and avoid creating a whole new set of them just for this test.
-# This does mean that the example class has an unrelated attribute (last_name)
-# but this is not a problem for the purposes of these tests.
-class SearchForm
+class Validatable
   include ActiveModel::Model
   attr_accessor :day, :month, :year, :date_of_birth
 
@@ -14,7 +10,7 @@ class SearchForm
 end
 
 RSpec.describe DayMonthYearValidator do
-  subject(:validatable) { SearchForm.new(attributes.merge(last_name: "Foo")) }
+  subject(:validatable) { Validatable.new(attributes) }
 
   describe "#validate" do
     context "when the date is valid" do

@@ -4,13 +4,13 @@ class SearchFormErrorSummaryPresenter
   YEAR_FIELD = "#search_form_date_of_birth_1i"
   MONTH_FIELD = "#search_form_date_of_birth_2i"
   YEAR_MESSAGES = [
-    I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.invalid_year"),
-    I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.missing_year"),
-    I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.over_100"),
-    I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.under_16")
+    I18n.t("activemodel.errors.messages.invalid_year"),
+    I18n.t("activemodel.errors.messages.missing_year"),
+    I18n.t("activemodel.errors.messages.over_100"),
+    I18n.t("activemodel.errors.messages.under_16")
   ].freeze
   MONTH_MESSAGES = [
-    I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.missing_month")
+    I18n.t("activemodel.errors.messages.missing_month")
   ].freeze
     
   def initialize(error_messages)

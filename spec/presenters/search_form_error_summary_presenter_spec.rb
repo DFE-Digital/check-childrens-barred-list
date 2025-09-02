@@ -14,7 +14,7 @@ RSpec.describe SearchFormErrorSummaryPresenter do
       end
   
       context "when the error relates to the year field" do
-        let(:message) { I18n.t("activemodel.errors.models.search_form.attributes.date_of_birth.invalid_year") }
+        let(:message) { I18n.t("activemodel.errors.messages.invalid_year") }
   
         it "adds a custom link" do
           expect(presenter.formatted_error_messages).to eq([[:date_of_birth, message, "#search_form_date_of_birth_1i"]])
