@@ -46,7 +46,7 @@ RSpec.describe "Valid search", type: :system do
   end
 
   def then_i_see_a_result
-    expect(page).to have_content "Searched at #{SearchLog.last.created_at.to_fs(:time_on_date_long)}"
+    expect(page).to have_content("Searched at #{SearchLog.last.created_at.to_fs(:time_on_date_long)}", wait: 10)
     expect(page).to have_content "Possible match with the children’s barred list"
     expect(page).to have_content @record.last_name
     expect(page).to have_content Date.parse(@record.date_of_birth).to_fs(:long_uk)

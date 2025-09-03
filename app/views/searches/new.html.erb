@@ -8,7 +8,7 @@
 
       <h1 class="govuk-heading-l">Check the children’s barred list</h1>
 
-      <%= f.govuk_text_field :last_name, class: "govuk-input--width-20", label: { text: "Last name", size: "s" } %>
+      <%= f.govuk_text_field :last_name, class: "govuk-input--width-20", label: { text: "Last name", size: "s" }, autocomplete: "given-name" %>
       <%= f.govuk_date_field :date_of_birth, date_of_birth: true, legend: { text: "Date of birth", size: "s" }, hint: { text: "For example, 31 3 #{40.years.ago.year}" } %>
 
       <%= f.govuk_submit "Search" %>
