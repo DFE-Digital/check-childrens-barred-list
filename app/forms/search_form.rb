@@ -17,4 +17,16 @@ class SearchForm
   rescue StandardError
     InvalidDate.new(day:, month:, year:)
   end
+
+  def day=(value)
+    @day = value.delete(" \t\r\n")
+  end
+
+  def month=(value)
+    @month = value.delete(" \t\r\n")
+  end
+
+  def year=(value)
+    @year = value.delete(" \t\r\n")
+  end
 end
