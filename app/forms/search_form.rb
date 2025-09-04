@@ -4,6 +4,21 @@ class SearchForm
   include ActiveModel::Model
   include ActiveModel::Validations::Callbacks
 
+  MONTH_NAMES = {
+    "jan" => 1,
+    "feb" => 2,
+    "mar" => 3,
+    "apr" => 4,
+    "may" => 5,
+    "jun" => 6,
+    "jul" => 7,
+    "aug" => 8,
+    "sep" => 9,
+    "oct" => 10,
+    "nov" => 11,
+    "dec" => 12,
+  }
+
   attr_accessor :last_name, :day, :month, :year, :searched_at
 
   validates :last_name, presence: true
@@ -23,6 +38,8 @@ class SearchForm
   end
 
   def month=(value)
+    # Support entering month as a name, e.g. "January", "Jan", "january", "jan"
+    value = MONTH_NAMES[value.downcase[0, 3]].to_s if value.match?(/\A[a-zA-Z]+\z/)
     @month = value.delete(" \t\r\n")
   end
 
