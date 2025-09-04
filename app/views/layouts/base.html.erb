@@ -25,25 +25,27 @@
 
     <%= govuk_skip_link %>
 
-    <%= govuk_header(service_name: t("service.name")) do |header|
-      if request.path != main_app.not_authorised_path
-        if current_dsi_user
-          header.with_navigation_item(
-            href: main_app.dsi_sign_out_post_path({ id_token_hint: session[:id_token] }),
-            post: true,
-            text: "Sign out"
-          )
-        else
-          header.with_navigation_item(href: main_app.sign_in_path, text: "Sign in")
+    <%=
+      govuk_header(service_name: t("service.name")) do |header|
+        if current_dsi_user&.internal?
+          header.with_navigation_item(href: "/support/features", text: "Features")
+          header.with_navigation_item(href: "/support/roles", text: "Check role codes")
+          header.with_navigation_item(href: "/support/uploads/new", text: "File upload")
+        end
+
+        if request.path != main_app.not_authorised_path
+          if current_dsi_user
+            header.with_navigation_item(
+              href: main_app.dsi_sign_out_post_path({ id_token_hint: session[:id_token] }),
+              post: true,
+              text: "Sign out"
+            )
+          else
+            header.with_navigation_item(href: main_app.sign_in_path, text: "Sign in")
+          end
         end
       end
-
-      if current_dsi_user&.internal?
-        header.with_navigation_item(href: "/support/features", text: "Features")
-        header.with_navigation_item(href: "/support/roles", text: "Check role codes")
-        header.with_navigation_item(href: "/support/uploads/new", text: "File upload")
-      end
-    end %>
+    %>
 
     <div class="govuk-width-container">
       <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
