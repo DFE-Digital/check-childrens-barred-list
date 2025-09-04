@@ -17,9 +17,11 @@ class SearchForm
     "oct" => 10,
     "nov" => 11,
     "dec" => 12,
-  }
+  }.freeze
 
-  attr_accessor :last_name, :day, :month, :year, :searched_at
+  attr_accessor :last_name, :searched_at
+  # setters are custom to strip whitespace and allow stringified month names
+  attr_reader :day, :month, :year
 
   validates :last_name, presence: true
 
