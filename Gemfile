@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.4.4"
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.0.2"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -62,6 +62,9 @@ gem "clockwork"
 gem "jwt"
 
 gem 'activerecord-session_store'
+
+# ostruct will stop being a part of the standard library in ruby 3.5
+gem 'ostruct'
 
 group :development do
   gem "prettier_print", require: false
