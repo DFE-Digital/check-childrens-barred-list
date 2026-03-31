@@ -63,6 +63,8 @@ gem "jwt"
 
 gem 'activerecord-session_store'
 
+gem "mutex_m"
+
 group :development do
   gem "prettier_print", require: false
   gem "rladr"
