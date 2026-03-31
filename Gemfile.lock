@@ -282,6 +282,7 @@ GEM
     msgpack (1.7.2)
     multi_json (1.17.0)
     multi_xml (0.6.0)
+    mutex_m (0.3.0)
     net-http (0.8.0)
       uri (>= 0.11.1)
     net-imap (0.4.10)
@@ -633,6 +634,7 @@ DEPENDENCIES
   jsbundling-rails
   jwt
   launchy
+  mutex_m
   okcomputer
   omniauth-oauth2 (~> 1.8)
   omniauth-rails_csrf_protection

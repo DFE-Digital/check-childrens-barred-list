@@ -47,13 +47,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def trigger_request_event
+  def trigger_request_event(event_type)
     return unless DfE::Analytics.enabled?
 
     request_event =
       DfE::Analytics::FilteredRequestEvent
         .new
-        .with_type("web_request")
+        .with_type(event_type)
         .with_request_details(request)
         .with_response_details(response)
         .with_request_uuid(RequestLocals.fetch(:dfe_analytics_request_id))
