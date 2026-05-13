@@ -53,7 +53,7 @@ gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
 # Sending events to BigQuery
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.14.2"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.10"
 
 # Scheduling jobs
 gem "clockwork"
@@ -62,6 +62,8 @@ gem "clockwork"
 gem "jwt"
 
 gem 'activerecord-session_store'
+
+gem "mutex_m"
 
 group :development do
   gem "prettier_print", require: false

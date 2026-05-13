@@ -14,6 +14,7 @@ RSpec.describe DfE::Analytics::FilteredRequestEvent do
         query_string: "foo=bar&search[name]=bar]&search[date(3i)]=10&search[date(2i)]=10&search[date(1i)]=2000",
         referer: "http://example.com",
         remote_ip: "1.3.22.21",
+        headers: {}
       )
 
       event = described_class.new.with_request_details(rack_request)
