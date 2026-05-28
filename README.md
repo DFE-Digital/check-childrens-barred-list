@@ -70,6 +70,10 @@ You also need to set `BIGQUERY_DISABLE` to `false` as it defaults to `true` in t
 
 [Read more about setting up BigQuery](https://github.com/DFE-Digital/dfe-analytics/blob/main/docs/google_cloud_bigquery_setup.md).
 
+## Infrastructure validation workflow
+
+The scheduled workflow defined in `.github/workflows/validate-infra.yml` runs Terraform plan validations for the AKS cluster plus domains infrastructure/environment each day at **07:00 UTC** against **production** only. Failures and drift notifications are sent to the SD Infra alerts Teams channel via the `TEAMS_WEBHOOK_URL_INFRA` secret.
+
 ### Linting
 
 To run the linters:
