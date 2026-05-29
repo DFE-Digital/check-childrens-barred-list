@@ -62,7 +62,7 @@ terraform-init: set-azure-account
 	$(eval export TF_VAR_config=${CONFIG})
 
 terraform-plan: terraform-init
-	terraform -chdir=terraform/aks plan -var-file "config/${CONFIG}.tfvars.json"
+	terraform -chdir=terraform/aks plan ${DETAILED_EXITCODE} -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
 	terraform -chdir=terraform/aks apply -var-file "config/${CONFIG}.tfvars.json" $(AUTO_APPROVE)
@@ -136,7 +136,7 @@ domains-infra-init: dns set-azure-account
 		-backend-config=config/${DOMAINS_ID}_backend.tfvars
 
 domains-infra-plan: domains-infra-init # make dns domains-infra-plan
-	terraform -chdir=terraform/custom_domains/infrastructure plan -var-file config/${DOMAINS_ID}.tfvars.json
+	terraform -chdir=terraform/custom_domains/infrastructure plan ${DETAILED_EXITCODE} -var-file config/${DOMAINS_ID}.tfvars.json
 
 domains-infra-apply: domains-infra-init # make dns domains-infra-apply
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file config/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
@@ -148,7 +148,7 @@ domains-init: dns set-azure-account
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=config/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
 domains-plan: domains-init  # make test dns domains-plan
-	terraform -chdir=terraform/custom_domains/environment_domains plan -var-file config/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+	terraform -chdir=terraform/custom_domains/environment_domains plan ${DETAILED_EXITCODE} -var-file config/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
 
 domains-apply: domains-init # make test dns domains-apply
 	terraform -chdir=terraform/custom_domains/environment_domains apply -var-file config/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json ${AUTO_APPROVE}
