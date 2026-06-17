@@ -5,7 +5,7 @@ class AuthFailuresController < ApplicationController
   class OpenIdConnectProtocolError < StandardError; end
 
   def failure
-    return redirect_to(dsi_sign_out_path(id_token_hint: session[:id_token])) if session_expired?
+    return redirect_to(dsi_sign_out_path) if session_expired?
     handle_failure_then_redirect_to sign_in_path(oauth_failure: true)
   end
 
