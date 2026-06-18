@@ -24,7 +24,8 @@ RSpec.describe "DSI authentication", type: :system do
 
   def then_i_am_signed_in
     within(".govuk-service-navigation__container") do
-      expect(page).to have_link("Sign out", href: "/auth/dfe/sign-out")
+      sign_out = find_button("Sign out")
+      expect(sign_out.find(:xpath, "ancestor::form")["action"]).to end_with("/auth/dfe/sign-out")
     end
     expect(DsiUser.count).to eq 1
     expect(DsiUserSession.count).to eq 1
