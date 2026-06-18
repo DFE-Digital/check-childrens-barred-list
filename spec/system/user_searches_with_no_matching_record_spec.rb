@@ -15,8 +15,8 @@ RSpec.describe "No matching record search", type: :system do
     and_i_search_for_a_different_last_name
     and_i_enter_their_date_of_birth
     and_i_click_search
-    and_my_search_is_logged
     then_i_see_the_no_record_page
+    and_my_search_is_logged
     and_event_tracking_is_working
   end
 
@@ -46,8 +46,8 @@ RSpec.describe "No matching record search", type: :system do
   end
 
   def then_i_see_the_no_record_page
-    expect(page).to have_content("Searched at #{SearchLog.last.created_at.to_fs(:time_on_date_long)}", wait: 10)
-    expect(page).to have_content "No record found"
+    expect(page).to have_content("No record found", wait: 10)
+    expect(page).to have_content("Searched at #{SearchLog.last.created_at.to_fs(:time_on_date_long)}")
     expect(page).to have_content(
       "No record found for Random name born on #{Date.parse(@record.date_of_birth).to_fs(:long_uk)}")
   end
