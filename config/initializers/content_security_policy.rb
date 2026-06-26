@@ -14,7 +14,10 @@ Rails.application.configure do
     policy.base_uri        :self
     policy.connect_src     :self
     policy.font_src        :self
-    policy.form_action     :self
+    # Allow the DfE Sign-in OIDC host in form-action: the sign-in form POSTs to
+    # /auth/dfe which 302-redirects to *.education.gov.uk, and browsers enforce
+    # form-action across redirect hops, so 'self' alone blocks the OAuth round-trip.
+    policy.form_action     :self, "https://*.education.gov.uk"
     policy.frame_ancestors :none
     policy.frame_src       :none
     policy.img_src         :self

@@ -20,21 +20,29 @@ RSpec.describe "Security headers", type: :request do
       expect(policy).to include("default-src 'self'")
       expect(policy).to include("base-uri 'self'")
       expect(policy).to include("connect-src 'self'")
-      expect(policy).to include("form-action 'self'")
+      expect(policy).to include("font-src 'self'")
       expect(policy).to include("frame-ancestors 'none'")
       expect(policy).to include("frame-src 'none'")
+      expect(policy).to include("img-src 'self'")
       expect(policy).to include("object-src 'none'")
       expect(policy).to include("style-src 'self'")
+    end
+
+    # form-action also allows the DfE Sign-in domain family: the sign-in form
+    # POSTs to /auth/dfe, which redirects to the DfE Sign-in OIDC host, and
+    # browsers enforce form-action against every hop.
+    it "allows first-party and the DfE Sign-in domain family in form-action" do
+      expect(policy).to include("form-action 'self' https://*.education.gov.uk")
     end
 
     it "permits nonce-based inline scripts but no external scripts" do
       expect(policy).to match(/script-src 'self' 'nonce-[^']+'/)
     end
 
-    # The ITHC flagged the :https scheme as allowing any HTTPS host on the
-    # internet, defeating the point of the policy.
-    it "does not allow the https: scheme as a source" do
-      expect(policy).not_to include("https:")
+    # The ITHC flagged the bare :https scheme source (any HTTPS host) — distinct
+    # from an explicit https://host origin, which is fine.
+    it "does not allow the bare https: scheme as a source" do
+      expect(policy).not_to match(%r{https:(?!//)})
     end
 
     # Nothing in the compiled assets uses data: URIs, so the permissive
