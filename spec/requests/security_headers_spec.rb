@@ -28,9 +28,11 @@ RSpec.describe "Security headers", type: :request do
       expect(policy).to include("style-src 'self'")
     end
 
-    # form-action also allows the DfE Sign-in domain family: the sign-in form
-    # POSTs to /auth/dfe, which redirects to the DfE Sign-in OIDC host, and
-    # browsers enforce form-action against every hop.
+    # form-action also allows the DfE Sign-in OIDC host the sign-in form redirects
+    # to (browsers enforce form-action across every redirect hop). The exact
+    # issuer origin is derived from DFE_SIGN_IN_ISSUER at boot; the
+    # *.education.gov.uk family below is the always-present fallback (the derived
+    # origin is nil in the test environment, where the issuer is a stub).
     it "allows first-party and the DfE Sign-in domain family in form-action" do
       expect(policy).to include("form-action 'self' https://*.education.gov.uk")
     end
