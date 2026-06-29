@@ -76,6 +76,7 @@ RSpec.describe "Security headers", type: :request do
     end
 
     it "uses the same nonce in the meta tag, inline script and CSP header" do
+      expect(header_nonce).to be_present
       expect(meta_nonce).to eq(header_nonce)
       expect(script_nonce).to eq(header_nonce)
     end
