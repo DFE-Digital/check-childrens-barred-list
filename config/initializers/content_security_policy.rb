@@ -5,11 +5,13 @@
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
 require "dfe_sign_in"
 
-# The sign-in form POSTs to /auth/dfe, which 302-redirects to the DfE Sign-in
-# OIDC host; browsers enforce form-action across redirect hops, so 'self' alone
-# blocks the OAuth round-trip. Derive the exact issuer origin from the same env
-# var OmniAuth uses so the CSP can't drift from the configured provider.
-# Bypassed environments use the first-party developer strategy and need it not.
+# form-action is enforced against every hop of a form submission, including
+# redirects, so it must allow the external origins our POST forms land on:
+#   - sign-out POSTs to /auth/dfe/sign-out, which redirects to the GOV.UK
+#     guidance page (always a www.gov.uk page)
+#   - sign-in POSTs to /auth/dfe, which redirects to the DfE Sign-in OIDC host;
+#     derive that origin from the same env var OmniAuth uses so the CSP can't
+#     drift (skipped when bypassed; those envs use the developer strategy)
 dfe_sign_in_form_action =
   unless DfESignIn.bypass?
     issuer = URI(ENV.fetch("DFE_SIGN_IN_ISSUER", ""))
@@ -27,9 +29,9 @@ Rails.application.configure do
     policy.base_uri        :self
     policy.connect_src     :self
     policy.font_src        :self
-    # Allow the derived issuer origin plus the *.education.gov.uk family as a
-    # fallback (see the issuer note above).
-    policy.form_action     :self, "https://*.education.gov.uk", *Array(dfe_sign_in_form_action)
+    # Allow the DfE Sign-in family and GOV.UK (sign-out redirect), plus the
+    # derived issuer origin as belt-and-braces (see note above).
+    policy.form_action     :self, "https://*.education.gov.uk", "https://www.gov.uk", *Array(dfe_sign_in_form_action)
     policy.frame_ancestors :none
     policy.frame_src       :none
     policy.img_src         :self

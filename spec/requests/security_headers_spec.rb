@@ -28,13 +28,14 @@ RSpec.describe "Security headers", type: :request do
       expect(policy).to include("style-src 'self'")
     end
 
-    # form-action also allows the DfE Sign-in OIDC host the sign-in form redirects
-    # to (browsers enforce form-action across every redirect hop). The exact
-    # issuer origin is derived from DFE_SIGN_IN_ISSUER at boot; the
-    # *.education.gov.uk family below is the always-present fallback (the derived
-    # origin is nil in the test environment, where the issuer is a stub).
-    it "allows first-party and the DfE Sign-in domain family in form-action" do
+    # form-action is enforced across every redirect hop, so it must allow the
+    # external origins our POST forms reach: the DfE Sign-in OIDC host (sign-in)
+    # and the GOV.UK guidance page (sign-out). The *.education.gov.uk family is
+    # the always-present fallback; the sign-in origin is nil in the test
+    # environment, where the issuer is a stub.
+    it "allows first-party, the DfE Sign-in family and the sign-out redirect in form-action" do
       expect(policy).to include("form-action 'self' https://*.education.gov.uk")
+      expect(policy).to include("https://www.gov.uk")
     end
 
     it "permits nonce-based inline scripts but no external scripts" do
