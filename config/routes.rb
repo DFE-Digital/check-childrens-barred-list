@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   get "/sign-in", to: "sign_in#new"
   get "/sign-out", to: "sign_out#new"
   get "/auth/dfe/sign-out", to: "sign_out#new", as: :dsi_sign_out
-  post "/auth/dfe/sign-out", to: "sign_out#new", as: :dsi_sign_out_post
+  # The header "Sign out" is a POST button (sign out is state-changing), so it
+  # needs a POST route. /auth/dfe/sign-out is served by SignOutController, not
+  # the OmniAuth middleware (whose logout_path is "/sign-out").
+  post "/auth/dfe/sign-out", to: "sign_out#new"
 
   get "/auth/dfe/callback", to: "omniauth_callbacks#dfe"
   get "/auth/developer/callback" => "omniauth_callbacks#dfe_bypass"

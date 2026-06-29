@@ -19,7 +19,7 @@ RSpec.describe "DSI authentication", type: :system do
     expect(page).to have_content(
       "You cannot use the DfE Sign-in account for Test School to check the children's barred list"
     )
-    expect(page).to have_link("sign out and start again", href: "/auth/dfe/sign-out?id_token_hint=abc123")
+    expect(page).to have_link("sign out and start again", href: "/auth/dfe/sign-out")
 
     within(".govuk-service-navigation__container") do
       expect(page).not_to have_link("Sign in")

@@ -18,4 +18,8 @@ module HostingEnvironment
   def self.production?
     environment_name == "production"
   end
+
+  def self.review?
+    environment_name == "review"
+  end
 end

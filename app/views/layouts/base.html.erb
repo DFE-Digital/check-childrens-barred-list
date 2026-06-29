@@ -26,29 +26,30 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header %>
-    <%= govuk_service_navigation(
-        service_name: t("service.name"),
-        navigation_items: begin
-          items = []
-          if current_dsi_user&.internal?
-            items << { href: "/support/features", text: "Features" }
-            items << { href: "/support/roles", text: "Check role codes" }
-            items << { href: "/support/uploads/new", text: "File upload" }
-          end
+    <%
+      navigation_items = []
+      post_navigation_items = []
 
-          if request.path != main_app.not_authorised_path
-            if current_dsi_user
-              items << {
-                href: main_app.dsi_sign_out_post_path({ id_token_hint: session[:id_token] }),
-                text: "Sign out"
-              }
-            else
-              items << { href: main_app.sign_in_path, text: "Sign in" }
-            end
-          end
+      if current_dsi_user&.internal?
+        navigation_items << { href: "/support/features", text: "Features" }
+        navigation_items << { href: "/support/roles", text: "Check role codes" }
+        navigation_items << { href: "/support/uploads/new", text: "File upload" }
+      end
 
-          items
+      if request.path != main_app.not_authorised_path
+        if current_dsi_user
+          # Sign out is state-changing, so it must be a POST button rather than
+          # a GET link (GET links can be triggered by prefetch/crawlers).
+          post_navigation_items << { href: main_app.dsi_sign_out_path, text: "Sign out" }
+        else
+          navigation_items << { href: main_app.sign_in_path, text: "Sign in" }
         end
+      end
+    %>
+    <%= render ServiceNavigationComponent.new(
+        service_name: t("service.name"),
+        navigation_items:,
+        post_navigation_items:
       )
     %>
 

@@ -1,5 +1,4 @@
 require "dfe/analytics/filtered_request_event"
-require "govuk_component/header_component"
 
 class ApplicationController < ActionController::Base
   include DfE::Analytics::Requests
