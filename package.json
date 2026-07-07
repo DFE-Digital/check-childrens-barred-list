@@ -2,7 +2,7 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "govuk-frontend": "^5.6.0",
     "sass": "^1.99.0"
   },
@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "^4.0.4",
-    "prettier": "3.8.3"
+    "prettier": "3.9.4"
   }
 }
