@@ -8,12 +8,12 @@ class DsiUser < ApplicationRecord
   CURRENT_TERMS_AND_CONDITIONS_VERSION = "1.0".freeze
 
   def self.create_or_update_from_dsi(dsi_payload, role = nil)
-    dsi_user = find_or_initialize_by(email: dsi_payload.info.fetch(:email))
+    dsi_user = find_or_initialize_by(uid: dsi_payload.uid)
 
     dsi_user.update!(
       first_name: dsi_payload.info.first_name,
       last_name: dsi_payload.info.last_name,
-      uid: dsi_payload.uid
+      email: dsi_payload.info.fetch(:email)
     )
 
     if role.present?
