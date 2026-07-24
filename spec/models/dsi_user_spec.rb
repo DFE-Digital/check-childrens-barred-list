@@ -4,7 +4,7 @@ RSpec.describe DsiUser, type: :model do
   describe ".create_or_update_from_dsi" do
     let(:dsi_payload) do
       OmniAuth::AuthHash.new(
-        uid: "123456",
+        uid: uid,
         info: { email:, first_name: "John", last_name: "Doe" },
         extra: {
           raw_info: {
@@ -17,21 +17,23 @@ RSpec.describe DsiUser, type: :model do
       )
     end
     let(:email) { "test@example.com" }
+    let(:uid) { "123456" }
 
     context "when the user with the email exists" do
-      let!(:existing_user) { create(:dsi_user, email:) }
+      let!(:existing_user) { create(:dsi_user, uid:, email: "mail@example.com") }
 
       it "finds the existing user and updates the attributes" do
         result = described_class.create_or_update_from_dsi(dsi_payload)
 
         expect(result).to eq(existing_user)
         expect(result.uid).to eq dsi_payload.uid
+        expect(result.email).to eq email
         expect(result.first_name).to eq dsi_payload.info.first_name
         expect(result.last_name).to eq dsi_payload.info.last_name
       end
     end
 
-    context "when the user with the email does not exist" do
+    context "when the user with the uid does not exist" do
       it "creates a new user" do
         expect { described_class.create_or_update_from_dsi(dsi_payload) }.to change {
           DsiUser.count
