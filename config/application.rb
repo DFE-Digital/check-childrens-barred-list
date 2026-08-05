@@ -22,7 +22,7 @@ Bundler.require(*Rails.groups)
 module CheckTheChildrensBarredList
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -39,6 +39,16 @@ module CheckTheChildrensBarredList
     config.assets.paths << Rails.root.join("node_modules/govuk-frontend/dist/govuk/assets/fonts")
 
     config.active_job.queue_adapter = :sidekiq
+
+    # Rails 7.1 defaults derive Active Record encryption keys with SHA-256.
+    # Existing production ciphertext was written with SHA-1, and the
+    # deterministic columns (email, date_of_birth, last_name, trn,
+    # national_insurance_number) back record lookups, so switching the digest
+    # would make those lookups miss and non-deterministic values
+    # undecryptable. Pinned to SHA-1 until the data is re-encrypted in
+    # <FOLLOW-UP TICKET>.
+    config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA1
+    config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
 
     config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
     config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
