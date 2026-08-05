@@ -1,4 +1,4 @@
-require "dfe_sign_in"
+require_relative "../../app/lib/dfe_sign_in"
 require "omniauth/strategies/dfe_openid_connect"
 
 OmniAuth.config.logger = Rails.logger

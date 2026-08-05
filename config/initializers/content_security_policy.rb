@@ -3,7 +3,7 @@
 # Define an application-wide content security policy.
 # See the Securing Rails Applications Guide for more information:
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
-require "dfe_sign_in"
+require_relative "../../app/lib/dfe_sign_in"
 
 # form-action is enforced against every hop of a form submission, including
 # redirects, so it must allow the external origins our POST forms land on:
