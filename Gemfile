@@ -45,7 +45,9 @@ gem "sidekiq", "<7"
 gem "sidekiq-cron"
 
 # Feature switching
-gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
+gem "govuk_feature_flags",
+    git: "https://github.com/DFE-Digital/govuk_feature_flags.git",
+    tag: "v1.0.1"
 
 # Authentication
 gem "omniauth-oauth2", "~> 1.8"
