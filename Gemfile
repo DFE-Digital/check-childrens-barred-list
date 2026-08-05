@@ -100,5 +100,8 @@ group :development, :test, :review do
 end
 
 group :development, :production, :review do
-  gem "rails_semantic_logger"
+  # 5.x calls Sidekiq::Config, which only exists from Sidekiq 7, so the ceiling
+  # lifts when sidekiq does. 4.20 is the first release that survives Rails 8.1
+  # removing ActiveRecord::RuntimeRegistry.sql_runtime.
+  gem "rails_semantic_logger", ">= 4.20", "< 5"
 end
