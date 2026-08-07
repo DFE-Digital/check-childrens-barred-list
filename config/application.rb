@@ -40,13 +40,17 @@ module CheckTheChildrensBarredList
 
     config.active_job.queue_adapter = :sidekiq
 
-    # Rails 7.1 defaults derive Active Record encryption keys with SHA-256.
-    # Existing production ciphertext was written with SHA-1, and the
-    # deterministic columns (email, date_of_birth, last_name, trn,
-    # national_insurance_number) back record lookups, so switching the digest
-    # would make those lookups miss and non-deterministic values
-    # undecryptable. Pinned to SHA-1 until the data is re-encrypted in
-    # <FOLLOW-UP TICKET>.
+    # Rails 7.1 defaults derive Active Record encryption keys with SHA-256, but
+    # production ciphertext was written with SHA-1. Moving the digest would make
+    # the deterministic columns that back record lookups miss silently
+    # (ChildrensBarredListEntry and SearchLog on date_of_birth, first_names,
+    # last_name and searchable_last_name; DsiUser on email) and leave every
+    # non-deterministic value undecryptable (trn, national_insurance_number, and
+    # DsiUser's first_name and last_name). hash_digest_class is what holds the
+    # pin. support_sha1_for_non_deterministic_encryption registers a previous
+    # scheme that derives the same key as the current one while the digest is
+    # SHA-1, so it does nothing until re-encryption moves the digest to SHA-256
+    # in <FOLLOW-UP TICKET>.
     config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA1
     config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
 
