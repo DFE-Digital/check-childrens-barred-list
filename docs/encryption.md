@@ -12,9 +12,9 @@ the database ever be compromised.
 For database encryption to work, Rails needs three configuration values:
 
 ```
-config.active_record_encryption.primary_key
-config.active_record_encryption.deterministic_key
-config.active_record_encryption.key_derivation_salt
+config.active_record.encryption.primary_key
+config.active_record.encryption.deterministic_key
+config.active_record.encryption.key_derivation_salt
 ```
 
 The application reads these from environment variables populated either locally from dotenv files, or from the appropriate keyvault secrets.
@@ -23,7 +23,9 @@ The application reads these from environment variables populated either locally 
 
 To generate or regenerate these configuration values run:
 
-`bin/rails setup_db_encryption`
+`bin/setup_db_encryption`
+
+It offers to generate a new `RAILS_MASTER_KEY`, then prints the three encryption values as ready-to-paste environment variables.
 
 Paste the resulting output to either your `.env.local` _and_ `.env.test.local` files.
 
