@@ -26,6 +26,10 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Ruby 4.0 drops ostruct from the default gems. Required in config/application.rb
+# and used by FeedbackHelper.
+gem "ostruct", "~> 0.6"
+
 # Build forms and style them using govuk-frontend
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
