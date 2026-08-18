@@ -1,4 +1,4 @@
-require "hosting_environment"
+require_relative "hosting_environment"
 
 class DfESignIn
   def self.bypass?

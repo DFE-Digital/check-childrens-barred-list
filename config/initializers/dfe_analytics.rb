@@ -1,4 +1,4 @@
-require "hosting_environment"
+require_relative "../../app/lib/hosting_environment"
 
 DfE::Analytics.configure do |config|
   config.queue = :analytics

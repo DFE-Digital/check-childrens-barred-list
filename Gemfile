@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.4.9"
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.3"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -26,6 +26,10 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Ruby 4.0 drops ostruct from the default gems. Required in config/application.rb
+# and used by FeedbackHelper.
+gem "ostruct", "~> 0.6"
+
 # Build forms and style them using govuk-frontend
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
@@ -45,7 +49,9 @@ gem "sidekiq", "<7"
 gem "sidekiq-cron"
 
 # Feature switching
-gem "govuk_feature_flags", github: "DFE-Digital/govuk_feature_flags", branch: "main"
+gem "govuk_feature_flags",
+    git: "https://github.com/DFE-Digital/govuk_feature_flags.git",
+    tag: "v1.0.1"
 
 # Authentication
 gem "omniauth-oauth2", "~> 1.8"
@@ -98,5 +104,8 @@ group :development, :test, :review do
 end
 
 group :development, :production, :review do
-  gem "rails_semantic_logger"
+  # 5.x calls Sidekiq::Config, which only exists from Sidekiq 7, so the ceiling
+  # lifts when sidekiq does. 4.20 is the first release that survives Rails 8.1
+  # removing ActiveRecord::RuntimeRegistry.sql_runtime.
+  gem "rails_semantic_logger", ">= 4.20", "< 5"
 end
