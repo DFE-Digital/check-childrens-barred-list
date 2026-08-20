@@ -179,8 +179,8 @@ The steps involved in this are:
 2. [Start the incident process](#start-the-incident-process-if-not-already-in-progress)
 3. [Freeze pipeline](#freeze-pipeline)
 4. [Back up the database (optional)](#back-up-the-database-optional)
-5. [Validate data](#validate-data)
-6. [Restore postgres database](#restore-postgres-database)
+5. [Restore postgres database](#restore-postgres-database)
+6. [Validate data](#validate-data)
 7. [Upload restored database to Azure storage](#upload-restored-database-to-azure-storage)
 8. [Restore data into the live server](#restore-data-into-the-live-server)
 9. [Restart applications](#restart-applications)
@@ -214,6 +214,21 @@ This step is optional, however if users have entered data or new users have sign
 
 Use the [Backup database to Azure storage workflow](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/backup-db.yml) to save a copy of the flawed database. Use a specific name to identify the backup file later on.
 
+### Restore postgres database
+
+First we must restore the database to a new postgres server using the point in time restore (PTR) feature. This will create a new copy of the database as it was at the point in time chosen for the restore, and this copy will be on a new postgres server. The live server will not be affected by this process, and the restored data can be checked and validated before being copied back into the live server.
+
+Run the [Restore database from point in time to new database server workflow](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/restore-db-ptr.yml) using a time before the data was deleted. Always set a custom name for the new server rather than accepting the default `<original-server-name>-ptr` — include the date, for example `s189t01-ccbl-ts-pg-ptr-2026-08-20`. The default name is the same on every run, so a second attempt fails while a PTR server from an earlier attempt still exists. You need this name again to [validate the data](#validate-data), to [upload the restored database](#upload-restored-database-to-azure-storage) and to [tidy up](#tidy-up).
+
+| Required Parameter               | Description                                                      | Options                                  |
+| -------------------------------- | ---------------------------------------------------------------- | ---------------------------------------- |
+| Environment to restore           | The environment to restore the database server in.               | test, preproduction, production          |
+| Confirm production               | A true/false confirmation if running in production.              | true, false                              |
+| Restore point in time            | Restore point in time in UTC.<br/>See below for important notes. | e.g. 2024-07-24T06:00:00                 |
+| Name of the new database server. | The name to be used for the new server.                          | Default is `<original-server-name>-ptr`. |
+
+**Important:** You should convert the time to UTC before actually using it. When you record the time, note what timezone you are using. Especially during BST (British Summer Time).
+
 ### Validate data
 
 It may be necessary to connect to the PTR postgres server for troubleshooting, before deciding on a full restore or otherwise. For instance, the PTR restore may have to be rerun with a different date/time. Konduit allows you to connect to a backend service via an app instance, and can be used to connect to the PTR postgres server to check the data before restoring to the live server. This can be used to check if the restore was successful, and if the correct point in time was chosen for the restore.
@@ -232,21 +247,6 @@ To connect to the existing live postgres server for comparison:
 - Run: `bin/konduit.sh -x name-of-deployment -- psql`
 
 e.g. `bin/konduit.sh -x check-childrens-barred-list-ccbl -- psql`
-
-### Restore postgres database
-
-First we must restore the database to a new postgres server using the point in time restore (PTR) feature. This will create a new copy of the database as it was at the point in time chosen for the restore, and this copy will be on a new postgres server. The live server will not be affected by this process, and the restored data can be checked and validated before being copied back into the live server.
-
-Run the [Restore database from point in time to new database server workflow](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/restore-db-ptr.yml) using a time before the data was deleted. Always set a custom name for the new server rather than accepting the default `<original-server-name>-ptr` — include the date, for example `s189t01-ccbl-ts-pg-ptr-2026-08-20`. The default name is the same on every run, so a second attempt fails while a PTR server from an earlier attempt still exists. You need this name again to [validate the data](#validate-data), to [upload the restored database](#upload-restored-database-to-azure-storage) and to [tidy up](#tidy-up).
-
-| Required Parameter               | Description                                                      | Options                                  |
-| -------------------------------- | ---------------------------------------------------------------- | ---------------------------------------- |
-| Environment to restore           | The environment to restore the database server in.               | test, preproduction, production          |
-| Confirm production               | A true/false confirmation if running in production.              | true, false                              |
-| Restore point in time            | Restore point in time in UTC.<br/>See below for important notes. | e.g. 2024-07-24T06:00:00                 |
-| Name of the new database server. | The name to be used for the new server.                          | Default is `<original-server-name>-ptr`. |
-
-**Important:** You should convert the time to UTC before actually using it. When you record the time, note what timezone you are using. Especially during BST (British Summer Time).
 
 ### Upload restored database to Azure storage
 
