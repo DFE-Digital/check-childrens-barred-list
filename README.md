@@ -111,11 +111,11 @@ You’ll also need to configure your editor’s `solargraph` plugin to
 
 ## How the application works
 
-We keep track of architecture decisions in [Architecture Decision Records
-(ADRs)](/adr/).
+Start with the [architecture](docs/architecture.md) documentation: what the service is made of, what it talks to, and where the barred list data comes from. From there:
 
-We use `rladr` to generate the boilerplate for new records:
-
-```bash
-bin/bundle exec rladr new title
-```
+- [Data flows](docs/data-flows.md) — loading the barred list, and searching it
+- [Authentication](docs/authentication.md) — DfE Sign-in and support interface access
+- [Hosting and observability](docs/hosting.md) — environments, deployment, monitoring
+- [Encryption](docs/encryption.md) — how PII is protected
+- [Disaster recovery](docs/disaster-recovery.md) — restoring a lost or corrupted database
+- [Architecture Decision Records](/adr/) — why things are the way they are

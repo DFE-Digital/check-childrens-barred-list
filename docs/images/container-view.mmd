@@ -1,0 +1,30 @@
+flowchart LR
+    employer["Employer, agency<br/>or LA user"]
+    support["TRA support user"]
+
+    subgraph cbl["Check the Children's Barred List (AKS)"]
+        direction TB
+        web["Web app<br/>Rails, Puma"]
+        redis[("Cache and queues<br/>Azure Redis")]
+        worker["Worker<br/>Sidekiq"]
+        db[("Database<br/>Azure Postgres")]
+    end
+
+    subgraph ext["External systems"]
+        direction TB
+        dsi["DfE Sign-in"]
+        bigquery["BigQuery"]
+        monitoring["Sentry and Logit"]
+    end
+
+    employer -->|"searches the<br/>barred list"| web
+    support -->|"uploads the<br/>barred list"| web
+
+    web -->|"queues jobs, caches<br/>rejected rows"| redis
+    redis -->|"delivers jobs to"| worker
+    web -->|"reads and writes"| db
+    worker -->|"reads and writes"| db
+
+    web -->|"signs users in,<br/>reads roles"| dsi
+    worker -->|"analytics events"| bigquery
+    web & worker --> monitoring
