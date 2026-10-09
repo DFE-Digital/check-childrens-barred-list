@@ -60,8 +60,8 @@ RUN rm -rf node_modules log/* tmp/* /tmp && \
 # Build runtime image
 FROM ruby:3.4.9-alpine as production
 
-# Upgrade ssl, crypto and curl libraries to latest version
-RUN apk upgrade --no-cache openssl libssl3 libcrypto3 curl
+# Upgrade ssl, crypto, curl and zlib libraries to latest version
+RUN apk upgrade --no-cache openssl libssl3 libcrypto3 curl zlib
 
 # The application runs from /app
 WORKDIR /app
