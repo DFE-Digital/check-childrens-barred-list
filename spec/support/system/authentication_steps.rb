@@ -115,6 +115,9 @@ module AuthenticationSteps
   def and_i_accept_the_terms_and_conditions(accept)
     if accept
       click_on "Accept"
+      # The click returns before the acceptance saves, and a following visit can
+      # cancel the request and land back on the terms page.
+      expect(page).to have_content("Terms and conditions accepted")
     end
   end
 end
