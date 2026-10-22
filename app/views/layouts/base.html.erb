@@ -56,7 +56,8 @@
     <div class="govuk-width-container">
       <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
         This is a new service – your
-        <%= govuk_link_to("feedback", main_app.feedbacks_path) %>
+        <%# Path only: a query string can carry a searched name and date of birth. A page re-rendered from a POST is at its form's action, which can be a different page. %>
+        <%= govuk_link_to("feedback", main_app.feedbacks_path(return_to: (request.path if request.get?))) %>
         will help us to improve it.
       <% end %>
       <%= govuk_back_link(href: yield(:back_link_url)) if content_for?(:back_link_url) %>

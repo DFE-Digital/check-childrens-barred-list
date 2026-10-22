@@ -1,4 +1,5 @@
 <% content_for :page_title, "Give feedback about checking the Children’s Barred List" %>
+<% content_for :back_link_url, feedback_return_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -8,6 +9,7 @@
 
     <%= form_with model: @feedback do |f| %>
       <%= f.govuk_error_summary %>
+      <%= hidden_field_tag :return_to, feedback_return_path %>
       <%= f.govuk_collection_radio_buttons(
           :satisfaction_rating,
           satisfaction_rating_options(Feedback::SATISFACTION_RATINGS),
