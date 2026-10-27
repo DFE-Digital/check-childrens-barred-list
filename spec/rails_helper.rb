@@ -16,17 +16,6 @@ require "webmock/rspec"
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
-Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(
-    app,
-    timeout: 10,
-    process_timeout: 30,
-    window_size: [1200, 800],
-  )
-end
-Capybara.default_driver = :cuprite
-Capybara.javascript_driver = :cuprite
-
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
@@ -43,7 +32,18 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-  config.before(:each, type: :system) { driven_by(:cuprite) }
+  # driven_by re-registers :cuprite on every system spec, replacing any
+  # Capybara.register_driver block, so the driver options must be passed here.
+  config.before(:each, type: :system) do
+    driven_by(
+      :cuprite,
+      screen_size: [1200, 800],
+      options: {
+        timeout: 10,
+        process_timeout: 30,
+      },
+    )
+  end
   config.around(:each, test: :with_stubbed_auth) do |example|
     OmniAuth.config.test_mode = true
     example.run
