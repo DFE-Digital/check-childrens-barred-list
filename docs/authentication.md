@@ -1,6 +1,26 @@
 # Authentication and authorisation
 
-Most pages in CBL sit behind DfE Sign-in, and the support interface applies a further check on top. This document covers the three layers and the records sign-in creates. For where these sit in the service, see [architecture](architecture.md).
+Most pages in CBL sit behind DfE Sign-in, and the support interface applies a further check on top. This document covers the two types of user, the three layers and the records sign-in creates. For where these sit in the service, see [architecture](architecture.md).
+
+## User types
+
+Every user signs in through DfE Sign-in, and the role DfE Sign-in holds for them decides which of two types they are.
+
+**External users** belong to an organisation with access to the service and hold an external role. They can search the barred list by last name and date of birth.
+
+**Internal users** hold the internal role, which DfE Sign-in assigns to users in internal organisations. CBL doesn't check that the organisation is internal; the role alone grants support access. They can do everything an external user can, and they can also use the support interface to upload barred list entries, manage feature flags, and add or edit role codes. An upload takes a CSV of new entries, which they preview and confirm before the entries take effect.
+
+| Role code                                  | Type     |
+| ------------------------------------------ | -------- |
+| `CheckTheChildrensBarredList_ITTProvider`  | External |
+| `CheckTheChildrensBarredList_LA`           | External |
+| `CheckTheChildrensBarredList_School`       | External |
+| `CheckTheChildrensBarredList_MAT`          | External |
+| `CheckTheChildrensBarredList_InternalUser` | Internal |
+
+The role codes live in the `roles` table rather than the code; see [support interface access](#3-support-interface-access). Granting access needs both systems: DfE Sign-in gives the user the role in their organisation, and the code must be in the `roles` table and enabled. A code set up in DfE Sign-in does nothing until it's added at `/support/roles`.
+
+The feedback form isn't tied to either type: it needs no DfE Sign-in, so anyone who can reach the service can send feedback.
 
 ## The three layers
 
