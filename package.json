@@ -1,6 +1,9 @@
 {
   "name": "app",
   "private": "true",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "dependencies": {
     "esbuild": "^0.28.2",
     "govuk-frontend": "^6.3.0",
