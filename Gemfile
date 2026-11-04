@@ -54,7 +54,7 @@ gem "govuk_feature_flags",
     tag: "v1.0.1"
 
 # Authentication
-gem "omniauth-oauth2", "~> 1.8"
+gem "omniauth-oauth2", "~> 1.10"
 gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
