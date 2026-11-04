@@ -1,5 +1,5 @@
 ARM_TEMPLATE_TAG=1.1.0
-RG_TAGS={"Product" : "Database of Qualified Teachers"}
+RG_TAGS={"Product" : "Check the children's barred list"}
 SERVICE_SHORT=ccbl
 
 .PHONY: install-konduit
@@ -165,7 +165,7 @@ domain-azure-resources: set-azure-account
 action-group-resources: set-azure-account # make production action-group-resources ACTION_GROUP_EMAIL=notificationemail@domain.com. Must be run before setting enable_monitoring=true for each subscription
 	$(if $(ACTION_GROUP_EMAIL), , $(error Please specify a notification email for the action group))
 	echo ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg
-	az group create -l uksouth -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Database of Qualified Teachers" "Environment=${DEPLOY_ENV}" "Service Offering=Database of Qualified Teachers"
+	az group create -l uksouth -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Check the children's barred list" "Environment=${DEPLOY_ENV}" "Service Offering=Database of Qualified Teachers"
 	az monitor action-group create -n ${AZURE_RESOURCE_PREFIX}-check-childrens-barred-list -g ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
 
 console: read-cluster-config get-cluster-credentials
