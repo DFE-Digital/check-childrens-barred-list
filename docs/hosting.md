@@ -27,6 +27,8 @@ Both the web and worker deployments run from that same image, and the web contai
 
 The workflow posts build and deploy failures to a Teams channel through `TEAMS_WEBHOOK_URL`. Separately, `validate-infrastructure.yml` runs a Terraform plan against production every day at 07:00 UTC and reports drift and failures to the SD Infra alerts channel (`TEAMS_WEBHOOK_URL_INFRA`).
 
+To take an environment offline for planned maintenance, or to deploy while it is offline, see [maintenance page](maintenance-page.md).
+
 ## Observability
 
 | Concern   | Where it goes                                                                       |
