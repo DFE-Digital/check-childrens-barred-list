@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: check-childrens-barred-list-maintenance
+  labels:
+    app: check-childrens-barred-list-maintenance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: check-childrens-barred-list-maintenance
+  template:
+    metadata:
+      labels:
+        app: check-childrens-barred-list-maintenance
+    spec:
+      nodeSelector:
+        teacherservices.cloud/node_pool: applications
+        kubernetes.io/os: linux
+      containers:
+      - name: check-childrens-barred-list-maintenance
+        image: ghcr.io/dfe-digital/check-childrens-barred-list-maintenance:#MAINTENANCE_IMAGE_TAG#
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 64M
+            cpu: 0.1
+          limits:
+            memory: 64M
+            cpu: 1
