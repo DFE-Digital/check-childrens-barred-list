@@ -244,9 +244,9 @@ e.g. `bin/konduit.sh -x -n tra-development -s <name-of-ptr-server> check-childre
 
 To connect to the existing live postgres server for comparison:
 
-- Run: `bin/konduit.sh -x name-of-deployment -- psql`
+- Run: `bin/konduit.sh -x -n <namespace-of-deployment> <name-of-deployment> -- psql`
 
-e.g. `bin/konduit.sh -x check-childrens-barred-list-test -- psql`
+e.g. `bin/konduit.sh -x -n tra-development check-childrens-barred-list-test -- psql`
 
 ### Upload restored database to Azure storage
 
