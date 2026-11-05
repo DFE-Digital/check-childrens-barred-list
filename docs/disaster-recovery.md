@@ -125,7 +125,7 @@ Check and delete any postgres diagnostics remaining for the deleted instance in 
 
 Run the [Restore database from Azure storage workflow](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/restore-db.yml).
 
-The workflow has a backup filename parameter. Leave it blank to use the default, which restores from the most recent automated nightly backup. The default only works with the automated nightly backups — if you need to restore from a manually triggered (adhoc) backup, you'll need to specify the adhoc backup file's name explicitly.
+The workflow has a backup filename parameter. Leave it blank to use the default, which is today's scheduled backup, `ccbl_<environment short name>_<YYYY-MM-DD>.sql.gz`. The scheduled backup runs at 04:00 UTC and usually finishes by 04:20, so before then the default names a file that doesn't exist yet, and you need to give the previous day's name. To restore a manually triggered (adhoc) backup, give its name explicitly. Backups are stored as the name the backup run reports with `.sql.gz` on the end.
 
 If you need to find the filename of a nightly or adhoc backup, you can get it from the output of the [scheduled backup GitHub Action](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/backup-db.yml) workflow run that created it.
 
