@@ -110,6 +110,12 @@ variable "rg_name" {
   type = string
 }
 
+variable "send_traffic_to_maintenance_page" {
+  description = "During a maintenance operation, keep sending traffic to the maintenance page instead of resetting the ingress"
+  type        = bool
+  default     = false
+}
+
 variable "service_short" {
   type = string
 }

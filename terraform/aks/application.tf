@@ -20,7 +20,9 @@ module "web_application" {
 
   web_external_hostnames = var.gov_uk_host_names
   enable_logit           = var.enable_logit
-  
+
+  send_traffic_to_maintenance_page = var.send_traffic_to_maintenance_page
+
   run_as_non_root = true
 }
 
