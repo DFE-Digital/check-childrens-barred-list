@@ -54,7 +54,7 @@ Edit `maintenance_page/html/index.html` on a branch, push it, and run the workfl
 gh workflow run maintenance.yml --ref <branch> -f environment=production -f mode=enable
 ```
 
-The header and footer are copied from the service's own layout, and the styles and assets are govuk-frontend 6.3.0 from `node_modules`. They don't follow later govuk-frontend upgrades, which only matters if the page starts to look out of place.
+The header and footer are copied from the service's own layout, without the footer links to the service's own pages, which would only show the maintenance page while it's up. The styles and assets are govuk-frontend 6.3.0 from `node_modules`. They don't follow later govuk-frontend upgrades, which only matters if the page starts to look out of place.
 
 ## Running it without the workflow
 
