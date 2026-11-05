@@ -60,8 +60,8 @@ Even though the database is gone, the application may still be running and showi
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 0`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 0`
 
 ### Freeze pipeline
 
@@ -138,8 +138,8 @@ Scale the deployments back up to restore the service.
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 2`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 1`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 2`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 1`
 
 ### Validate app
 
@@ -195,8 +195,8 @@ If the service is available, even in a degraded mode, there is a risk users may 
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 0`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 0`
 
 ### Start the incident process (if not already in progress)
 
@@ -240,13 +240,13 @@ To connect to the PTR postgres copy using `psql` via konduit:
 - Install `konduit.sh` locally using the `make` command
 - Run: `bin/konduit.sh -x -n <namespace-of-deployment> -s <name-of-ptr-server> <name-of-deployment> -- psql`
 
-e.g. `bin/konduit.sh -x -n tra-development -s <name-of-ptr-server> check-childrens-barred-list-ccbl -- psql`
+e.g. `bin/konduit.sh -x -n tra-development -s <name-of-ptr-server> check-childrens-barred-list-test -- psql`
 
 To connect to the existing live postgres server for comparison:
 
 - Run: `bin/konduit.sh -x name-of-deployment -- psql`
 
-e.g. `bin/konduit.sh -x check-childrens-barred-list-ccbl -- psql`
+e.g. `bin/konduit.sh -x check-childrens-barred-list-test -- psql`
 
 ### Upload restored database to Azure storage
 
@@ -267,8 +267,8 @@ Note that when entering the backup filename that the name entered in the `Upload
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 2`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 1`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 2`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 1`
 
 ### Validate app
 
