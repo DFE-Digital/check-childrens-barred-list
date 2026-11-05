@@ -179,3 +179,20 @@ logs: read-cluster-config get-cluster-credentials
 ssh: read-cluster-config get-cluster-credentials
 	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/check-childrens-barred-list-${APP_ID} -- /bin/sh
+
+maintenance-image-push: ## Build and push the maintenance page image. Usage: make maintenance-image-push GITHUB_TOKEN=<token with write:packages>
+	$(if ${GITHUB_TOKEN},, $(error Provide a valid Github token with write:packages permissions as GITHUB_TOKEN variable))
+	$(if ${MAINTENANCE_IMAGE_TAG},, $(eval export MAINTENANCE_IMAGE_TAG=$(shell date +%s)))
+	docker build --platform linux/amd64 -t ghcr.io/dfe-digital/check-childrens-barred-list-maintenance:${MAINTENANCE_IMAGE_TAG} maintenance_page
+	echo ${GITHUB_TOKEN} | docker login ghcr.io -u USERNAME --password-stdin
+	docker push ghcr.io/dfe-digital/check-childrens-barred-list-maintenance:${MAINTENANCE_IMAGE_TAG}
+
+maintenance-fail-over: get-cluster-credentials ## Point the environment at the maintenance page. Usage: make production maintenance-fail-over MAINTENANCE_IMAGE_TAG=<tag>
+	$(eval export CONFIG)
+	./maintenance_page/scripts/failover.sh
+
+enable-maintenance: maintenance-image-push maintenance-fail-over ## Usage: make production enable-maintenance GITHUB_TOKEN=<token with write:packages>
+
+disable-maintenance: get-cluster-credentials ## Point the environment back at the app. Usage: make production disable-maintenance
+	$(eval export CONFIG)
+	./maintenance_page/scripts/failback.sh

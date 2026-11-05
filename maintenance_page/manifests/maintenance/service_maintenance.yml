@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: check-childrens-barred-list-maintenance
+spec:
+  selector:
+    app: check-childrens-barred-list-maintenance
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
