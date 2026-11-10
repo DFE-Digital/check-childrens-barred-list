@@ -60,8 +60,8 @@ Even though the database is gone, the application may still be running and showi
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 0`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 0`
 
 ### Freeze pipeline
 
@@ -125,7 +125,7 @@ Check and delete any postgres diagnostics remaining for the deleted instance in 
 
 Run the [Restore database from Azure storage workflow](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/restore-db.yml).
 
-The workflow has a backup filename parameter. Leave it blank to use the default, which restores from the most recent automated nightly backup. The default only works with the automated nightly backups — if you need to restore from a manually triggered (adhoc) backup, you'll need to specify the adhoc backup file's name explicitly.
+The workflow has a backup filename parameter. Leave it blank to use the default, which is today's scheduled backup, `ccbl_<environment short name>_<YYYY-MM-DD>.sql.gz`. The scheduled backup runs at 04:00 UTC and usually finishes by 04:20, so before then the default names a file that doesn't exist yet, and you need to give the previous day's name. To restore a manually triggered (adhoc) backup, give its name explicitly. Backups are stored as the name the backup run reports with `.sql.gz` on the end.
 
 If you need to find the filename of a nightly or adhoc backup, you can get it from the output of the [scheduled backup GitHub Action](https://github.com/DFE-Digital/check-childrens-barred-list/actions/workflows/backup-db.yml) workflow run that created it.
 
@@ -138,8 +138,8 @@ Scale the deployments back up to restore the service.
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 2`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 1`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 2`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 1`
 
 ### Validate app
 
@@ -195,8 +195,8 @@ If the service is available, even in a degraded mode, there is a risk users may 
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 0`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 0`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 0`
 
 ### Start the incident process (if not already in progress)
 
@@ -240,13 +240,13 @@ To connect to the PTR postgres copy using `psql` via konduit:
 - Install `konduit.sh` locally using the `make` command
 - Run: `bin/konduit.sh -x -n <namespace-of-deployment> -s <name-of-ptr-server> <name-of-deployment> -- psql`
 
-e.g. `bin/konduit.sh -x -n tra-development -s <name-of-ptr-server> check-childrens-barred-list-ccbl -- psql`
+e.g. `bin/konduit.sh -x -n tra-development -s <name-of-ptr-server> check-childrens-barred-list-test -- psql`
 
 To connect to the existing live postgres server for comparison:
 
-- Run: `bin/konduit.sh -x name-of-deployment -- psql`
+- Run: `bin/konduit.sh -x -n <namespace-of-deployment> <name-of-deployment> -- psql`
 
-e.g. `bin/konduit.sh -x check-childrens-barred-list-ccbl -- psql`
+e.g. `bin/konduit.sh -x -n tra-development check-childrens-barred-list-test -- psql`
 
 ### Upload restored database to Azure storage
 
@@ -267,8 +267,8 @@ Note that when entering the backup filename that the name entered in the `Upload
 e.g. [update namespace and deployment names as required, the below refers to the tra-development environment]
 
 - `kubectl -n tra-development get deployments`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl --replicas 2`
-- `kubectl -n tra-development scale deployment check-childrens-barred-list-ccbl-worker --replicas 1`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test --replicas 2`
+- `kubectl -n tra-development scale deployment check-childrens-barred-list-test-worker --replicas 1`
 
 ### Validate app
 
