@@ -29,6 +29,12 @@ The workflow posts build and deploy failures to a Teams channel through `TEAMS_W
 
 To take an environment offline for planned maintenance, or to deploy while it is offline, see [maintenance page](maintenance-page.md).
 
+## Warning users about downtime
+
+Before planned downtime, turn on the `downtime_banner` feature flag at `/support/features` in the environment going down. While it's on, every page shows a notification banner saying when the service will be unavailable. The wording, with the date and the start and end times, is in `app/views/layouts/base.html.erb`, so update it and deploy before turning the flag on.
+
+Signed-out users go straight from `/sign-in` to DfE Sign-in without seeing a page of the service, so the banner only reaches people once they've signed in. Turn it on far enough ahead for regular users to see it, tell users through other channels as well, and turn it off once the downtime has passed.
+
 ## Observability
 
 | Concern   | Where it goes                                                                       |
