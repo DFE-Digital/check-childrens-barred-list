@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: check-childrens-barred-list-preproduction.test.teacherservices.cloud
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: check-childrens-barred-list-preproduction.test.teacherservices.cloud
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            backend:
+              service:
+                name: check-childrens-barred-list-maintenance
+                port:
+                  number: 80
