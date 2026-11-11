@@ -172,14 +172,14 @@ console: read-cluster-config get-cluster-credentials
 	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/check-childrens-barred-list-${APP_ID} -- /bin/sh -c "cd /app && /usr/local/bin/bundle exec rails c"
 
-# make production railstask TASK=pii:verify
-# make production railstask WORKER=1 TASK=pii:re_encrypt
+# make production railstask TASK=db:version
+# make production railstask WORKER=1 TASK=db:version
 # Quote the task when it takes an argument, or zsh reads the brackets as a glob:
-#   make production railstask WORKER=1 TASK='pii:re_encrypt[DsiUser,12345]'
+#   make production railstask WORKER=1 TASK='some:task[an-argument]'
 # WORKER=1 targets the sidekiq deployment, for when the web one is scaled to zero.
 # No -t: this is a batch job, and a TTY mangles output you are teeing to a file.
 railstask: read-cluster-config get-cluster-credentials
-	$(if $(TASK), , $(error TASK not set, e.g. make production railstask TASK=pii:verify))
+	$(if $(TASK), , $(error TASK not set, e.g. make production railstask TASK=db:version))
 	$(if $(APP_NAME), $(eval export APP_ID=$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -i deployment/check-childrens-barred-list-${APP_ID}$(if $(WORKER),-worker,) -- /bin/sh -c "cd /app && /usr/local/bin/bundle exec rails '$(TASK)'"
 
