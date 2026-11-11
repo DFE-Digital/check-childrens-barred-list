@@ -136,6 +136,26 @@ RSpec.describe ChildrensBarredListEntry, type: :model do
         ).to be_nil
       end
     end
+
+    # A search that misses here tells the user a barred person has no record,
+    # so the lookup has to survive the move from SHA-1 to SHA-256.
+    context "with a record converted from SHA-1 to SHA-256" do
+      it "returns the record" do
+        %i[first_names last_name searchable_last_name date_of_birth].each do |attribute|
+          write_under_sha1(record, attribute, record.public_send(attribute))
+        end
+
+        Pii::ReEncryptor.new(logger: Logger.new(File::NULL)).call
+        record.reload
+
+        expect(
+          described_class.search(
+            last_name: record.last_name,
+            date_of_birth: record.date_of_birth,
+          ),
+        ).to eq(record)
+      end
+    end
   end
 
   describe ".before_save" do

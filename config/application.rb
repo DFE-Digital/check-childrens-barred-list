@@ -40,18 +40,17 @@ module CheckTheChildrensBarredList
 
     config.active_job.queue_adapter = :sidekiq
 
-    # Rails 7.1 defaults derive Active Record encryption keys with SHA-256, but
-    # production ciphertext was written with SHA-1. Moving the digest would make
-    # the deterministic columns that back record lookups miss silently
-    # (ChildrensBarredListEntry and SearchLog on date_of_birth, first_names,
-    # last_name and searchable_last_name; DsiUser on email) and leave every
-    # non-deterministic value undecryptable (trn, national_insurance_number, and
-    # DsiUser's first_name and last_name). hash_digest_class is what holds the
-    # pin. support_sha1_for_non_deterministic_encryption registers a previous
-    # scheme that derives the same key as the current one while the digest is
-    # SHA-1, so it does nothing until re-encryption moves the digest to SHA-256
-    # in <FOLLOW-UP TICKET>.
-    config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA1
+    # Keys are now derived with SHA-256, the Rails 7.1 default. Columns written
+    # before that change are carried by the setting below, which registers a
+    # SHA-1 previous scheme for the non-deterministic columns (trn,
+    # national_insurance_number, and DsiUser's first_name and last_name) so they
+    # still decrypt. It does nothing for the deterministic columns that back
+    # record lookups, which `rails pii:re_encrypt` rewrites. It has to sit below
+    # `load_defaults`, whose 7.1 defaults set it to false.
+    #
+    # It comes out once `rails pii:verify` reports no unreadable rows in
+    # production. Tracked at
+    # https://github.com/DFE-Digital/teaching-record-team-project-board/issues/435
     config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
 
     config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
