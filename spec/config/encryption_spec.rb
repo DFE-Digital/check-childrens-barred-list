@@ -2,7 +2,7 @@ require "rails_helper"
 
 # Key derivation moved from SHA-1 to SHA-256, which no ciphertext records, so a
 # silent revert of the configuration would not surface until rows stopped
-# decrypting in production. These assert the intended state directly.
+# decrypting in production. These assert the intended end state directly.
 RSpec.describe "Active Record encryption configuration" do
   let(:config) { ActiveRecord::Encryption.config }
 
@@ -10,67 +10,40 @@ RSpec.describe "Active Record encryption configuration" do
     expect(config.hash_digest_class).to eq OpenSSL::Digest::SHA256
   end
 
-  # support_sha1_for_non_deterministic_encryption is a writer with no reader: it
-  # appends a previous scheme. Assert what it buys instead of whether it was set.
-  it "still reads non-deterministic columns written before the change" do
-    dsi_user = create(:dsi_user, first_name: "Steven")
-    write_under_sha1(dsi_user, :first_name, "Steven")
-
-    expect(dsi_user.reload.first_name).to eq "Steven"
+  it "keeps no previous schemes, so SHA-256 is the only digest that can read" do
+    expect(config.previous_schemes).to be_empty
   end
 
-  it "gives non-deterministic columns a SHA-1 fallback" do
-    aggregate_failures do
-      expect(DsiUser.type_for_attribute(:first_name).previous_types).not_to be_empty
-      expect(ChildrensBarredListEntry.type_for_attribute(:trn).previous_types).not_to be_empty
-    end
+  it "gives no encrypted attribute a fallback to an older digest" do
+    types = [
+      DsiUser.type_for_attribute(:email),
+      DsiUser.type_for_attribute(:first_name),
+      ChildrensBarredListEntry.type_for_attribute(:last_name),
+      ChildrensBarredListEntry.type_for_attribute(:trn)
+    ]
+
+    expect(types.map(&:previous_types)).to all(be_empty)
   end
 
-  it "gives the deterministic columns no SHA-1 fallback of their own" do
-    aggregate_failures do
-      Pii::DETERMINISTIC_ATTRIBUTES.each do |name, attributes|
-        attributes.each do |attribute|
-          expect(name.constantize.type_for_attribute(attribute).previous_types)
-            .to be_empty, "expected #{name}##{attribute} to have no previous types"
-        end
-      end
-    end
-  end
+  # The counterpart of this ran green before support_sha1_for_non_deterministic_encryption
+  # was removed. Anything still holding SHA-1 ciphertext is now unreadable for good,
+  # which is why pii:verify had to report nothing before this change shipped.
+  context "with a row still written under SHA-1" do
+    it "cannot read a non-deterministic column" do
+      entry = create(:childrens_barred_list_entry, trn: "1234567")
+      write_under_sha1(entry, :trn, "1234567")
 
-  # These are named rather than derived, so the specs have to be what keeps them
-  # honest. An attribute added to a model, or its determinism changed, would
-  # otherwise be silently left on the old digest.
-  describe "the named attribute lists" do
-    let(:declared) do
-      Pii::ENCRYPTED_ATTRIBUTES.keys.index_with { |name| name.constantize.encrypted_attributes.to_a }
+      expect { entry.reload.trn }.to raise_error(ActiveRecord::Encryption::Errors::Decryption)
     end
 
-    it "covers every encrypted attribute the models declare" do
-      expect(Pii::ENCRYPTED_ATTRIBUTES.transform_values(&:sort))
-        .to eq declared.transform_values(&:sort)
-    end
+    # This is the failure that mattered: a search reporting no record for a
+    # barred person, with no error anywhere.
+    it "cannot find a barred list entry by search" do
+      entry = create(:childrens_barred_list_entry, last_name: "Doe", date_of_birth: "1980-01-01")
+      write_under_sha1(entry, :searchable_last_name, "doe")
+      write_under_sha1(entry, :date_of_birth, "1980-01-01")
 
-    # The lists name models as well as attributes, so a newly encrypted model
-    # would otherwise be missed entirely rather than caught by the spec above.
-    # Only models that own their table count: FailedChildrensBarredListEntry
-    # inherits its encryption from the model whose rows it describes.
-    it "covers every model that declares an encrypted attribute" do
-      Rails.autoloaders.main.eager_load_dir(Rails.root.join("app/models"))
-      encrypted_models = ApplicationRecord.descendants.select do |model|
-        model.base_class == model && model.encrypted_attributes.present?
-      end
-
-      expect(Pii::MODEL_NAMES).to match_array(encrypted_models.map(&:name))
-    end
-
-    it "marks exactly the attributes the models treat as deterministic" do
-      deterministic = declared.to_h do |name, attributes|
-        model = name.constantize
-        [name, attributes.select { |a| model.type_for_attribute(a).deterministic? }]
-      end
-
-      expect(Pii::DETERMINISTIC_ATTRIBUTES.transform_values(&:sort))
-        .to eq(deterministic.reject { |_, attributes| attributes.empty? }.transform_values(&:sort))
+      expect(ChildrensBarredListEntry.search(last_name: "Doe", date_of_birth: "1980-01-01")).to be_nil
     end
   end
 end

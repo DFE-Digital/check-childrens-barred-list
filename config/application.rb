@@ -40,19 +40,6 @@ module CheckTheChildrensBarredList
 
     config.active_job.queue_adapter = :sidekiq
 
-    # Keys are now derived with SHA-256, the Rails 7.1 default. Columns written
-    # before that change are carried by the setting below, which registers a
-    # SHA-1 previous scheme for the non-deterministic columns (trn,
-    # national_insurance_number, and DsiUser's first_name and last_name) so they
-    # still decrypt. It does nothing for the deterministic columns that back
-    # record lookups, which `rails pii:re_encrypt` rewrites. It has to sit below
-    # `load_defaults`, whose 7.1 defaults set it to false.
-    #
-    # It comes out once `rails pii:verify` reports no unreadable rows in
-    # production. Tracked at
-    # https://github.com/DFE-Digital/teaching-record-team-project-board/issues/435
-    config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
-
     config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
     config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
     config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
