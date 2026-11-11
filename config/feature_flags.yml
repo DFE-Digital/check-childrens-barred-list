@@ -3,3 +3,6 @@ feature_flags:
   service_open:
     author: Steve Laing
     description: Allow users to access the service
+  downtime_banner:
+    author: Naomi Lockhart
+    description: Display banner informing users of service downtime
