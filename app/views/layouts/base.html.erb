@@ -65,7 +65,7 @@
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if FeatureFlags::FeatureFlag.active?(:downtime_banner) %>
           <%= govuk_notification_banner(title_text: "Important") do %>
-            <p class="govuk-body">This service will be unavailable from [START TIME] to [END TIME] on [DAY AND DATE] while we make improvements.</p>
+            <p class="govuk-body">This service will be unavailable from 9am to 12pm on Wednesday 18 November 2026 while we make improvements.</p>
             <p class="govuk-body">You will not be able to use the service during this time. Please complete anything urgent before this window.</p>
             <p class="govuk-body">We are sorry for any inconvenience.</p>
           <% end %>

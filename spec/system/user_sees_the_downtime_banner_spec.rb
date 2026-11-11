@@ -33,7 +33,10 @@ RSpec.describe "The downtime banner", type: :system do
   def then_i_see_the_planned_downtime_warning
     aggregate_failures do
       expect(page).to have_css(".govuk-notification-banner", text: "Important")
-      expect(page).to have_content("This service will be unavailable from")
+      expect(page).to have_content(
+        "This service will be unavailable from 9am to 12pm on Wednesday 18 November 2026 " \
+        "while we make improvements."
+      )
       expect(page).to have_content("You will not be able to use the service during this time.")
     end
   end
