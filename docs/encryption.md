@@ -33,19 +33,39 @@ If you are generating application secrets in Azure, amend this output to a valid
 
 ## Key derivation digest
 
-Keys are derived with PBKDF2-HMAC-**SHA-1**, not the SHA-256 that Rails has defaulted to since `load_defaults 7.1`. `config/application.rb` pins the digest back to SHA-1, and that pin is load-bearing: production ciphertext was written under it, and the digest feeds every derived key.
+Rails 7.1 changed the digest used to derive encryption keys from SHA-1 to SHA-256. Every encrypted column in this database was written under SHA-1, so the change cannot be taken until the existing ciphertext has been rewritten. The move is tracked at https://github.com/DFE-Digital/teaching-record-team-project-board/issues/435.
 
-Changing the digest breaks reads in two different ways, depending on how a column is declared. The `encrypts` lines in `app/models/` are the authoritative list of which is which.
+Keys are now derived with SHA-256. `config/application.rb` keeps one override:
 
-- **Deterministic columns** (`deterministic: true`) are queried by encrypting the search term and matching the stored ciphertext. Under a new digest the ciphertext no longer matches, so lookups return nothing — no exception, no log entry, searches quietly go empty. Two indexes depend on this working.
-- **Non-deterministic columns** fail to decrypt outright, which at least surfaces loudly.
+```ruby
+config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
+```
 
-`config.active_record.encryption.support_sha1_for_non_deterministic_encryption` sits next to the pin and does nothing while the digest is SHA-1 — it registers a previous scheme whose derived key is byte-identical to the current one. It starts doing work only when the digest moves to SHA-256, and even then it covers the non-deterministic columns alone.
+That registers a SHA-1 previous scheme, which carries the four non-deterministic columns: `ChildrensBarredListEntry#trn` and `#national_insurance_number`, and `DsiUser#first_name` and `#last_name`. They decrypt under either digest while it is set.
 
-To be clear about the risk being carried: PBKDF2-HMAC-SHA-1 is not broken, and the collision attacks that retired SHA-1 for signatures do not apply to key derivation. SHA-256 is the modern default and where we should end up, but this is a modernisation task rather than a live vulnerability.
+It does nothing for the seven deterministic columns: `ChildrensBarredListEntry#date_of_birth`, `#first_names`, `#last_name` and `#searchable_last_name`, `SearchLog#date_of_birth` and `#last_name`, and `DsiUser#email`. The scheme it adds is non-deterministic, and Rails only attaches a previous scheme to an attribute whose determinism matches, so those seven have no fallback and must be rewritten. Until they are, a lookup against a row still holding SHA-1 ciphertext returns nothing, with no exception and no log entry, so a search for a barred person reports no record. Reading one raises.
 
-### Moving to SHA-256
+PBKDF2-HMAC-SHA-1 is not broken, and the collision attacks that retired SHA-1 for signatures do not apply to key derivation. This is a modernisation task rather than a live vulnerability.
 
-Set `support_sha1_for_non_deterministic_encryption` before moving `hash_digest_class`, so non-deterministic values written under SHA-1 stay readable through the previous scheme.
+### Converting the data
 
-That fallback does not extend to the deterministic columns. Those have to be read and rewritten under the new digest, and lookups against them will miss for any row not yet rewritten — so the migration needs to account for the service being live, or run behind a maintenance window.
+```bash
+make test railstask TASK=pii:re_encrypt
+make test railstask TASK=pii:verify
+```
+
+`railstask` ties the task to your terminal session, which is fine for verify and for small environments. In production, run the conversion detached in the worker pod, as the runbook on the ticket above describes, so a dropped connection cannot stop it mid-batch.
+
+`pii:re_encrypt` rewrites every encrypted column under the current digest, in batches, one transaction per batch. Each batch logs the arguments to resume with, so an interruption is recovered by copying `pii:re_encrypt[DsiUser,12345]` from the log. Rerunning it is safe: it writes the same plaintext back, though the non-deterministic columns get fresh ciphertext each pass. It writes with `update_columns`, so it runs no callbacks, sends no analytics events, and leaves `updated_at` alone.
+
+`pii:verify` reads every encrypted column through a type with no previous schemes and exits non-zero if anything fails, so it answers the only question that matters: would these rows survive the override being removed. It has to build that type itself, because the models' own types have the SHA-1 fallback and would report success right up until the override goes. It also fails a value that decrypts to more ciphertext, because a value encrypted twice reads cleanly.
+
+Nothing in the ciphertext records which digest derived its key (`store_key_references` is off), so there is no way to count remaining rows in SQL. Reading them is the only check.
+
+Both tasks must be run with the service behind the [maintenance page](maintenance-page.md). Once the digest change is deployed, a search misses any entry not yet converted, and any write to a `DsiUser`, such as signing in, raises on a row not yet converted, because dfe-analytics reads each attribute's old value to track the change.
+
+The unique index on `childrens_barred_list_entries` covers names and date of birth as deterministic ciphertext, so it cannot see that a SHA-1 row and a SHA-256 row hold the same person. If both exist, converting the SHA-1 one fails with `ActiveRecord::RecordNotUnique` naming that row.
+
+The override comes out once `pii:verify` reports nothing in production.
+
+Note this is all specific to Active Record encryption. `active_support.key_generator_hash_digest_class`, which signs session cookies, moved to SHA-256 back in Rails 7.0 and is not pinned.
