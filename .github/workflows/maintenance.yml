@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Enable or disable maintenance mode
-        uses: DFE-Digital/github-actions/maintenance@7a465652523fad5a38db8753b36bd6c7b80837e8 # master on 2026-11-04, the repo has no version tags
+        uses: DFE-Digital/github-actions/maintenance@2d9495c41ad4fc750fd51b42e8417a4b87023aa4 # master on 2026-11-04, the repo has no version tags
         with:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
