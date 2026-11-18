@@ -64,6 +64,8 @@ Nothing in the ciphertext records which digest derived its key (`store_key_refer
 
 Both tasks must be run with the service behind the [maintenance page](maintenance-page.md). Once the digest change is deployed, a search misses any entry not yet converted, and any write to a `DsiUser`, such as signing in, raises on a row not yet converted, because dfe-analytics reads each attribute's old value to track the change.
 
+Some rows predate encryption on their column and still hold plaintext, because nothing rewrote existing rows when `encrypts` was added. The application cannot read them, and `pii:verify` counts them. `pii:re_encrypt` recognises a value that is not an encrypted message at all and encrypts it. A value that is an encrypted message but readable under neither digest, such as one written under another environment's keys, still stops the run.
+
 The unique index on `childrens_barred_list_entries` covers names and date of birth as deterministic ciphertext, so it cannot see that a SHA-1 row and a SHA-256 row hold the same person. If both exist, converting the SHA-1 one fails with `ActiveRecord::RecordNotUnique` naming that row.
 
 The override comes out once `pii:verify` reports nothing in production.

@@ -76,6 +76,25 @@ RSpec.describe Pii::ReEncryptor do
       end
     end
 
+    # Encryption was added to these columns after rows already existed, and
+    # nothing rewrote those rows, so some still hold the plaintext itself.
+    context "when a value was stored before the column was encrypted" do
+      it "encrypts it under SHA-256" do
+        dsi_user = create(:dsi_user)
+        write_raw(dsi_user, :email, "legacy@example.com")
+        write_raw(dsi_user, :first_name, "Steven")
+
+        re_encryptor.call
+
+        aggregate_failures do
+          expect(readable_under_sha256?(dsi_user, :email)).to be true
+          expect(readable_under_sha256?(dsi_user, :first_name)).to be true
+          expect(dsi_user.reload.email).to eq "legacy@example.com"
+          expect(dsi_user.first_name).to eq "Steven"
+        end
+      end
+    end
+
     context "when an encrypted column is NULL" do
       it "leaves it NULL rather than encrypting a nil" do
         entry = create(:childrens_barred_list_entry, trn: nil)
@@ -143,13 +162,14 @@ RSpec.describe Pii::ReEncryptor do
       # encrypt it again, which verification would then read as fine.
       it "stops on a non-deterministic value readable under neither digest rather than encrypting it again" do
         dsi_user = create(:dsi_user)
-        write_raw(dsi_user, :first_name, "not ciphertext under any key")
+        write_under_unknown_key(dsi_user, :first_name, "Steven")
+        ciphertext = dsi_user.read_attribute_before_type_cast(:first_name)
         allow(ActiveRecord::Encryption.config).to receive(:support_unencrypted_data).and_return(true)
 
         aggregate_failures do
           expect { re_encryptor.call }
             .to raise_error(ActiveRecord::Encryption::Errors::Base, /DsiUser##{dsi_user.id}/)
-          expect(dsi_user.reload.read_attribute_before_type_cast(:first_name)).to eq "not ciphertext under any key"
+          expect(dsi_user.reload.read_attribute_before_type_cast(:first_name)).to eq ciphertext
         end
       end
     end
@@ -157,7 +177,7 @@ RSpec.describe Pii::ReEncryptor do
     context "when a value is readable under neither digest" do
       it "raises naming the row and a cursor that skips only that row" do
         dsi_user = create(:dsi_user)
-        write_raw(dsi_user, :email, "not ciphertext under any key")
+        write_under_unknown_key(dsi_user, :email, dsi_user.email)
 
         expect { re_encryptor.call }
           .to raise_error(ActiveRecord::Encryption::Errors::Base,
@@ -169,7 +189,7 @@ RSpec.describe Pii::ReEncryptor do
       it "keeps the rows before it in the batch and leaves the ones after it" do
         before_it, bad, after_it = create_list(:dsi_user, 3)
         [before_it, after_it].each { |dsi_user| write_under_sha1(dsi_user, :email, dsi_user.email) }
-        write_raw(bad, :email, "not ciphertext under any key")
+        write_under_unknown_key(bad, :email, bad.email)
 
         expect { re_encryptor.call }.to raise_error(ActiveRecord::Encryption::Errors::Base)
 

@@ -56,6 +56,20 @@ RSpec.describe Pii::Verifier do
       end
     end
 
+    # The application cannot read plaintext either, so it fails until converted.
+    context "when a value was stored before the column was encrypted" do
+      it "counts it until the re-encryptor has run" do
+        dsi_user = create(:dsi_user)
+        write_raw(dsi_user, :email, "legacy@example.com")
+
+        aggregate_failures do
+          expect(verifier.call).to eq 1
+          Pii::ReEncryptor.new(logger: Logger.new(File::NULL)).call
+          expect(verifier.call).to be_zero
+        end
+      end
+    end
+
     context "after the re-encryptor has run" do
       it "counts nothing" do
         dsi_user = create(:dsi_user)

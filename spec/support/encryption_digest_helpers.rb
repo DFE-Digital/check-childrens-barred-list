@@ -7,6 +7,20 @@ module EncryptionDigestHelpers
     write_raw(record, attribute, sha1_type_for(record.class, attribute).serialize(value))
   end
 
+  # Writes well-formed ciphertext that no configured key can read, which is what
+  # a value from another environment or a lost key would look like.
+  def write_under_unknown_key(record, attribute, value)
+    type = ActiveRecord::Encryption::EncryptedAttributeType.new(
+      scheme: ActiveRecord::Encryption::Scheme.new(
+        deterministic: record.class.type_for_attribute(attribute).deterministic?,
+        key_provider: ActiveRecord::Encryption::DerivedSecretKeyProvider.new(SecureRandom.hex(16))
+      ),
+      default: column_default_for(record.class, attribute)
+    )
+
+    write_raw(record, attribute, type.serialize(value))
+  end
+
   # Puts bytes in the column untouched.
   #
   # update_columns and update_all both serialize through the attribute's own type,

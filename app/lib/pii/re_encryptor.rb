@@ -110,6 +110,8 @@ module Pii
     # the model. The model's type falls back to returning the raw value when the
     # global support_unencrypted_data is true, so a value readable under neither
     # digest would come back as ciphertext and be encrypted again as plaintext.
+    # Plaintext written before the column was encrypted is told apart by its
+    # shape instead, as it is not an encrypted message at all.
     #
     # And the plaintext cannot be assigned to the record first, which is what
     # record.encrypt would need. dfe-analytics wraps write_attribute to track
@@ -124,6 +126,10 @@ module Pii
     def plaintext_for(record, attribute)
       raw = record.read_attribute_before_type_cast(attribute)
       return raw if raw.nil?
+      # Stored before the column was encrypted, so it is already the plaintext.
+      # encrypted? only parses the message and needs no key, so ciphertext under
+      # a key nobody holds still reaches the readers below and stops the run.
+      return raw unless ActiveRecord::Encryption.encryptor.encrypted?(raw)
 
       readers = readers_for(record.class, attribute)
       begin
