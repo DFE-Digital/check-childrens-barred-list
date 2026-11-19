@@ -33,19 +33,12 @@ If you are generating application secrets in Azure, amend this output to a valid
 
 ## Key derivation digest
 
-Keys are derived with PBKDF2-HMAC-**SHA-1**, not the SHA-256 that Rails has defaulted to since `load_defaults 7.1`. `config/application.rb` pins the digest back to SHA-1, and that pin is load-bearing: production ciphertext was written under it, and the digest feeds every derived key.
+Keys are derived with SHA-256, the Rails default since `load_defaults 7.1`.
 
-Changing the digest breaks reads in two different ways, depending on how a column is declared. The `encrypts` lines in `app/models/` are the authoritative list of which is which.
+Every encrypted column in this database was originally written under SHA-1, which was the default when they were first encrypted. They were rewritten under SHA-256 by a one-off `pii:re_encrypt` task, run with the service behind the [maintenance page](maintenance-page.md), and the SHA-1 overrides in `config/application.rb` were removed once a companion `pii:verify` task confirmed no row depended on them. Both tasks were deleted afterwards. See https://github.com/DFE-Digital/teaching-record-team-project-board/issues/435.
 
-- **Deterministic columns** (`deterministic: true`) are queried by encrypting the search term and matching the stored ciphertext. Under a new digest the ciphertext no longer matches, so lookups return nothing — no exception, no log entry, searches quietly go empty. Two indexes depend on this working.
-- **Non-deterministic columns** fail to decrypt outright, which at least surfaces loudly.
+One thing worth knowing before changing a digest or key again: nothing in the ciphertext records which key derived it, because `store_key_references` is off. There is no way to tell a converted row from an unconverted one in SQL, and no way to count what is left. Any future change needs the same shape of migration, and the only completion check available is reading every row through a type with no previous schemes.
 
-`config.active_record.encryption.support_sha1_for_non_deterministic_encryption` sits next to the pin and does nothing while the digest is SHA-1 — it registers a previous scheme whose derived key is byte-identical to the current one. It starts doing work only when the digest moves to SHA-256, and even then it covers the non-deterministic columns alone.
+The deterministic columns are the ones that hurt when this goes wrong. A row still under the old key doesn't match a lookup, so a search reports no record for that person rather than failing. The `encrypts` lines in `app/models/` say which columns are deterministic.
 
-To be clear about the risk being carried: PBKDF2-HMAC-SHA-1 is not broken, and the collision attacks that retired SHA-1 for signatures do not apply to key derivation. SHA-256 is the modern default and where we should end up, but this is a modernisation task rather than a live vulnerability.
-
-### Moving to SHA-256
-
-Set `support_sha1_for_non_deterministic_encryption` before moving `hash_digest_class`, so non-deterministic values written under SHA-1 stay readable through the previous scheme.
-
-That fallback does not extend to the deterministic columns. Those have to be read and rewritten under the new digest, and lookups against them will miss for any row not yet rewritten — so the migration needs to account for the service being live, or run behind a maintenance window.
+Note this is specific to Active Record encryption. `active_support.key_generator_hash_digest_class`, which signs session cookies, moved to SHA-256 back in Rails 7.0 and is not pinned.

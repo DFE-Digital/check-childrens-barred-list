@@ -136,6 +136,28 @@ make review ssh APP_NAME=pr-1234
 make qa ssh
 ```
 
+## Run a rake task
+
+`railstask` runs a rake task in a deployed pod rather than opening a shell, and needs the same access as the console.
+
+```shell
+make test railstask TASK=db:version
+make review railstask APP_NAME=pr-1234 TASK=db:version
+make production railstask TASK=db:version
+```
+
+Quote the task if it takes an argument, or zsh reads the brackets as a glob:
+
+```shell
+make production railstask TASK='some:task[an-argument]'
+```
+
+`WORKER=1` runs it in the worker deployment instead of the web one, for when the web deployment is scaled to zero:
+
+```shell
+make production railstask WORKER=1 TASK=db:version
+```
+
 ## Show CPU / Memory Usage
 
 All pods in a namespace:

@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: preproduction.check-the-childrens-barred-list.education.gov.uk
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: preproduction.check-the-childrens-barred-list.education.gov.uk
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            backend:
+              service:
+                name: check-childrens-barred-list-preproduction
+                port:
+                  number: 80
