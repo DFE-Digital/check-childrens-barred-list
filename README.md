@@ -117,5 +117,6 @@ Start with the [architecture](docs/architecture.md) documentation: what the serv
 - [Authentication](docs/authentication.md) — DfE Sign-in and support interface access
 - [Hosting and observability](docs/hosting.md) — environments, deployment, monitoring
 - [Encryption](docs/encryption.md) — how PII is protected
+- [Unfindable barred list entries](docs/unfindable-barred-list-entries.md) — listing entries search can't find, and the searches that missed them
 - [Disaster recovery](docs/disaster-recovery.md) — restoring a lost or corrupted database
 - [Architecture Decision Records](/adr/) — why things are the way they are
