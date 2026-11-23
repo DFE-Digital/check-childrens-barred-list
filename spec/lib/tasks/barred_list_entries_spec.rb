@@ -39,4 +39,15 @@ RSpec.describe "barred_list_entries rake tasks" do
       end
     end
   end
+
+  describe "barred_list_entries:failed_searches" do
+    it "prints the report once" do
+      expect { Rake::Task["barred_list_entries:failed_searches"].invoke }.to output(
+        satisfy do |printed|
+          printed.scan("report: read only").one? &&
+            printed.include?("failed searches for entry #{plaintext.id}: 0\n")
+        end
+      ).to_stdout
+    end
+  end
 end

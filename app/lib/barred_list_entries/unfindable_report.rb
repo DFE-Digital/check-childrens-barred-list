@@ -1,5 +1,7 @@
 module BarredListEntries
   # Prints each entry holding plaintext that search can't find, then counts.
+  # It doesn't touch search_logs, so it runs quickly. FailedSearchReport counts
+  # the logged searches that missed these people.
   #
   # Prints counts and row ids only, never a value.
   class UnfindableReport
