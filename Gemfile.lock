@@ -239,7 +239,7 @@ GEM
     hashie (5.0.0)
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
-    httparty (0.23.2)
+    httparty (0.25.1)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
