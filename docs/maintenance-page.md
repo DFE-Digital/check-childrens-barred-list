@@ -6,7 +6,7 @@ The maintenance page is a static page that stands in for the service while it is
 
 `maintenance_page/` holds an nginx image serving `html/index.html`, the Kubernetes manifests for it, and the scripts that switch traffic. Enabling maintenance deploys the image as `check-childrens-barred-list-maintenance` in the environment's namespace, points the environment's internal ingress at it, and adds two ingresses on `teacherservices.cloud`: a temp host that still reaches the app, for checking it before users get it back, and a maintenance host that shows the page directly.
 
-Front Door forwards requests with the origin's own hostname (`null_host_header` in `terraform/custom_domains/environment_domains/main.tf`), so the internal ingress is the only one on a user's path. Terraform also creates an ingress for each `gov_uk_host_names` entry, which the scripts leave alone.
+Front Door passes the public hostname through to the cluster (`null_host_header` in `terraform/custom_domains/environment_domains/main.tf`), so users arrive on the external ingress, the one terraform creates for the environment's `gov_uk_host_names` entry. The internal ingress, on the `teacherservices.cloud` host, serves requests made to that host directly. The scripts switch both.
 
 | Environment   | Namespace         | Public host                                                              | Temp host, reaches the app                                                          | Maintenance host                                                                           |
 | ------------- | ----------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -34,7 +34,7 @@ To bring the app back:
 gh workflow run maintenance.yml -f environment=production -f mode=disable
 ```
 
-That resets the internal ingress to the app and deletes the maintenance deployment, its service, and the temp and maintenance ingresses.
+That resets the external and internal ingresses to the app and deletes the maintenance deployment, its service, and the temp and maintenance ingresses.
 
 ## Deploying while the maintenance page is up
 
